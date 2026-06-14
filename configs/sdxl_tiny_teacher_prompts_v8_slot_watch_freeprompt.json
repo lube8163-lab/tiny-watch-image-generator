@@ -1,0 +1,846 @@
+{
+  "version": "watch75_sdxl_tiny_v8_slot_freeprompt",
+  "description": "Eval-aligned V8 teacher supplement for color/action/view/style slot binding. This is intentionally narrower than v7 and should be mixed with existing base/focus datasets.",
+  "default_negative_prompt": "text, logo, watermark, caption, signature, letters, low quality, blurry, noisy, distorted, deformed, cropped subject, multiple subjects, duplicate subject, repeated subject, many copies, group, collection, set, array, row of objects, icon sheet, collage, tiled layout, pattern, seamless pattern, repeating pattern, wallpaper, decorative background, decorative frame, ornamental border, stripes, checkerboard, busy background, cluttered background, detailed scenery, crowd, people in background, grain, speckles, mottled texture, paper texture, canvas texture, dirty background, noisy background, background pattern, complex scenery, repeated objects, tiny details, photorealistic clutter",
+  "defaults": {
+    "colors_v2": [
+      "red",
+      "blue",
+      "white",
+      "black",
+      "pink",
+      "yellow",
+      "green"
+    ],
+    "views_v2": [
+      "front view",
+      "side view",
+      "top view",
+      "closeup"
+    ],
+    "styles_v2": [
+      "icon",
+      "cartoon",
+      "toy",
+      "anime",
+      "watercolor",
+      "sketch",
+      "photo"
+    ],
+    "modifiers_v2": [
+      "simple",
+      "small",
+      "clear",
+      "bright"
+    ]
+  },
+  "variants": [
+    {
+      "variant": "slot_base00",
+      "conditioning_prompt": "{key}",
+      "prompt": "exactly one {subject}, isolated single subject, centered, full subject visible, clear readable silhouette, plain matte light gray background, empty background, low texture, smooth simple shading, no repeated objects, not a collection{guard_clause}, no scenery, no background pattern, no text, no logo, no watermark"
+    },
+    {
+      "variant": "slot_base01",
+      "conditioning_prompt": "simple {key}",
+      "prompt": "exactly one {subject}, simple object icon, large clear shape, isolated single subject, centered, full subject visible, clear readable silhouette, plain matte light gray background, empty background, low texture, smooth simple shading, no repeated objects, not a collection{guard_clause}, no scenery, no background pattern, no text, no logo, no watermark"
+    },
+    {
+      "variant": "slot_color_{color_token}",
+      "slot_source": {
+        "color": "colors_v2"
+      },
+      "max_expansions": 7,
+      "conditioning_prompt": "{color} {key}",
+      "prompt": "exactly one {color} {subject}, the whole subject is clearly {color}, isolated single subject, centered, full subject visible, clear readable silhouette, plain matte light gray background, empty background, low texture, smooth simple shading, no repeated objects, not a collection{guard_clause}, no scenery, no background pattern, no text, no logo, no watermark"
+    },
+    {
+      "variant": "slot_action_{action_token}",
+      "slot_source": {
+        "action": "actions_v2"
+      },
+      "max_expansions": 5,
+      "conditioning_prompt": "{key} {action}",
+      "prompt": "exactly one {subject} {action}, exaggerated simple readable pose, clear limb or body direction when applicable, isolated single subject, centered, full subject visible, clear readable silhouette, plain matte light gray background, empty background, low texture, smooth simple shading, no repeated objects, not a collection{guard_clause}, no scenery, no background pattern, no text, no logo, no watermark"
+    },
+    {
+      "variant": "slot_view_{view_token}",
+      "slot_source": {
+        "view": "views_v2"
+      },
+      "max_expansions": 4,
+      "conditioning_prompt": "{key} {view}",
+      "prompt": "exactly one {subject}, {view}, viewpoint is unambiguous, isolated single subject, centered, full subject visible, clear readable silhouette, plain matte light gray background, empty background, low texture, smooth simple shading, no repeated objects, not a collection{guard_clause}, no scenery, no background pattern, no text, no logo, no watermark"
+    },
+    {
+      "variant": "slot_style_simple_{style_token}",
+      "slot_values": {
+        "style": [
+          "icon",
+          "cartoon",
+          "toy"
+        ]
+      },
+      "conditioning_prompt": "{style} {key}",
+      "prompt": "exactly one {subject}, {style} style, bold simple outline, smooth solid color areas, centered, full subject visible, strong readable silhouette, plain matte light gray background, empty background, no repeated objects, no text, no logo, no watermark{guard_clause}"
+    },
+    {
+      "variant": "slot_style_art_{style_token}",
+      "slot_values": {
+        "style": [
+          "anime",
+          "watercolor",
+          "sketch"
+        ]
+      },
+      "conditioning_prompt": "{style} {key}",
+      "prompt": "exactly one {subject}, {style} style, simple clean illustration, minimal detail, centered, full subject visible, strong readable silhouette, plain matte light gray background, empty background, no repeated objects, no text, no logo, no watermark{guard_clause}"
+    },
+    {
+      "variant": "slot_style_photo",
+      "slot_values": {
+        "style": [
+          "photo"
+        ]
+      },
+      "conditioning_prompt": "{style} {key}",
+      "prompt": "studio product photo of exactly one {subject}, simple soft lighting, centered, full subject visible, strong readable silhouette, plain matte light gray background, empty background, no repeated objects, no text, no logo, no watermark{guard_clause}"
+    },
+    {
+      "variant": "slot_color_action_{color_token}_{action_token}",
+      "slot_source": {
+        "color": "colors_v2",
+        "action": "actions_v2"
+      },
+      "slot_strategy": "zip_cycle",
+      "max_expansions": 7,
+      "conditioning_prompt": "{color} {key} {action}",
+      "prompt": "exactly one {color} {subject} {action}, the subject color is clearly {color}, exaggerated simple readable pose, isolated single subject, centered, full subject visible, clear readable silhouette, plain matte light gray background, empty background, low texture, smooth simple shading, no repeated objects, not a collection{guard_clause}, no scenery, no background pattern, no text, no logo, no watermark"
+    },
+    {
+      "variant": "slot_action_view_{action_token}_{view_token}",
+      "slot_source": {
+        "action": "actions_v2",
+        "view": "views_v2"
+      },
+      "slot_strategy": "zip_cycle",
+      "max_expansions": 8,
+      "conditioning_prompt": "{key} {action} {view}",
+      "prompt": "exactly one {subject} {action}, {view}, viewpoint and pose are unambiguous, isolated single subject, centered, full subject visible, clear readable silhouette, plain matte light gray background, empty background, low texture, smooth simple shading, no repeated objects, not a collection{guard_clause}, no scenery, no background pattern, no text, no logo, no watermark"
+    },
+    {
+      "variant": "slot_style_color_{style_token}_{color_token}",
+      "slot_source": {
+        "style": "styles_v2",
+        "color": "colors_v2"
+      },
+      "slot_strategy": "zip_cycle",
+      "max_expansions": 7,
+      "conditioning_prompt": "{style} {color} {key}",
+      "prompt": "exactly one {color} {subject}, {style} style, the subject color is clearly {color}, isolated single subject, centered, full subject visible, clear readable silhouette, plain matte light gray background, empty background, low texture, smooth simple shading, no repeated objects, not a collection{guard_clause}, no scenery, no background pattern, no text, no logo, no watermark"
+    },
+    {
+      "variant": "slot_full_{style_token}_{color_token}_{action_token}_{view_token}",
+      "slot_source": {
+        "style": "styles_v2",
+        "color": "colors_v2",
+        "action": "actions_v2",
+        "view": "views_v2"
+      },
+      "slot_strategy": "zip_cycle",
+      "max_expansions": 14,
+      "conditioning_prompt": "{style} {color} {key} {action} {view}",
+      "prompt": "exactly one {color} {subject} {action}, {view}, {style} style, subject color, pose, and viewpoint are all clearly readable, isolated single subject, centered, full subject visible, clear readable silhouette, plain matte light gray background, empty background, low texture, smooth simple shading, no repeated objects, not a collection{guard_clause}, no scenery, no background pattern, no text, no logo, no watermark"
+    }
+  ],
+  "presets": [
+    {
+      "key": "cat",
+      "title": "Cat",
+      "subject": "cute cat",
+      "colors_v2": [
+        "red",
+        "blue",
+        "white",
+        "black",
+        "pink",
+        "yellow",
+        "green"
+      ],
+      "actions_v2": [
+        "sitting",
+        "standing",
+        "jumping",
+        "sleeping",
+        "looking"
+      ],
+      "modifiers_v2": [
+        "simple",
+        "small",
+        "clear",
+        "bright",
+        "round"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "anime",
+        "watercolor",
+        "sketch",
+        "photo"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "top view",
+        "closeup"
+      ],
+      "guard": null
+    },
+    {
+      "key": "dog",
+      "title": "Dog",
+      "subject": "cute dog",
+      "colors_v2": [
+        "red",
+        "blue",
+        "white",
+        "black",
+        "pink",
+        "yellow",
+        "green"
+      ],
+      "actions_v2": [
+        "running",
+        "sitting",
+        "standing",
+        "sleeping",
+        "jumping"
+      ],
+      "modifiers_v2": [
+        "simple",
+        "small",
+        "clear",
+        "bright",
+        "round"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "anime",
+        "watercolor",
+        "sketch",
+        "photo"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "top view",
+        "closeup"
+      ],
+      "guard": null
+    },
+    {
+      "key": "bird",
+      "title": "Bird",
+      "subject": "small bird",
+      "colors_v2": [
+        "red",
+        "blue",
+        "white",
+        "black",
+        "pink",
+        "yellow",
+        "green"
+      ],
+      "actions_v2": [
+        "flying",
+        "standing",
+        "looking"
+      ],
+      "modifiers_v2": [
+        "simple",
+        "small",
+        "clear",
+        "bright",
+        "round"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "anime",
+        "watercolor",
+        "sketch",
+        "photo"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "top view",
+        "closeup"
+      ],
+      "guard": null
+    },
+    {
+      "key": "fish",
+      "title": "Fish",
+      "subject": "single fish",
+      "colors_v2": [
+        "red",
+        "blue",
+        "white",
+        "black",
+        "pink",
+        "yellow",
+        "green"
+      ],
+      "actions_v2": [
+        "swimming",
+        "floating",
+        "looking",
+        "jumping",
+        "turning"
+      ],
+      "modifiers_v2": [
+        "simple",
+        "small",
+        "clear",
+        "bright",
+        "round"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "anime",
+        "watercolor",
+        "sketch",
+        "photo"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "top view",
+        "closeup"
+      ],
+      "guard": null
+    },
+    {
+      "key": "car",
+      "title": "Car",
+      "subject": "single small toy car side silhouette",
+      "guard": "one car only, no road, no driver, no buildings, no scenery",
+      "qc_flags": [
+        "avoid_people"
+      ],
+      "colors_v2": [
+        "red",
+        "blue",
+        "white",
+        "black",
+        "pink",
+        "yellow",
+        "green"
+      ],
+      "actions_v2": [
+        "parked",
+        "tilted",
+        "floating"
+      ],
+      "modifiers_v2": [
+        "simple",
+        "small",
+        "clear",
+        "bright",
+        "round"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "anime",
+        "watercolor",
+        "sketch",
+        "photo"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "top view",
+        "closeup"
+      ]
+    },
+    {
+      "key": "flower",
+      "title": "Flower",
+      "subject": "single flower",
+      "colors_v2": [
+        "red",
+        "blue",
+        "white",
+        "black",
+        "pink",
+        "yellow",
+        "green"
+      ],
+      "actions_v2": [
+        "standing",
+        "tilted",
+        "shining"
+      ],
+      "modifiers_v2": [
+        "simple",
+        "small",
+        "clear",
+        "bright",
+        "round"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "anime",
+        "watercolor",
+        "sketch",
+        "photo"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "top view",
+        "closeup"
+      ],
+      "guard": null
+    },
+    {
+      "key": "house",
+      "title": "House",
+      "subject": "small house",
+      "colors_v2": [
+        "red",
+        "blue",
+        "white",
+        "black",
+        "pink",
+        "yellow",
+        "green"
+      ],
+      "actions_v2": [
+        "standing",
+        "shining"
+      ],
+      "modifiers_v2": [
+        "simple",
+        "small",
+        "clear",
+        "bright",
+        "round"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "anime",
+        "watercolor",
+        "sketch",
+        "photo"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "top view",
+        "closeup"
+      ],
+      "guard": null
+    },
+    {
+      "key": "tree",
+      "title": "Tree",
+      "subject": "single tree",
+      "colors_v2": [
+        "red",
+        "blue",
+        "white",
+        "black",
+        "pink",
+        "yellow",
+        "green"
+      ],
+      "actions_v2": [
+        "standing",
+        "tilted",
+        "leaning",
+        "swaying"
+      ],
+      "modifiers_v2": [
+        "simple",
+        "small",
+        "clear",
+        "bright",
+        "round"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "anime",
+        "watercolor",
+        "sketch",
+        "photo"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "top view",
+        "closeup"
+      ],
+      "guard": null
+    },
+    {
+      "key": "clock",
+      "title": "Clock",
+      "subject": "simple round clock",
+      "guard": "one clock only, no readable numbers, no text, no wall background",
+      "colors_v2": [
+        "red",
+        "blue",
+        "white",
+        "black",
+        "pink",
+        "yellow",
+        "green"
+      ],
+      "actions_v2": [
+        "standing",
+        "tilted"
+      ],
+      "modifiers_v2": [
+        "simple",
+        "small",
+        "clear",
+        "bright",
+        "round"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "anime",
+        "watercolor",
+        "sketch",
+        "photo"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "top view",
+        "closeup"
+      ]
+    },
+    {
+      "key": "pizza",
+      "title": "Pizza",
+      "subject": "single pizza slice icon",
+      "guard": "one pizza slice only, no full pizza, no plate, no multiple slices, no repeated toppings pattern",
+      "colors_v2": [
+        "red",
+        "blue",
+        "white",
+        "black",
+        "pink",
+        "yellow",
+        "green"
+      ],
+      "actions_v2": [
+        "standing",
+        "tilted",
+        "floating"
+      ],
+      "modifiers_v2": [
+        "simple",
+        "small",
+        "clear",
+        "bright",
+        "round"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "anime",
+        "watercolor",
+        "sketch",
+        "photo"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "top view",
+        "closeup"
+      ]
+    },
+    {
+      "key": "apple",
+      "title": "Apple",
+      "subject": "single apple fruit icon with a stem",
+      "guard": "fruit only, no apple logo, no bite mark, no repeated fruit",
+      "qc_flags": [
+        "possible_brand_shape"
+      ],
+      "colors_v2": [
+        "red",
+        "blue",
+        "white",
+        "black",
+        "pink",
+        "yellow",
+        "green"
+      ],
+      "actions_v2": [
+        "standing",
+        "tilted",
+        "floating"
+      ],
+      "modifiers_v2": [
+        "simple",
+        "small",
+        "clear",
+        "bright",
+        "round"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "anime",
+        "watercolor",
+        "sketch",
+        "photo"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "top view",
+        "closeup"
+      ]
+    },
+    {
+      "key": "astronaut",
+      "title": "Astronaut",
+      "subject": "single cute astronaut in a round helmet",
+      "colors_v2": [
+        "red",
+        "blue",
+        "white",
+        "black",
+        "pink",
+        "yellow",
+        "green"
+      ],
+      "actions_v2": [
+        "standing",
+        "floating",
+        "walking",
+        "looking"
+      ],
+      "modifiers_v2": [
+        "simple",
+        "small",
+        "clear",
+        "bright",
+        "round"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "anime",
+        "watercolor",
+        "sketch",
+        "photo"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "top view",
+        "closeup"
+      ],
+      "guard": null
+    },
+    {
+      "key": "alien",
+      "title": "Alien",
+      "subject": "single cute alien creature with a big head",
+      "colors_v2": [
+        "red",
+        "blue",
+        "white",
+        "black",
+        "pink",
+        "yellow",
+        "green"
+      ],
+      "actions_v2": [
+        "standing",
+        "walking",
+        "smiling",
+        "looking"
+      ],
+      "modifiers_v2": [
+        "simple",
+        "small",
+        "clear",
+        "bright",
+        "round"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "anime",
+        "watercolor",
+        "sketch",
+        "photo"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "top view",
+        "closeup"
+      ],
+      "guard": null
+    },
+    {
+      "key": "dragon",
+      "title": "Dragon",
+      "subject": "single cute dragon with small wings",
+      "colors_v2": [
+        "red",
+        "blue",
+        "white",
+        "black",
+        "pink",
+        "yellow",
+        "green"
+      ],
+      "actions_v2": [
+        "standing",
+        "flying",
+        "sitting",
+        "looking"
+      ],
+      "modifiers_v2": [
+        "simple",
+        "small",
+        "clear",
+        "bright",
+        "round"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "anime",
+        "watercolor",
+        "sketch",
+        "photo"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "top view",
+        "closeup"
+      ],
+      "guard": null
+    },
+    {
+      "key": "penguin",
+      "title": "Penguin",
+      "subject": "single cute penguin",
+      "colors_v2": [
+        "red",
+        "blue",
+        "white",
+        "black",
+        "pink",
+        "yellow",
+        "green"
+      ],
+      "actions_v2": [
+        "standing",
+        "walking",
+        "sliding",
+        "looking"
+      ],
+      "modifiers_v2": [
+        "simple",
+        "small",
+        "clear",
+        "bright",
+        "round"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "anime",
+        "watercolor",
+        "sketch",
+        "photo"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "top view",
+        "closeup"
+      ],
+      "guard": null
+    },
+    {
+      "key": "frog",
+      "title": "Frog",
+      "subject": "single cute frog",
+      "colors_v2": [
+        "red",
+        "blue",
+        "white",
+        "black",
+        "pink",
+        "yellow",
+        "green"
+      ],
+      "actions_v2": [
+        "sitting",
+        "jumping",
+        "standing",
+        "looking"
+      ],
+      "modifiers_v2": [
+        "simple",
+        "small",
+        "clear",
+        "bright",
+        "round"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "anime",
+        "watercolor",
+        "sketch",
+        "photo"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "top view",
+        "closeup"
+      ],
+      "guard": null
+    }
+  ]
+}

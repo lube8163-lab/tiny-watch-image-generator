@@ -189,6 +189,7 @@ def expand_variant_slots(
 ) -> list[dict[str, Any]]:
     slot_sources = variant_payload.get("slot_source") or {}
     slot_values = variant_payload.get("slot_values") or {}
+    slot_strategy = str(variant_payload.get("slot_strategy") or "product")
     if not isinstance(slot_sources, dict):
         raise SystemExit(f"slot_source must be an object: {variant_payload}")
     if not isinstance(slot_values, dict):
@@ -213,6 +214,22 @@ def expand_variant_slots(
 
     max_expansions = int(variant_payload.get("max_expansions") or 0)
     expanded: list[dict[str, Any]] = []
+
+    if slot_strategy == "zip_cycle":
+        row_count = max_expansions or max(len(values) for _, values in slot_options)
+        for row_index in range(row_count):
+            extra: dict[str, Any] = {}
+            for slot_name, values in slot_options:
+                slot_index, slot_value = values[row_index % len(values)]
+                extra[slot_name] = slot_value
+                extra[f"{slot_name}_index"] = f"{slot_index:02d}"
+                extra[f"{slot_name}_token"] = safe_token(slot_value).lower()
+            expanded.append(extra)
+        return expanded
+
+    if slot_strategy != "product":
+        raise SystemExit(f"unknown slot_strategy '{slot_strategy}': {variant_payload}")
+
     for combo in itertools.product(*(values for _, values in slot_options)):
         extra: dict[str, Any] = {}
         for (slot_name, _), (slot_index, slot_value) in zip(slot_options, combo):

@@ -128,6 +128,8 @@ python3 -m pip install pillow
 
 ```sh
 bash tools/run_cloud_watch_v7_pipeline.sh
+python3 tools/build_watch_v8_slot_prompt_config.py
+bash tools/cloud_generate_sdxl_watch_v8_slot.sh
 python3 tools/prompt_normalization.py --help
 python3 tools/train_tiny_coordinate_mlp.py --help
 ```
