@@ -177,9 +177,11 @@ public struct TinyImageGenerator {
         guard width > 2, height > 2 else { return rgba }
 
         let pixelCount = width * height
+        let background = estimateBackground(rgba: rgba, width: width, height: height)
         var luminance = [Float](repeating: 0, count: pixelCount)
         var cb = [Float](repeating: 0, count: pixelCount)
         var cr = [Float](repeating: 0, count: pixelCount)
+        var colorMask = [Float](repeating: 0, count: pixelCount)
 
         for index in 0..<pixelCount {
             let base = index * 4
@@ -190,11 +192,14 @@ public struct TinyImageGenerator {
             luminance[index] = y
             cb[index] = blue - y
             cr[index] = red - y
+            let distance = colorDistance(y: y, cb: cb[index], cr: cr[index], background: background)
+            colorMask[index] = smoothstep(18.0, 56.0, distance)
         }
 
         var yBlur = [Float](repeating: 0, count: pixelCount)
         var cbBlur = [Float](repeating: 0, count: pixelCount)
         var crBlur = [Float](repeating: 0, count: pixelCount)
+        var maskBlur = [Float](repeating: 0, count: pixelCount)
 
         for y in 0..<height {
             for x in 0..<width {
@@ -223,6 +228,19 @@ public struct TinyImageGenerator {
                 }
                 cbBlur[index] = cbSum / 25.0
                 crBlur[index] = crSum / 25.0
+
+                var maskMax: Float = 0
+                var maskSum: Float = 0
+                for dy in -1...1 {
+                    let sampleY = min(height - 1, max(0, y + dy))
+                    for dx in -1...1 {
+                        let sampleX = min(width - 1, max(0, x + dx))
+                        let sampleMask = colorMask[sampleY * width + sampleX]
+                        maskMax = max(maskMax, sampleMask)
+                        maskSum += sampleMask
+                    }
+                }
+                maskBlur[index] = max(maskSum / 9.0, maskMax * 0.72)
             }
         }
 
@@ -239,16 +257,29 @@ public struct TinyImageGenerator {
                     + abs(luminance[index] - luminance[up])
                     + abs(luminance[index] - luminance[down])
                 let edge = min(1.0 as Float, gradient / 128.0)
+                let edgeMask = smoothstep(34.0, 120.0, gradient)
+                let edgeSupport = edgeMask * min(1.0 as Float, maskBlur[index] + 0.18)
+                let foregroundMask = min(
+                    1.0 as Float,
+                    max(colorMask[index], max(maskBlur[index], edgeSupport))
+                )
+                let backgroundMask = (1.0 - foregroundMask) * (1.0 - edge * 0.55)
+                let foregroundSmooth = foregroundMask * (1.0 - edge)
 
-                let lumaAmount = 0.28 * (1.0 - edge)
-                let chromaAmount = 0.65 + 0.25 * (1.0 - edge)
+                let lumaAmount = 0.08 * foregroundSmooth + 0.62 * backgroundMask
+                let chromaAmount = 0.18 * foregroundSmooth + 0.82 * backgroundMask
                 let newY = luminance[index] + (yBlur[index] - luminance[index]) * lumaAmount
-                let newCb = cb[index] + (cbBlur[index] - cb[index]) * chromaAmount
-                let newCr = cr[index] + (crBlur[index] - cr[index]) * chromaAmount
+                var newCb = cb[index] + (cbBlur[index] - cb[index]) * chromaAmount
+                var newCr = cr[index] + (crBlur[index] - cr[index]) * chromaAmount
+                var matteY = newY
+                let matteAmount = 0.28 * backgroundMask
+                matteY += (background.y - matteY) * matteAmount
+                newCb += (background.cb - newCb) * (0.50 * backgroundMask)
+                newCr += (background.cr - newCr) * (0.50 * backgroundMask)
 
-                let red = newY + newCr
-                let blue = newY + newCb
-                let green = (newY - 0.299 * red - 0.114 * blue) / 0.587
+                let red = matteY + newCr
+                let blue = matteY + newCb
+                let green = (matteY - 0.299 * red - 0.114 * blue) / 0.587
                 let base = index * 4
                 output[base] = byteClamped(red)
                 output[base + 1] = byteClamped(green)
@@ -256,6 +287,209 @@ public struct TinyImageGenerator {
             }
         }
         return output
+    }
+
+    private struct BackgroundEstimate {
+        let red: Float
+        let green: Float
+        let blue: Float
+        let y: Float
+        let cb: Float
+        let cr: Float
+    }
+
+    private static func estimateBackground(rgba: [UInt8], width: Int, height: Int) -> BackgroundEstimate {
+        let patchSize = max(2, min(12, min(width, height) / 8))
+        let cornerMeans = [
+            meanColor(rgba: rgba, width: width, xRange: 0..<patchSize, yRange: 0..<patchSize),
+            meanColor(rgba: rgba, width: width, xRange: (width - patchSize)..<width, yRange: 0..<patchSize),
+            meanColor(rgba: rgba, width: width, xRange: 0..<patchSize, yRange: (height - patchSize)..<height),
+            meanColor(rgba: rgba, width: width, xRange: (width - patchSize)..<width, yRange: (height - patchSize)..<height)
+        ]
+        let initial = pairedCornerMean(cornerMeans) ?? cornerMeans.min { left, right in
+            left.variance < right.variance
+        } ?? meanColor(rgba: rgba, width: width, xRange: 0..<width, yRange: 0..<height)
+
+        let borderWidth = max(2, min(8, min(width, height) / 16))
+        var distanceSum: Float = 0
+        var distanceSquareSum: Float = 0
+        var sampleCount: Float = 0
+
+        for y in 0..<height {
+            for x in 0..<width where isBorder(x: x, y: y, width: width, height: height, borderWidth: borderWidth) {
+                let base = (y * width + x) * 4
+                let red = Float(rgba[base])
+                let green = Float(rgba[base + 1])
+                let blue = Float(rgba[base + 2])
+                let distance = rgbDistance(red, green, blue, initial.red, initial.green, initial.blue)
+                distanceSum += distance
+                distanceSquareSum += distance * distance
+                sampleCount += 1.0
+            }
+        }
+
+        guard sampleCount > 0 else {
+            return backgroundEstimate(red: initial.red, green: initial.green, blue: initial.blue)
+        }
+
+        let meanDistance = distanceSum / sampleCount
+        let variance = max(0.0 as Float, distanceSquareSum / sampleCount - meanDistance * meanDistance)
+        let threshold = max(14.0 as Float, meanDistance + sqrtf(variance) * 0.85)
+        var redSum: Float = 0
+        var greenSum: Float = 0
+        var blueSum: Float = 0
+        var keptCount: Float = 0
+
+        for y in 0..<height {
+            for x in 0..<width where isBorder(x: x, y: y, width: width, height: height, borderWidth: borderWidth) {
+                let base = (y * width + x) * 4
+                let red = Float(rgba[base])
+                let green = Float(rgba[base + 1])
+                let blue = Float(rgba[base + 2])
+                let distance = rgbDistance(red, green, blue, initial.red, initial.green, initial.blue)
+                if distance <= threshold {
+                    redSum += red
+                    greenSum += green
+                    blueSum += blue
+                    keptCount += 1.0
+                }
+            }
+        }
+
+        if keptCount < max(8.0 as Float, sampleCount * 0.12) {
+            return backgroundEstimate(red: initial.red, green: initial.green, blue: initial.blue)
+        }
+        return backgroundEstimate(red: redSum / keptCount, green: greenSum / keptCount, blue: blueSum / keptCount)
+    }
+
+    private struct ColorSummary {
+        let red: Float
+        let green: Float
+        let blue: Float
+        let variance: Float
+    }
+
+    private static func meanColor(
+        rgba: [UInt8],
+        width: Int,
+        xRange: Range<Int>,
+        yRange: Range<Int>
+    ) -> ColorSummary {
+        var redSum: Float = 0
+        var greenSum: Float = 0
+        var blueSum: Float = 0
+        var redSquareSum: Float = 0
+        var greenSquareSum: Float = 0
+        var blueSquareSum: Float = 0
+        var count: Float = 0
+
+        for y in yRange {
+            for x in xRange {
+                let base = (y * width + x) * 4
+                let red = Float(rgba[base])
+                let green = Float(rgba[base + 1])
+                let blue = Float(rgba[base + 2])
+                redSum += red
+                greenSum += green
+                blueSum += blue
+                redSquareSum += red * red
+                greenSquareSum += green * green
+                blueSquareSum += blue * blue
+                count += 1.0
+            }
+        }
+
+        guard count > 0 else {
+            return ColorSummary(red: 0, green: 0, blue: 0, variance: Float.greatestFiniteMagnitude)
+        }
+
+        let redMean = redSum / count
+        let greenMean = greenSum / count
+        let blueMean = blueSum / count
+        let variance = max(
+            0.0 as Float,
+            (redSquareSum + greenSquareSum + blueSquareSum) / count
+                - (redMean * redMean + greenMean * greenMean + blueMean * blueMean)
+        ) / 3.0
+
+        return ColorSummary(red: redMean, green: greenMean, blue: blueMean, variance: variance)
+    }
+
+    private static func pairedCornerMean(_ summaries: [ColorSummary]) -> ColorSummary? {
+        guard summaries.count >= 2 else { return nil }
+
+        var bestLeft = 0
+        var bestRight = 1
+        var bestScore = Float.greatestFiniteMagnitude
+
+        for left in summaries.indices {
+            for right in summaries.indices where right > left {
+                let distance = rgbDistance(
+                    summaries[left].red,
+                    summaries[left].green,
+                    summaries[left].blue,
+                    summaries[right].red,
+                    summaries[right].green,
+                    summaries[right].blue
+                )
+                let variancePenalty = sqrtf(max(0.0 as Float, summaries[left].variance + summaries[right].variance))
+                let score = distance + variancePenalty * 0.15
+                if score < bestScore {
+                    bestScore = score
+                    bestLeft = left
+                    bestRight = right
+                }
+            }
+        }
+
+        return ColorSummary(
+            red: (summaries[bestLeft].red + summaries[bestRight].red) * 0.5,
+            green: (summaries[bestLeft].green + summaries[bestRight].green) * 0.5,
+            blue: (summaries[bestLeft].blue + summaries[bestRight].blue) * 0.5,
+            variance: (summaries[bestLeft].variance + summaries[bestRight].variance) * 0.5
+        )
+    }
+
+    private static func backgroundEstimate(red: Float, green: Float, blue: Float) -> BackgroundEstimate {
+        let y = 0.299 * red + 0.587 * green + 0.114 * blue
+        return BackgroundEstimate(red: red, green: green, blue: blue, y: y, cb: blue - y, cr: red - y)
+    }
+
+    private static func colorDistance(
+        y: Float,
+        cb: Float,
+        cr: Float,
+        background: BackgroundEstimate
+    ) -> Float {
+        let luma = abs(y - background.y)
+        let chroma = (abs(cb - background.cb) + abs(cr - background.cr)) * 0.5
+        return luma * 0.68 + chroma * 0.62
+    }
+
+    private static func rgbDistance(
+        _ red: Float,
+        _ green: Float,
+        _ blue: Float,
+        _ otherRed: Float,
+        _ otherGreen: Float,
+        _ otherBlue: Float
+    ) -> Float {
+        let dr = red - otherRed
+        let dg = green - otherGreen
+        let db = blue - otherBlue
+        return sqrtf((dr * dr + dg * dg + db * db) / 3.0)
+    }
+
+    private static func isBorder(x: Int, y: Int, width: Int, height: Int, borderWidth: Int) -> Bool {
+        x < borderWidth || y < borderWidth || x >= width - borderWidth || y >= height - borderWidth
+    }
+
+    private static func smoothstep(_ edge0: Float, _ edge1: Float, _ x: Float) -> Float {
+        guard edge0 != edge1 else {
+            return x < edge0 ? 0.0 : 1.0
+        }
+        let t = max(0.0 as Float, min(1.0 as Float, (x - edge0) / (edge1 - edge0)))
+        return t * t * (3.0 - 2.0 * t)
     }
 
     private func inferBatch(

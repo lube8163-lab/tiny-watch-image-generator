@@ -1,96 +1,125 @@
 # Tiny Watch Image Generator
 
-Apple Watch で動かすことを最優先にした、極小の画像生成モデルです。実用性や品質は捨て、技術デモとして「モデル推論で画像を生成する」ことだけに絞っています。
+Apple Watch 上で動くことを優先した、小型の画像生成デモです。
 
-今後は 2 つのルートで進めます。
+現在の watchOS 版は diffusion を Watch 上で動かす構成ではありません。プロンプトを小さな latent に変換し、座標条件付き MLP が 128x128 RGB 画像を直接生成します。学習済み重み `TinyWeights.bin` はリポジトリに含めているため、研究用データセットや RunPod 環境がなくても Xcode からすぐにビルドできます。
 
-- `TinyWatchGenerator`: 純 Swift の玩具 txt2img。Watch UI と推論パスの検証用。
-- Core ML 量子化ルート: 既存の小型画像生成モデルを分解、蒸留、量子化して Apple Watch を狙う研究用。
+## Xcode Quick Start
 
-## 方針
+必要なもの:
 
-- Diffusion / Transformer / VAE は使わない
-- Core ML 変換も必須にしない
-- 32x32 RGB を生成する座標条件付き MLP
-- 重みは int8 配列として Swift に直接埋め込み
-- 入力は `prompt, seed, x, y, radius, sin_feature, cos_feature, bias, latent[8]`
-- 出力は各ピクセルの RGB
+- macOS
+- Xcode with watchOS SDK and Swift 6 support
+- Apple Watch Simulator, or a paired Apple Watch for device testing
 
-現在のモデルは 293 パラメータです。うち重みは 270 個の int8 で、残りは Float bias です。
-
-## 生成
+Watch Simulator で動かす場合:
 
 ```sh
-python3 tools/generate_weights.py
-python3 tools/preview.py --prompt "sunset" --seed 7 --size 32 --out out/seed7.png
+open watchos_example/TinyImageWatchApp.xcodeproj
 ```
 
-Swift 側の確認:
+1. Scheme に `TinyImageWatchApp` を選びます。
+2. Destination に任意の Apple Watch Simulator を選びます。
+3. Run を押します。
+
+Simulator build は署名設定なしで動きます。実機の Apple Watch に入れる場合だけ、Xcode の `Signing & Capabilities` で自分の Team を選び、必要に応じて `Bundle Identifier` を自分用に変更してください。
+
+CLI で Simulator 向けにビルド確認する場合:
 
 ```sh
-swift run TinyPreview 7 sunset > out/seed7.ppm
+xcodebuild \
+  -project watchos_example/TinyImageWatchApp.xcodeproj \
+  -scheme TinyImageWatchApp \
+  -destination 'generic/platform=watchOS Simulator' \
+  CODE_SIGNING_ALLOWED=NO \
+  build
 ```
 
-## Apple Watch への組み込み
-
-`TinyWatchGenerator` を watchOS ターゲットに追加し、`watch_example/ContentView.swift` のように `TinyImageGenerator().generate(seed:)` の RGBA バッファを `CGImage` に変換して表示します。
-
-この構成は画質ではなくサイズを優先しています。より小さくするなら hidden を 6 程度まで落とせます。少し見た目を改善するなら hidden を 16-24 に増やすのが現実的です。
-
-## 350M 級 txt2img への方針
-
-350M パラメータ級を目指すなら、純 Swift 配列ではなく Core ML の `mlpackage` と圧縮を使います。詳細は [docs/watch_txt2img_plan.md](docs/watch_txt2img_plan.md) にまとめています。
-
-実際の作業順は [docs/phase_workflow.md](docs/phase_workflow.md) にまとめています。最初の本命候補は `SimianLuo/LCM_Dreamshaper_v7` です。これは Watch へ直接載せるモデルではなく、Mac 側で品質と component 分割を検証するための基準モデルです。
-
-iPhone 実機検証後の品質改善方針は [docs/model_improvement_plan.md](docs/model_improvement_plan.md) にまとめています。現行小型モデルのMac基準画像生成と、`SDXL_test` のローカルSDXLキャッシュを使った教師画像セット生成は以下のスクリプトから始めます。
+実機アーキテクチャ向けに compile-only で確認する場合:
 
 ```sh
-.venv/bin/python tools/generate_student_reference_grid.py --candidate segmind_tiny_sd --local-files-only
-.venv/bin/python tools/generate_sdxl_teacher_dataset.py --limit 1 --variants-per-prompt 1 --seeds 0 --steps 1 --target-sizes 128,64
+xcodebuild \
+  -project watchos_example/TinyImageWatchApp.xcodeproj \
+  -scheme TinyImageWatchApp \
+  -destination 'generic/platform=watchOS' \
+  CODE_SIGNING_ALLOWED=NO \
+  build
 ```
 
-重みサイズの概算:
+実機へインストールする CLI build は署名設定が必要です。Xcode で Team と Bundle Identifier を設定した後に実行してください。
 
 ```sh
-python3 tools/model_budget.py --params 350
+xcodebuild \
+  -project watchos_example/TinyImageWatchApp.xcodeproj \
+  -scheme TinyImageWatchApp \
+  -destination 'generic/platform=watchOS' \
+  build
 ```
 
-既存 Core ML モデルの圧縮スクリプト雛形:
+## What Is Included
+
+- `watchos_example/TinyImageWatchApp.xcodeproj`: すぐ開ける watchOS サンプルアプリ
+- `watchos_example/TinyImageWatchApp/TinyWeights.bin`: Watch アプリに同梱する学習済み int8 重み
+- `Sources/TinyWatchGenerator`: 純 Swift の tiny generator 実装
+- `Sources/TinyPreview`: macOS CLI で PPM を出す軽量プレビュー
+- `tools/`: 学習、教師画像生成、prompt normalization、重み export 用スクリプト
+- `docs/`: 研究ログと追加学習・モデル改善メモ
+
+`datasets/`, `out/`, `models/`, `dist/`, `reports/` はローカルの研究成果物置き場です。GitHub には入れず、Watch サンプルのビルドにも不要です。
+
+## SwiftPM Preview
+
+Xcode を開かずに generator だけ確認できます。
 
 ```sh
-python3 tools/coreml_quantize.py path/to/component.mlpackage --mode palettize4 --out dist/component_4bit.mlpackage
+swift run TinyPreview 7 cat > /tmp/cat.ppm
+swift run TinyPreview --raw 7 cat > /tmp/cat_raw.ppm
 ```
 
-現実的な最初の目標は、フル Stable Diffusion ではなく、64x64 の latent decoder + 小型 denoiser + 簡易 text conditioning です。Watch ではファイルサイズより実行時メモリと発熱が支配的なので、段階的に FP16 -> int8 -> 4bit の順で落としていきます。
+`--raw` を付けない場合は watchOS 側と同じ軽量 postprocess を通します。
 
-研究環境:
+## Current Watch App
+
+- 128x128 RGBA output
+- Prompt preset picker
+- Slot/chip input: subject, color, action, view, style
+- Advanced text input
+- Lightweight postprocess for background denoise/matting
+- No network access at runtime
+- No Core ML model required for the current watchOS demo
+
+## Training And Research Notes
+
+追加学習や重み再生成は任意です。通常の Xcode build には不要です。
+
+主な入口:
 
 ```sh
-bash tools/bootstrap_research_env.sh
-source .venv/bin/activate
-export HF_HUB_DISABLE_XET=1
+bash tools/run_cloud_watch_v7_pipeline.sh
+python3 tools/prompt_normalization.py --help
+python3 tools/train_tiny_coordinate_mlp.py --help
 ```
 
-Phase 1:
+進捗メモ:
 
-```sh
-python3 tools/phase0_download.py --candidate segmind_tiny_sd
-python3 tools/phase1_generate.py --candidate segmind_tiny_sd --local-files-only --prompt "a small watercolor landscape, crisp details"
-python3 tools/phase1_inspect.py --candidate segmind_tiny_sd --local-files-only
-```
+- [docs/articles/tiny_watch_image_generator_progress_2026-06-14.md](docs/articles/tiny_watch_image_generator_progress_2026-06-14.md)
+- [docs/model_improvement_plan.md](docs/model_improvement_plan.md)
+- [docs/watch_txt2img_plan.md](docs/watch_txt2img_plan.md)
 
-Phase 2:
+## Troubleshooting
 
-```sh
-python3 tools/phase2_export_vae_decoder.py --candidate segmind_tiny_sd --local-files-only --output-width 64 --output-height 64 --drop-mid-attention
-python3 tools/coreml_quantize.py dist/segmind_tiny_sd/vae_decoder_64x64.mlpackage --mode palettize4 --out dist/segmind_tiny_sd/vae_decoder_64x64_4bit.mlpackage
-```
+If Xcode asks for a development team when using Simulator:
 
-Phase 3 UNet probe:
+- Make sure the selected destination is an Apple Watch Simulator, not a physical device or `Any watchOS Device`.
+- Clean build folder if Xcode reused a previous device destination.
 
-```sh
-python3 tools/phase3_export_unet.py --candidate lcm_dreamshaper_v7 --local-files-only --latent-height 8 --latent-width 8 --attention-processor eager
-python3 tools/coreml_quantize.py dist/lcm_dreamshaper_v7/unet_8x8.mlpackage --mode palettize4 --out dist/lcm_dreamshaper_v7/unet_8x8_4bit.mlpackage
-python3 tools/phase3_smoke_unet_coreml.py dist/lcm_dreamshaper_v7/unet_8x8_4bit.mlpackage --latent-height 8 --latent-width 8
-```
+If a physical Watch build fails with signing errors:
+
+- Select your own Team in `Signing & Capabilities`.
+- Change `Bundle Identifier` from `dev.local.TinyImageWatchApp` to a unique identifier you own.
+- Ensure the Watch is paired and enabled for development.
+
+If the app crashes with `TinyWeights.bin is missing from the app bundle`:
+
+- Confirm `watchos_example/TinyImageWatchApp/TinyWeights.bin` exists after clone.
+- Confirm it appears in the target's Copy Bundle Resources phase.
