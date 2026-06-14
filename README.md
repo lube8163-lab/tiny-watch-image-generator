@@ -91,7 +91,16 @@ python3 tools/make_watch_eval_contact_sheet.py \
   --seeds 0
 ```
 
-出力先はデフォルトで `reports/watch_eval/YYYYMMDD_HHMMSS/` です。`reports/` は Git 管理外なので、生成画像を誤ってコミットしにくい構成です。Swift evaluator はデフォルトで release build を使います。
+raw と watchOS postprocess 後を横並びで比較する場合:
+
+```sh
+python3 tools/make_watch_postprocess_compare.py \
+  --groups core_nouns,adjectives,actions,styles,japanese_aliases \
+  --prompts-per-group 2 \
+  --seeds 0
+```
+
+通常 eval の出力先はデフォルトで `reports/watch_eval/YYYYMMDD_HHMMSS/`、postprocess 比較の出力先は `reports/watch_postprocess_compare/YYYYMMDD_HHMMSS/` です。`reports/` は Git 管理外なので、生成画像を誤ってコミットしにくい構成です。Swift evaluator はデフォルトで release build を使います。
 
 Swift evaluator だけを直接使う場合:
 

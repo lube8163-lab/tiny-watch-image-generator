@@ -71,3 +71,15 @@ When RunPod is enabled, the intended entry point is:
 ```sh
 bash tools/cloud_generate_sdxl_watch_v8_slot.sh
 ```
+
+## Postprocess Compare
+
+Raw vs watch-side postprocess can be checked locally with:
+
+```sh
+python3 tools/make_watch_postprocess_compare.py \
+  --out-dir reports/watch_postprocess_compare/current \
+  --seeds 0
+```
+
+The current 24-prompt comparison reduces mean border color standard deviation from roughly `13.77` to `10.48` with similar local generation time. The tradeoff remains visible: background noise is lower, but very soft foregrounds still need retraining rather than heavier watch-side filtering.

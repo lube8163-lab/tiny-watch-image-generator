@@ -264,18 +264,19 @@ public struct TinyImageGenerator {
                     max(colorMask[index], max(maskBlur[index], edgeSupport))
                 )
                 let backgroundMask = (1.0 - foregroundMask) * (1.0 - edge * 0.55)
+                let cleanBackgroundMask = backgroundMask * backgroundMask
                 let foregroundSmooth = foregroundMask * (1.0 - edge)
 
-                let lumaAmount = 0.08 * foregroundSmooth + 0.62 * backgroundMask
-                let chromaAmount = 0.18 * foregroundSmooth + 0.82 * backgroundMask
+                let lumaAmount = 0.04 * foregroundSmooth + 0.64 * cleanBackgroundMask
+                let chromaAmount = 0.08 * foregroundSmooth + 0.84 * cleanBackgroundMask
                 let newY = luminance[index] + (yBlur[index] - luminance[index]) * lumaAmount
                 var newCb = cb[index] + (cbBlur[index] - cb[index]) * chromaAmount
                 var newCr = cr[index] + (crBlur[index] - cr[index]) * chromaAmount
                 var matteY = newY
-                let matteAmount = 0.28 * backgroundMask
+                let matteAmount = 0.30 * cleanBackgroundMask
                 matteY += (background.y - matteY) * matteAmount
-                newCb += (background.cb - newCb) * (0.50 * backgroundMask)
-                newCr += (background.cr - newCr) * (0.50 * backgroundMask)
+                newCb += (background.cb - newCb) * (0.52 * cleanBackgroundMask)
+                newCr += (background.cr - newCr) * (0.52 * cleanBackgroundMask)
 
                 let red = matteY + newCr
                 let blue = matteY + newCb
