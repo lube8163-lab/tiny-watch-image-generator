@@ -1,0 +1,30 @@
+.build/
+.swiftpm/
+.venv/
+DerivedData/
+build/
+*.xcuserstate
+*.xcuserdatad/
+xcuserdata/
+.DS_Store
+__pycache__/
+*.pyc
+models/
+dist/
+reports/
+datasets/
+out/
+
+# Generated Core ML / model artifacts are too large for normal GitHub storage.
+*.mlmodelc/
+*.mlpackage/
+*.safetensors
+*.pth
+
+# Large local SD teacher app outputs.
+SD15TeacherDatasetDesktop/artifacts/
+SD15TeacherDatasetDesktop/build/
+SD15TeacherDatasetDesktop/.pycache/
+
+# Large iOS diffusion resources; watchOS tiny weights are tracked separately.
+ios_example/TinyImageIOSApp/Resources/Models/

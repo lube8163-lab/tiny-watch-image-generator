@@ -1,0 +1,98 @@
+{
+  "default": "lcm_dreamshaper_v7",
+  "candidates": {
+    "lcm_dreamshaper_v7": {
+      "repo": "SimianLuo/LCM_Dreamshaper_v7",
+      "pipeline": "LatentConsistencyModelPipeline",
+      "priority": 1,
+      "reason": "Few-step text-to-image model. Best first target for Apple Watch experiments because denoising steps can start at 1-4.",
+      "initial_width": 256,
+      "initial_height": 256,
+      "initial_steps": 4,
+      "watch_probe_width": 64,
+      "watch_probe_height": 64,
+      "components_to_split": ["text_encoder", "unet", "vae_decoder"],
+      "download_allow_patterns": [
+        "model_index.json",
+        "scheduler/*",
+        "tokenizer/*",
+        "text_encoder/config.json",
+        "text_encoder/model.safetensors",
+        "unet/config.json",
+        "unet/diffusion_pytorch_model.safetensors",
+        "vae/config.json",
+        "vae/diffusion_pytorch_model.safetensors"
+      ],
+      "download_ignore_patterns": [
+        "*.onnx",
+        "*.onnx_data",
+        "*.png",
+        "LCM_Dreamshaper_v7_4k.safetensors",
+        "safety_checker/*",
+        "feature_extractor/*",
+        "vae_decoder/*",
+        "vae_encoder/*"
+      ],
+      "notes": [
+        "This is still too large for direct Watch deployment.",
+        "Use it first to validate component export and quality at low resolutions.",
+        "The VAE decoder should be exported and profiled before the denoiser."
+      ]
+    },
+    "segmind_tiny_sd": {
+      "repo": "segmind/tiny-sd",
+      "pipeline": "StableDiffusionPipeline",
+      "priority": 2,
+      "reason": "Distilled Stable Diffusion variant with fewer parameters than SD 1.x. Useful comparison target for component size.",
+      "initial_width": 256,
+      "initial_height": 256,
+      "initial_steps": 20,
+      "watch_probe_width": 64,
+      "watch_probe_height": 64,
+      "components_to_split": ["text_encoder", "unet", "vae_decoder"],
+      "download_allow_patterns": [
+        "model_index.json",
+        "scheduler/*",
+        "tokenizer/*",
+        "text_encoder/*",
+        "unet/*",
+        "vae/*"
+      ],
+      "download_ignore_patterns": [
+        "*.png",
+        "README.md"
+      ],
+      "notes": [
+        "Likely needs more steps than LCM.",
+        "Potentially smaller denoiser, but less aligned with few-step Watch generation."
+      ]
+    },
+    "segmind_small_sd": {
+      "repo": "segmind/small-sd",
+      "pipeline": "StableDiffusionPipeline",
+      "priority": 3,
+      "reason": "Larger than tiny-sd but potentially better quality. Use as a fallback if tiny-sd quality is too weak.",
+      "initial_width": 256,
+      "initial_height": 256,
+      "initial_steps": 20,
+      "watch_probe_width": 64,
+      "watch_probe_height": 64,
+      "components_to_split": ["text_encoder", "unet", "vae_decoder"],
+      "download_allow_patterns": [
+        "model_index.json",
+        "scheduler/*",
+        "tokenizer/*",
+        "text_encoder/*",
+        "unet/*",
+        "vae/*"
+      ],
+      "download_ignore_patterns": [
+        "*.png",
+        "README.md"
+      ],
+      "notes": [
+        "Good comparison point, but not the first Watch target."
+      ]
+    }
+  }
+}

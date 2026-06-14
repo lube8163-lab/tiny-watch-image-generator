@@ -1,0 +1,165 @@
+{
+  "version": 1,
+  "groups": [
+    {
+      "key": "core_nouns",
+      "prompts": [
+        "cat",
+        "dog",
+        "car",
+        "flower",
+        "house",
+        "tree",
+        "robot",
+        "train",
+        "fish",
+        "bird"
+      ]
+    },
+    {
+      "key": "broad_nouns",
+      "prompts": [
+        "bicycle",
+        "airplane",
+        "boat",
+        "cake",
+        "pizza",
+        "guitar",
+        "chair",
+        "camera",
+        "shoe",
+        "mushroom"
+      ]
+    },
+    {
+      "key": "adjectives",
+      "prompts": [
+        "red car",
+        "blue bird",
+        "small house",
+        "large tree",
+        "white cat",
+        "black dog",
+        "pink flower",
+        "golden star"
+      ]
+    },
+    {
+      "key": "actions",
+      "prompts": [
+        "dog running",
+        "cat sitting",
+        "bird flying",
+        "fish swimming",
+        "car parked",
+        "person standing",
+        "dog sleeping",
+        "cat jumping"
+      ]
+    },
+    {
+      "key": "styles",
+      "prompts": [
+        "anime cat",
+        "watercolor flower",
+        "sketch car",
+        "photo apple",
+        "cartoon robot",
+        "toy train",
+        "icon star",
+        "simple moon"
+      ]
+    },
+    {
+      "key": "watch_v3_nouns",
+      "prompts": [
+        "fox",
+        "owl",
+        "banana",
+        "orange",
+        "strawberry",
+        "bread",
+        "mountain",
+        "cloud",
+        "clock",
+        "ball"
+      ]
+    },
+    {
+      "key": "japanese_aliases",
+      "prompts": [
+        "赤い車",
+        "走っている犬",
+        "小さい家",
+        "青い鳥",
+        "かわいい猫"
+      ]
+    },
+    {
+      "key": "v5_freeprompt_edges",
+      "prompts": [
+        "floating cloud",
+        "tilted star",
+        "smiling face",
+        "rolling ball",
+        "bouncing ball",
+        "fluffy cat",
+        "watercolor tree",
+        "anime cat",
+        "front view clock",
+        "top view book",
+        "blue robot walking",
+        "small fox sitting"
+      ]
+    },
+    {
+      "key": "v6_new_subjects",
+      "prompts": [
+        "astronaut",
+        "alien",
+        "dragon",
+        "penguin",
+        "turtle",
+        "elephant",
+        "lion",
+        "monkey",
+        "frog",
+        "duck",
+        "umbrella",
+        "key",
+        "bottle",
+        "pencil",
+        "lamp",
+        "phone",
+        "computer",
+        "crown",
+        "diamond",
+        "sword",
+        "shield",
+        "cactus",
+        "volcano",
+        "fire",
+        "ice cream",
+        "donut",
+        "sushi"
+      ]
+    },
+    {
+      "key": "v6_actions_modifiers_views",
+      "prompts": [
+        "green alien walking",
+        "cute dragon flying",
+        "penguin sliding",
+        "frog jumping",
+        "monkey climbing",
+        "spinning diamond",
+        "striped umbrella",
+        "open computer",
+        "metallic sword tilted",
+        "transparent bottle",
+        "top view phone",
+        "front view shield"
+      ]
+    }
+  ]
+}

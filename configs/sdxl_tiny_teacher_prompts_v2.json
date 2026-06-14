@@ -1,0 +1,299 @@
+{
+  "version": "expanded32_sdxl_tiny_v2",
+  "description": "Expanded SDXL teacher prompts with stricter plain-background guidance plus actions, modifiers, and compositions for constrained free-prompt training.",
+  "default_negative_prompt": "text, logo, watermark, caption, signature, letters, low quality, blurry, noisy, distorted, deformed, cropped subject, multiple subjects, duplicate subject, repeated subject, many copies, group, collection, set, array, row of objects, icon sheet, collage, tiled layout, pattern, seamless pattern, repeating pattern, wallpaper, decorative background, decorative frame, ornamental border, stripes, checkerboard, busy background, cluttered background, detailed scenery, crowd, people in background",
+  "defaults": {
+    "actions": ["floating", "tilted slightly", "glowing softly"],
+    "modifiers": ["small", "bright colored"],
+    "compositions": ["front view", "side view", "three-quarter view"]
+  },
+  "variants": [
+    {
+      "variant": "v00",
+      "conditioning_prompt": "{key}",
+      "prompt": "exactly one {subject}, isolated single subject, centered, full subject visible, readable silhouette, clean simple illustration, matte plain light gray background, empty background, not a collection{guard_clause}, no text, no logo, no watermark"
+    },
+    {
+      "variant": "v01",
+      "conditioning_prompt": "{key} front view",
+      "prompt": "exactly one {subject}, front view, isolated single subject, centered, full subject visible, simple shape, clean illustration, plain light gray background, empty background, not a collection{guard_clause}, no text, no logo, no watermark"
+    },
+    {
+      "variant": "v02",
+      "conditioning_prompt": "{key} side view",
+      "prompt": "exactly one {subject}, side view, isolated single subject, centered, full subject visible, readable silhouette, toy-like 3D render, plain light gray background, empty background, not a collection{guard_clause}, no text, no logo, no watermark"
+    },
+    {
+      "variant": "v03",
+      "conditioning_prompt": "simple {key}",
+      "prompt": "exactly one {subject}, simple object icon, isolated single subject only, centered, bold silhouette, low detail readable shape, clean vector-like illustration, plain light gray background, empty background, not a collection{guard_clause}, no text, no logo, no watermark"
+    },
+    {
+      "variant": "a{action_index}",
+      "slot_source": {"action": "actions"},
+      "max_expansions": 3,
+      "conditioning_prompt": "{key} {action}",
+      "prompt": "exactly one {subject} {action}, isolated single subject only, centered, full subject visible, simple readable pose, clean illustration, plain light gray background, empty background, no repeated objects, not a collection{guard_clause}, no text, no logo, no watermark"
+    },
+    {
+      "variant": "m{modifier_index}",
+      "slot_source": {"modifier": "modifiers"},
+      "max_expansions": 2,
+      "conditioning_prompt": "{modifier} {key}",
+      "prompt": "exactly one {modifier} {subject}, isolated single subject only, centered, full subject visible, clean simple illustration, plain light gray background, empty background, no repeated objects, not a collection, no pattern{guard_clause}, no text, no logo, no watermark"
+    },
+    {
+      "variant": "c{composition_index}",
+      "slot_source": {"composition": "compositions"},
+      "max_expansions": 3,
+      "conditioning_prompt": "{key} {composition}",
+      "prompt": "exactly one {subject}, {composition}, centered composition, isolated single subject only, full subject visible, readable at small size, clean illustration, plain light gray background, empty background, not a collection{guard_clause}, no text, no logo, no watermark"
+    }
+  ],
+  "presets": [
+    {
+      "key": "apple",
+      "title": "Apple",
+      "subject": "single apple fruit with stem and leaf",
+      "actions": ["falling", "floating", "cut in half"],
+      "modifiers": ["shiny red", "green"],
+      "guard": "fruit only, no apple logo shape, no bite mark, no repeating pattern",
+      "qc_flags": ["possible_brand_shape"]
+    },
+    {
+      "key": "bird",
+      "title": "Bird",
+      "subject": "small bird",
+      "actions": ["flying", "standing", "spreading wings"],
+      "modifiers": ["blue", "round"]
+    },
+    {
+      "key": "car",
+      "title": "Car",
+      "subject": "small toy car vehicle",
+      "actions": ["driving", "parked", "turning left"],
+      "modifiers": ["red", "blue"],
+      "guard": "vehicle only, no people, no driver, no buildings, no street scene",
+      "qc_flags": ["avoid_people"]
+    },
+    {
+      "key": "castle",
+      "title": "Castle",
+      "subject": "simple castle",
+      "actions": ["standing on a hill", "glowing softly", "covered with snow"],
+      "modifiers": ["stone", "tiny"]
+    },
+    {
+      "key": "cat",
+      "title": "Cat",
+      "subject": "cute cat",
+      "actions": ["sitting", "jumping", "sleeping"],
+      "modifiers": ["fluffy", "gray"]
+    },
+    {
+      "key": "dog",
+      "title": "Dog",
+      "subject": "cute dog",
+      "actions": ["sitting", "running", "jumping"],
+      "modifiers": ["brown", "fluffy"]
+    },
+    {
+      "key": "face",
+      "title": "Face",
+      "subject": "single round human face only",
+      "actions": ["smiling", "looking left", "looking surprised"],
+      "modifiers": ["happy", "sleepy"],
+      "compositions": ["front portrait", "three-quarter portrait", "close-up portrait"],
+      "qc_flags": ["face_may_be_multiple"]
+    },
+    {
+      "key": "fish",
+      "title": "Fish",
+      "subject": "single fish",
+      "actions": ["swimming", "turning", "jumping"],
+      "modifiers": ["orange", "blue"]
+    },
+    {
+      "key": "flower",
+      "title": "Flower",
+      "subject": "single flower",
+      "actions": ["blooming", "leaning left", "standing upright"],
+      "modifiers": ["pink", "yellow"]
+    },
+    {
+      "key": "house",
+      "title": "House",
+      "subject": "small house",
+      "actions": ["standing still", "glowing warmly", "covered with snow"],
+      "modifiers": ["wooden", "blue roof"]
+    },
+    {
+      "key": "moon",
+      "title": "Moon",
+      "subject": "single moon shape",
+      "actions": ["glowing", "floating", "crescent shaped"],
+      "modifiers": ["silver", "soft blue"],
+      "compositions": ["centered icon composition", "slightly tilted composition", "close-up icon composition"]
+    },
+    {
+      "key": "robot",
+      "title": "Robot",
+      "subject": "small robot",
+      "actions": ["standing", "waving", "walking"],
+      "modifiers": ["silver", "round"]
+    },
+    {
+      "key": "star",
+      "title": "Star",
+      "subject": "single five pointed star",
+      "actions": ["shining", "floating", "tilted slightly"],
+      "modifiers": ["golden", "blue"],
+      "compositions": ["centered icon composition", "slightly tilted composition", "close-up icon composition"]
+    },
+    {
+      "key": "sun",
+      "title": "Sun",
+      "subject": "single yellow sun",
+      "actions": ["shining", "rising", "glowing"],
+      "modifiers": ["golden", "round"],
+      "compositions": ["centered icon composition", "slightly tilted composition", "close-up icon composition"],
+      "qc_flags": ["may_generate_multiple_icons"]
+    },
+    {
+      "key": "train",
+      "title": "Train",
+      "subject": "toy train engine",
+      "actions": ["moving", "stopped", "turning"],
+      "modifiers": ["red", "steam"]
+    },
+    {
+      "key": "tree",
+      "title": "Tree",
+      "subject": "single tree",
+      "actions": ["standing upright", "leaning right", "swaying"],
+      "modifiers": ["green", "autumn"]
+    },
+    {
+      "key": "airplane",
+      "title": "Airplane",
+      "subject": "small toy airplane",
+      "actions": ["flying", "landing", "turning"],
+      "modifiers": ["white", "red"],
+      "guard": "aircraft only, no airport, no runway, no clouds as background"
+    },
+    {
+      "key": "boat",
+      "title": "Boat",
+      "subject": "small toy boat",
+      "actions": ["sailing", "floating", "tilted slightly"],
+      "modifiers": ["blue", "wooden"],
+      "guard": "boat only, no ocean scene, no waves filling background"
+    },
+    {
+      "key": "bicycle",
+      "title": "Bicycle",
+      "subject": "simple bicycle",
+      "actions": ["standing", "moving", "leaning"],
+      "modifiers": ["red", "black"],
+      "guard": "bicycle only, no rider, no street scene"
+    },
+    {
+      "key": "rocket",
+      "title": "Rocket",
+      "subject": "small rocket ship",
+      "actions": ["launching", "flying", "standing upright"],
+      "modifiers": ["red and white", "silver"],
+      "guard": "rocket only, no outer space background, no star field"
+    },
+    {
+      "key": "bus",
+      "title": "Bus",
+      "subject": "small toy bus",
+      "actions": ["driving", "parked", "turning"],
+      "modifiers": ["yellow", "blue"],
+      "guard": "vehicle only, no people, no city street"
+    },
+    {
+      "key": "rabbit",
+      "title": "Rabbit",
+      "subject": "cute rabbit",
+      "actions": ["sitting", "jumping", "standing"],
+      "modifiers": ["white", "fluffy"]
+    },
+    {
+      "key": "bear",
+      "title": "Bear",
+      "subject": "cute bear",
+      "actions": ["standing", "sitting", "waving"],
+      "modifiers": ["brown", "round"]
+    },
+    {
+      "key": "horse",
+      "title": "Horse",
+      "subject": "simple horse",
+      "actions": ["standing", "running", "jumping"],
+      "modifiers": ["brown", "white"]
+    },
+    {
+      "key": "butterfly",
+      "title": "Butterfly",
+      "subject": "single butterfly",
+      "actions": ["flying", "landing", "spreading wings"],
+      "modifiers": ["blue", "orange"],
+      "guard": "one butterfly only, no flower field background"
+    },
+    {
+      "key": "heart",
+      "title": "Heart",
+      "subject": "single heart shape",
+      "actions": ["floating", "glowing", "tilted slightly"],
+      "modifiers": ["red", "pink"],
+      "compositions": ["centered icon composition", "slightly tilted composition", "close-up icon composition"]
+    },
+    {
+      "key": "leaf",
+      "title": "Leaf",
+      "subject": "single leaf",
+      "actions": ["falling", "floating", "tilted slightly"],
+      "modifiers": ["green", "orange"],
+      "guard": "one leaf only, no repeated leaves"
+    },
+    {
+      "key": "mushroom",
+      "title": "Mushroom",
+      "subject": "single mushroom",
+      "actions": ["standing", "tilted slightly", "glowing softly"],
+      "modifiers": ["red cap", "brown"]
+    },
+    {
+      "key": "cup",
+      "title": "Cup",
+      "subject": "simple cup",
+      "actions": ["standing", "tilted slightly", "steaming"],
+      "modifiers": ["white", "blue"]
+    },
+    {
+      "key": "book",
+      "title": "Book",
+      "subject": "single book",
+      "actions": ["open", "closed", "floating"],
+      "modifiers": ["red cover", "blue cover"],
+      "guard": "book only, no readable text, blank cover"
+    },
+    {
+      "key": "chair",
+      "title": "Chair",
+      "subject": "simple chair",
+      "actions": ["standing", "tilted slightly", "facing left"],
+      "modifiers": ["wooden", "red"]
+    },
+    {
+      "key": "camera",
+      "title": "Camera",
+      "subject": "small camera",
+      "actions": ["facing forward", "tilted slightly", "floating"],
+      "modifiers": ["black", "silver"],
+      "guard": "camera only, no brand logo"
+    }
+  ]
+}

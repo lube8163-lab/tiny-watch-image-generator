@@ -1,0 +1,146 @@
+[
+  {
+    "key": "cat",
+    "title": "Cat",
+    "prompt": "cute cat sitting, clean anime illustration, simple background",
+    "aliases": ["cat", "kitty", "kitten", "neko", "ねこ", "猫"]
+  },
+  {
+    "key": "dog",
+    "title": "Dog",
+    "prompt": "cute dog sitting, clean anime illustration, simple background",
+    "aliases": ["dog", "puppy", "inu", "いぬ", "犬"]
+  },
+  {
+    "key": "girl",
+    "title": "Girl",
+    "prompt": "anime girl portrait, face centered, clean illustration, simple background",
+    "aliases": ["girl", "person", "portrait", "anime", "女の子", "人物"]
+  },
+  {
+    "key": "boy",
+    "title": "Boy",
+    "prompt": "anime boy portrait, face centered, clean illustration, simple background",
+    "aliases": ["boy", "少年", "男の子"]
+  },
+  {
+    "key": "face",
+    "title": "Face",
+    "prompt": "simple anime face portrait, centered composition, clean illustration",
+    "aliases": ["face", "顔", "portrait"]
+  },
+  {
+    "key": "robot",
+    "title": "Robot",
+    "prompt": "small friendly robot, centered, clean anime illustration",
+    "aliases": ["robot", "mecha", "ロボット"]
+  },
+  {
+    "key": "car",
+    "title": "Car",
+    "prompt": "small car side view, clean anime illustration, simple background",
+    "aliases": ["car", "vehicle", "auto", "車"]
+  },
+  {
+    "key": "house",
+    "title": "House",
+    "prompt": "small cozy house, centered, clean anime background art",
+    "aliases": ["house", "home", "building", "家"]
+  },
+  {
+    "key": "castle",
+    "title": "Castle",
+    "prompt": "fantasy castle, centered, clean anime background art",
+    "aliases": ["castle", "fantasy", "shiro", "城"]
+  },
+  {
+    "key": "flower",
+    "title": "Flower",
+    "prompt": "single beautiful flower, centered, clean anime illustration",
+    "aliases": ["flower", "rose", "hana", "花"]
+  },
+  {
+    "key": "tree",
+    "title": "Tree",
+    "prompt": "single green tree, centered, clean anime landscape art",
+    "aliases": ["tree", "forest", "木", "森"]
+  },
+  {
+    "key": "mountain",
+    "title": "Mountain",
+    "prompt": "mountain landscape, clean anime background art",
+    "aliases": ["mountain", "landscape", "yama", "山"]
+  },
+  {
+    "key": "beach",
+    "title": "Beach",
+    "prompt": "sunny beach landscape, clean anime background art",
+    "aliases": ["beach", "sea", "ocean", "海"]
+  },
+  {
+    "key": "city",
+    "title": "City",
+    "prompt": "small city street, clean anime background art",
+    "aliases": ["city", "street", "town", "街", "都市"]
+  },
+  {
+    "key": "star",
+    "title": "Star",
+    "prompt": "bright star in night sky, centered, clean anime illustration",
+    "aliases": ["star", "sky", "night", "星", "夜空"]
+  },
+  {
+    "key": "moon",
+    "title": "Moon",
+    "prompt": "bright moon in night sky, centered, clean anime illustration",
+    "aliases": ["moon", "night", "月"]
+  },
+  {
+    "key": "sun",
+    "title": "Sun",
+    "prompt": "bright sun in blue sky, centered, clean anime illustration",
+    "aliases": ["sun", "sky", "太陽"]
+  },
+  {
+    "key": "apple",
+    "title": "Apple",
+    "prompt": "single red apple, centered, clean simple illustration",
+    "aliases": ["apple", "fruit", "りんご", "リンゴ"]
+  },
+  {
+    "key": "bird",
+    "title": "Bird",
+    "prompt": "small bird, centered, clean anime illustration",
+    "aliases": ["bird", "tori", "鳥"]
+  },
+  {
+    "key": "fish",
+    "title": "Fish",
+    "prompt": "small colorful fish, centered, clean anime illustration",
+    "aliases": ["fish", "sakana", "魚"]
+  },
+  {
+    "key": "train",
+    "title": "Train",
+    "prompt": "small train side view, clean anime illustration",
+    "aliases": ["train", "railway", "電車", "列車"]
+  },
+  {
+    "key": "food",
+    "title": "Food",
+    "prompt": "cute plate of food, centered, clean anime illustration",
+    "aliases": ["food", "meal", "料理", "ごはん"]
+  },
+  {
+    "key": "watch",
+    "title": "Watch",
+    "prompt": "small digital watch, centered, clean product illustration",
+    "aliases": ["watch", "clock", "時計"]
+  },
+  {
+    "key": "abstract",
+    "title": "Abstract",
+    "prompt": "colorful abstract geometric pattern, clean illustration",
+    "aliases": ["abstract", "pattern", "抽象", "模様"]
+  }
+]

@@ -1,0 +1,57 @@
+{
+  "scheme": "watch_sd_quantization",
+  "output_policy": {
+    "write_only_under": [
+      "schemes/watch_sd_quantization/artifacts",
+      "schemes/watch_sd_quantization/reports"
+    ],
+    "read_only_inputs": [
+      "dist",
+      "models"
+    ]
+  },
+  "watch_targets": {
+    "first_resolution": "64x64",
+    "stretch_resolution": "96x96",
+    "max_initial_steps": 4,
+    "text_conditioning": "precomputed_prompt_embeddings"
+  },
+  "candidates": [
+    {
+      "key": "segmind_tiny_sd",
+      "repo": "segmind/tiny-sd",
+      "pipeline_role": "small_sd_compatible_baseline",
+      "initial_components": [
+        "vae_decoder_64x64_noattn_4bit",
+        "unet_sd_16x16_4bit"
+      ],
+      "expected_risk": "medium_high",
+      "next_test": "decoder_only_watch_probe"
+    },
+    {
+      "key": "lcm_dreamshaper_v7",
+      "repo": "SimianLuo/LCM_Dreamshaper_v7",
+      "pipeline_role": "few_step_teacher_or_baseline",
+      "initial_components": [
+        "vae_decoder_64x64_noattn_4bit",
+        "unet_8x8_4bit"
+      ],
+      "expected_risk": "high",
+      "next_test": "teacher_only_unless_unet_loads"
+    },
+    {
+      "key": "coreml_sdxl_ios",
+      "repo": "apple/coreml-stable-diffusion-xl-base-ios",
+      "pipeline_role": "compression_recipe_reference",
+      "expected_risk": "too_large_for_watch",
+      "next_test": "study_mixed_bit_recipe_only"
+    },
+    {
+      "key": "distilled_watch_student",
+      "repo": "derived_from_public_sd_or_lcm_teacher",
+      "pipeline_role": "probable_watch_native_path",
+      "expected_risk": "medium",
+      "next_test": "train_fixed_shape_64px_student"
+    }
+  ]
+}

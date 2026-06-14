@@ -1,0 +1,1365 @@
+{
+  "version": "watch46_sdxl_tiny_v4_freeprompt",
+  "description": "Watch teacher prompts aligned to compositional_v2. The schedule keeps plain backgrounds, uses explicit subject/color/action/view/style slots, and avoids unrecognized modifier wording.",
+  "default_negative_prompt": "text, logo, watermark, caption, signature, letters, low quality, blurry, noisy, distorted, deformed, cropped subject, multiple subjects, duplicate subject, repeated subject, many copies, group, collection, set, array, row of objects, icon sheet, collage, tiled layout, pattern, seamless pattern, repeating pattern, wallpaper, decorative background, decorative frame, ornamental border, stripes, checkerboard, busy background, cluttered background, detailed scenery, crowd, people in background",
+  "defaults": {
+    "views_v2": [
+      "front view",
+      "side view",
+      "closeup"
+    ],
+    "styles_v2": [
+      "icon",
+      "cartoon",
+      "toy",
+      "sketch"
+    ]
+  },
+  "variants": [
+    {
+      "variant": "v00",
+      "conditioning_prompt": "{key}",
+      "prompt": "exactly one {subject}, isolated single subject, centered, full subject visible, clean simple illustration, matte plain light gray background, empty background, readable silhouette, not a collection{guard_clause}, no text, no logo, no watermark"
+    },
+    {
+      "variant": "v01",
+      "conditioning_prompt": "simple {key}",
+      "prompt": "exactly one {subject}, simple object icon, centered, bold silhouette, low detail readable shape, clean vector-like illustration, plain light gray background, empty background, not a collection{guard_clause}, no text, no logo, no watermark"
+    },
+    {
+      "variant": "view{view_index}",
+      "slot_source": {
+        "view": "views_v2"
+      },
+      "max_expansions": 3,
+      "conditioning_prompt": "{key} {view}",
+      "prompt": "exactly one {subject}, {view}, isolated single subject, centered, full subject visible, clean simple illustration, plain light gray background, empty background, not a collection{guard_clause}, no text, no logo, no watermark"
+    },
+    {
+      "variant": "act{action_index}",
+      "slot_source": {
+        "action": "actions_v2"
+      },
+      "max_expansions": 4,
+      "conditioning_prompt": "{key} {action}",
+      "prompt": "exactly one {subject} {action}, isolated single subject, centered, full subject visible, simple readable pose, clean illustration, plain light gray background, empty background, no repeated objects, not a collection{guard_clause}, no text, no logo, no watermark"
+    },
+    {
+      "variant": "color{color_index}",
+      "slot_source": {
+        "color": "colors_v2"
+      },
+      "max_expansions": 4,
+      "conditioning_prompt": "{color} {key}",
+      "prompt": "exactly one {color} {subject}, isolated single subject, centered, full subject visible, clean simple illustration, plain light gray background, empty background, no repeated objects, not a collection{guard_clause}, no text, no logo, no watermark"
+    },
+    {
+      "variant": "mod{modifier_index}",
+      "slot_source": {
+        "modifier": "modifiers_v2"
+      },
+      "max_expansions": 3,
+      "conditioning_prompt": "{modifier} {key}",
+      "prompt": "exactly one {modifier} {subject}, isolated single subject, centered, full subject visible, clean simple illustration, plain light gray background, empty background, no repeated objects, not a collection{guard_clause}, no text, no logo, no watermark"
+    },
+    {
+      "variant": "style{style_index}",
+      "slot_source": {
+        "style": "styles_v2"
+      },
+      "max_expansions": 4,
+      "conditioning_prompt": "{style} {key}",
+      "prompt": "exactly one {subject}, {style} style, isolated single subject, centered, full subject visible, clean simple illustration, plain light gray background, empty background, no repeated objects, not a collection{guard_clause}, no text, no logo, no watermark"
+    },
+    {
+      "variant": "combo{color_index}_{action_index}",
+      "slot_source": {
+        "color": "colors_v2",
+        "action": "actions_v2"
+      },
+      "max_expansions": 6,
+      "conditioning_prompt": "{color} {key} {action}",
+      "prompt": "exactly one {color} {subject} {action}, isolated single subject, centered, full subject visible, simple readable pose, clean illustration, plain light gray background, empty background, no repeated objects, not a collection{guard_clause}, no text, no logo, no watermark"
+    }
+  ],
+  "presets": [
+    {
+      "key": "apple",
+      "title": "Apple",
+      "subject": "single apple fruit with stem and leaf",
+      "guard": "fruit only, no apple logo shape, no bite mark, no repeating pattern",
+      "qc_flags": [
+        "possible_brand_shape"
+      ],
+      "colors_v2": [
+        "red",
+        "green"
+      ],
+      "actions_v2": [
+        "standing"
+      ],
+      "modifiers_v2": [
+        "small",
+        "simple"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup"
+      ]
+    },
+    {
+      "key": "bird",
+      "title": "Bird",
+      "subject": "small bird",
+      "colors_v2": [
+        "blue",
+        "yellow"
+      ],
+      "actions_v2": [
+        "flying",
+        "standing"
+      ],
+      "modifiers_v2": [
+        "small",
+        "simple"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup"
+      ]
+    },
+    {
+      "key": "car",
+      "title": "Car",
+      "subject": "small toy car vehicle",
+      "guard": "vehicle only, no people, no driver, no buildings, no street scene",
+      "qc_flags": [
+        "avoid_people"
+      ],
+      "colors_v2": [
+        "red",
+        "blue"
+      ],
+      "actions_v2": [
+        "parked"
+      ],
+      "modifiers_v2": [
+        "small",
+        "simple"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup"
+      ]
+    },
+    {
+      "key": "castle",
+      "title": "Castle",
+      "subject": "simple castle",
+      "colors_v2": [],
+      "actions_v2": [
+        "standing"
+      ],
+      "modifiers_v2": [
+        "small",
+        "simple"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup"
+      ]
+    },
+    {
+      "key": "cat",
+      "title": "Cat",
+      "subject": "cute cat",
+      "colors_v2": [
+        "gray",
+        "white"
+      ],
+      "actions_v2": [
+        "sitting",
+        "standing",
+        "jumping",
+        "sleeping"
+      ],
+      "modifiers_v2": [
+        "cute",
+        "small"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup"
+      ]
+    },
+    {
+      "key": "dog",
+      "title": "Dog",
+      "subject": "cute dog",
+      "colors_v2": [
+        "brown",
+        "white"
+      ],
+      "actions_v2": [
+        "sitting",
+        "standing",
+        "running",
+        "jumping"
+      ],
+      "modifiers_v2": [
+        "cute",
+        "small"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup"
+      ]
+    },
+    {
+      "key": "face",
+      "title": "Face",
+      "subject": "single round human face only",
+      "qc_flags": [
+        "face_may_be_multiple"
+      ],
+      "colors_v2": [],
+      "actions_v2": [
+        "standing"
+      ],
+      "modifiers_v2": [
+        "small",
+        "simple"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup"
+      ]
+    },
+    {
+      "key": "fish",
+      "title": "Fish",
+      "subject": "single fish",
+      "colors_v2": [
+        "orange",
+        "blue"
+      ],
+      "actions_v2": [
+        "swimming",
+        "jumping"
+      ],
+      "modifiers_v2": [
+        "small",
+        "simple"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup"
+      ]
+    },
+    {
+      "key": "flower",
+      "title": "Flower",
+      "subject": "single flower",
+      "colors_v2": [
+        "yellow",
+        "pink"
+      ],
+      "actions_v2": [
+        "standing"
+      ],
+      "modifiers_v2": [
+        "small",
+        "bright"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup"
+      ]
+    },
+    {
+      "key": "house",
+      "title": "House",
+      "subject": "small house",
+      "colors_v2": [
+        "blue"
+      ],
+      "actions_v2": [
+        "standing"
+      ],
+      "modifiers_v2": [
+        "small",
+        "simple"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup"
+      ]
+    },
+    {
+      "key": "moon",
+      "title": "Moon",
+      "subject": "single moon shape",
+      "colors_v2": [
+        "blue",
+        "silver",
+        "soft blue"
+      ],
+      "actions_v2": [
+        "standing"
+      ],
+      "modifiers_v2": [
+        "round",
+        "bright"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup"
+      ]
+    },
+    {
+      "key": "robot",
+      "title": "Robot",
+      "subject": "small robot",
+      "colors_v2": [
+        "silver",
+        "blue"
+      ],
+      "actions_v2": [
+        "standing",
+        "walking",
+        "holding"
+      ],
+      "modifiers_v2": [
+        "small",
+        "simple"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup"
+      ]
+    },
+    {
+      "key": "star",
+      "title": "Star",
+      "subject": "single five pointed star",
+      "colors_v2": [
+        "blue",
+        "golden"
+      ],
+      "actions_v2": [
+        "standing"
+      ],
+      "modifiers_v2": [
+        "bright",
+        "small"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup"
+      ]
+    },
+    {
+      "key": "sun",
+      "title": "Sun",
+      "subject": "single yellow sun",
+      "qc_flags": [
+        "may_generate_multiple_icons"
+      ],
+      "colors_v2": [
+        "yellow",
+        "golden"
+      ],
+      "actions_v2": [
+        "standing"
+      ],
+      "modifiers_v2": [
+        "bright",
+        "round"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup"
+      ]
+    },
+    {
+      "key": "train",
+      "title": "Train",
+      "subject": "toy train engine",
+      "colors_v2": [
+        "red",
+        "blue"
+      ],
+      "actions_v2": [
+        "parked"
+      ],
+      "modifiers_v2": [
+        "small",
+        "simple"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup"
+      ]
+    },
+    {
+      "key": "tree",
+      "title": "Tree",
+      "subject": "single tree",
+      "colors_v2": [
+        "green"
+      ],
+      "actions_v2": [
+        "standing"
+      ],
+      "modifiers_v2": [
+        "small",
+        "simple"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup"
+      ]
+    },
+    {
+      "key": "airplane",
+      "title": "Airplane",
+      "subject": "small toy airplane",
+      "guard": "aircraft only, no airport, no runway, no clouds as background",
+      "colors_v2": [
+        "red",
+        "white"
+      ],
+      "actions_v2": [
+        "flying"
+      ],
+      "modifiers_v2": [
+        "small",
+        "simple"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup"
+      ]
+    },
+    {
+      "key": "boat",
+      "title": "Boat",
+      "subject": "small toy boat",
+      "guard": "boat only, no ocean scene, no waves filling background",
+      "colors_v2": [
+        "blue",
+        "brown"
+      ],
+      "actions_v2": [
+        "parked"
+      ],
+      "modifiers_v2": [
+        "small",
+        "simple"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup"
+      ]
+    },
+    {
+      "key": "bicycle",
+      "title": "Bicycle",
+      "subject": "simple bicycle",
+      "guard": "bicycle only, no rider, no street scene",
+      "colors_v2": [
+        "red",
+        "black"
+      ],
+      "actions_v2": [
+        "standing"
+      ],
+      "modifiers_v2": [
+        "small",
+        "simple"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup"
+      ]
+    },
+    {
+      "key": "rocket",
+      "title": "Rocket",
+      "subject": "small rocket ship",
+      "guard": "rocket only, no outer space background, no star field",
+      "colors_v2": [
+        "red",
+        "white",
+        "silver"
+      ],
+      "actions_v2": [
+        "flying",
+        "standing"
+      ],
+      "modifiers_v2": [
+        "small",
+        "simple"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup"
+      ]
+    },
+    {
+      "key": "bus",
+      "title": "Bus",
+      "subject": "small toy bus",
+      "guard": "vehicle only, no people, no city street",
+      "colors_v2": [
+        "yellow",
+        "blue"
+      ],
+      "actions_v2": [
+        "parked"
+      ],
+      "modifiers_v2": [
+        "small",
+        "simple"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup"
+      ]
+    },
+    {
+      "key": "rabbit",
+      "title": "Rabbit",
+      "subject": "cute rabbit",
+      "colors_v2": [
+        "white",
+        "gray"
+      ],
+      "actions_v2": [
+        "sitting",
+        "standing",
+        "jumping"
+      ],
+      "modifiers_v2": [
+        "cute",
+        "small"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup"
+      ]
+    },
+    {
+      "key": "bear",
+      "title": "Bear",
+      "subject": "cute bear",
+      "colors_v2": [
+        "brown"
+      ],
+      "actions_v2": [
+        "sitting",
+        "standing"
+      ],
+      "modifiers_v2": [
+        "cute",
+        "round"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup"
+      ]
+    },
+    {
+      "key": "horse",
+      "title": "Horse",
+      "subject": "simple horse",
+      "colors_v2": [
+        "brown",
+        "white"
+      ],
+      "actions_v2": [
+        "standing",
+        "running",
+        "jumping"
+      ],
+      "modifiers_v2": [
+        "small",
+        "simple"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup"
+      ]
+    },
+    {
+      "key": "butterfly",
+      "title": "Butterfly",
+      "subject": "single butterfly",
+      "guard": "one butterfly only, no flower field background",
+      "colors_v2": [
+        "orange",
+        "blue"
+      ],
+      "actions_v2": [
+        "flying"
+      ],
+      "modifiers_v2": [
+        "small",
+        "simple"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup"
+      ]
+    },
+    {
+      "key": "heart",
+      "title": "Heart",
+      "subject": "single heart shape",
+      "colors_v2": [
+        "red",
+        "pink"
+      ],
+      "actions_v2": [
+        "standing"
+      ],
+      "modifiers_v2": [
+        "round",
+        "bright"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup"
+      ]
+    },
+    {
+      "key": "leaf",
+      "title": "Leaf",
+      "subject": "single leaf",
+      "guard": "one leaf only, no repeated leaves",
+      "colors_v2": [
+        "orange",
+        "green"
+      ],
+      "actions_v2": [
+        "standing"
+      ],
+      "modifiers_v2": [
+        "small",
+        "simple"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup"
+      ]
+    },
+    {
+      "key": "mushroom",
+      "title": "Mushroom",
+      "subject": "single mushroom",
+      "colors_v2": [
+        "red",
+        "brown"
+      ],
+      "actions_v2": [
+        "standing"
+      ],
+      "modifiers_v2": [
+        "small",
+        "simple"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup"
+      ]
+    },
+    {
+      "key": "cup",
+      "title": "Cup",
+      "subject": "simple cup",
+      "colors_v2": [
+        "blue",
+        "white"
+      ],
+      "actions_v2": [
+        "standing"
+      ],
+      "modifiers_v2": [
+        "small",
+        "simple"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup"
+      ]
+    },
+    {
+      "key": "book",
+      "title": "Book",
+      "subject": "single book",
+      "guard": "book only, no readable text, blank cover",
+      "colors_v2": [
+        "red",
+        "blue"
+      ],
+      "actions_v2": [
+        "standing"
+      ],
+      "modifiers_v2": [
+        "small",
+        "simple"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup"
+      ]
+    },
+    {
+      "key": "chair",
+      "title": "Chair",
+      "subject": "simple chair",
+      "colors_v2": [
+        "red"
+      ],
+      "actions_v2": [
+        "standing"
+      ],
+      "modifiers_v2": [
+        "small",
+        "simple"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup"
+      ]
+    },
+    {
+      "key": "camera",
+      "title": "Camera",
+      "subject": "small camera",
+      "guard": "camera only, no brand logo",
+      "colors_v2": [
+        "black",
+        "silver"
+      ],
+      "actions_v2": [
+        "standing"
+      ],
+      "modifiers_v2": [
+        "small",
+        "simple"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup"
+      ]
+    },
+    {
+      "key": "fox",
+      "title": "Fox",
+      "subject": "cute fox",
+      "guard": "one fox only, no forest background",
+      "colors_v2": [
+        "orange"
+      ],
+      "actions_v2": [
+        "standing"
+      ],
+      "modifiers_v2": [
+        "small",
+        "simple"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup"
+      ]
+    },
+    {
+      "key": "owl",
+      "title": "Owl",
+      "subject": "cute owl",
+      "guard": "one owl only, no tree branch background",
+      "colors_v2": [
+        "brown"
+      ],
+      "actions_v2": [
+        "standing"
+      ],
+      "modifiers_v2": [
+        "small",
+        "simple"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup"
+      ]
+    },
+    {
+      "key": "banana",
+      "title": "Banana",
+      "subject": "single banana fruit",
+      "guard": "fruit only, one banana only, no bunch of bananas",
+      "colors_v2": [
+        "yellow"
+      ],
+      "actions_v2": [
+        "standing"
+      ],
+      "modifiers_v2": [
+        "small",
+        "simple"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup"
+      ]
+    },
+    {
+      "key": "orange",
+      "title": "Orange",
+      "subject": "single orange fruit",
+      "guard": "fruit only, one orange only, no repeated fruit",
+      "colors_v2": [
+        "red",
+        "orange"
+      ],
+      "actions_v2": [
+        "standing"
+      ],
+      "modifiers_v2": [
+        "small",
+        "simple"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup"
+      ]
+    },
+    {
+      "key": "strawberry",
+      "title": "Strawberry",
+      "subject": "single strawberry fruit",
+      "guard": "fruit only, one strawberry only, no repeated fruit",
+      "colors_v2": [
+        "red",
+        "pink"
+      ],
+      "actions_v2": [
+        "standing"
+      ],
+      "modifiers_v2": [
+        "small",
+        "simple"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup"
+      ]
+    },
+    {
+      "key": "cake",
+      "title": "Cake",
+      "subject": "single small cake slice",
+      "guard": "one cake only, no plate of multiple desserts, no candles, no text",
+      "colors_v2": [
+        "pink"
+      ],
+      "actions_v2": [
+        "standing"
+      ],
+      "modifiers_v2": [
+        "small",
+        "simple"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup"
+      ]
+    },
+    {
+      "key": "pizza",
+      "title": "Pizza",
+      "subject": "single pizza slice",
+      "guard": "one pizza slice only, no full pizza, no plate, no multiple slices",
+      "colors_v2": [],
+      "actions_v2": [
+        "standing"
+      ],
+      "modifiers_v2": [
+        "small",
+        "simple"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup"
+      ]
+    },
+    {
+      "key": "bread",
+      "title": "Bread",
+      "subject": "single bread loaf",
+      "guard": "one bread loaf only, no basket, no multiple loaves",
+      "colors_v2": [
+        "brown"
+      ],
+      "actions_v2": [
+        "standing"
+      ],
+      "modifiers_v2": [
+        "small",
+        "simple"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup"
+      ]
+    },
+    {
+      "key": "mountain",
+      "title": "Mountain",
+      "subject": "single simple mountain peak icon",
+      "guard": "one mountain peak only, no wide landscape scene, no sky panorama, no forest background",
+      "colors_v2": [
+        "green"
+      ],
+      "actions_v2": [
+        "standing"
+      ],
+      "modifiers_v2": [
+        "small",
+        "simple"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup"
+      ]
+    },
+    {
+      "key": "cloud",
+      "title": "Cloud",
+      "subject": "single fluffy cloud shape",
+      "guard": "one cloud only, no sky scene, no repeated clouds, no weather background",
+      "colors_v2": [
+        "blue",
+        "white"
+      ],
+      "actions_v2": [
+        "standing"
+      ],
+      "modifiers_v2": [
+        "small",
+        "simple"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup"
+      ]
+    },
+    {
+      "key": "clock",
+      "title": "Clock",
+      "subject": "simple round clock",
+      "guard": "one clock only, no readable numbers, no text, no wall background",
+      "colors_v2": [
+        "black",
+        "white"
+      ],
+      "actions_v2": [
+        "standing"
+      ],
+      "modifiers_v2": [
+        "small",
+        "simple"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup"
+      ]
+    },
+    {
+      "key": "ball",
+      "title": "Ball",
+      "subject": "single round ball",
+      "guard": "one ball only, no sports field, no repeated balls",
+      "colors_v2": [
+        "red",
+        "blue"
+      ],
+      "actions_v2": [
+        "standing"
+      ],
+      "modifiers_v2": [
+        "round",
+        "small"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup"
+      ]
+    },
+    {
+      "key": "guitar",
+      "title": "Guitar",
+      "subject": "single simple guitar",
+      "guard": "one guitar only, no musician, no stage, no text",
+      "colors_v2": [
+        "red",
+        "brown"
+      ],
+      "actions_v2": [
+        "standing"
+      ],
+      "modifiers_v2": [
+        "small",
+        "simple"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup"
+      ]
+    },
+    {
+      "key": "shoe",
+      "title": "Shoe",
+      "subject": "single simple shoe",
+      "guard": "one shoe only, no pair of shoes, no foot, no person",
+      "colors_v2": [
+        "red",
+        "white"
+      ],
+      "actions_v2": [
+        "standing"
+      ],
+      "modifiers_v2": [
+        "small",
+        "simple"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,135 @@
+{
+  "version": "fixed16_sdxl_tiny_v1",
+  "description": "Centered, single-subject SDXL teacher prompts for small image model distillation.",
+  "default_negative_prompt": "text, logo, watermark, caption, low quality, blurry, noisy, distorted, deformed, cluttered background, multiple subjects, cropped subject, extra limbs",
+  "variants": [
+    {
+      "variant": "v00",
+      "conditioning_prompt": "{key}",
+      "prompt": "{subject}, centered subject, single subject, simple clean background, readable silhouette, clean illustration{guard_clause}, no text, no logo, no watermark"
+    },
+    {
+      "variant": "v01",
+      "conditioning_prompt": "{key} front view",
+      "prompt": "{subject} front view, centered subject, single subject, plain background, clear simple shape, clean illustration{guard_clause}, no text, no logo, no watermark"
+    },
+    {
+      "variant": "v02",
+      "conditioning_prompt": "{key} side view",
+      "prompt": "{subject} side view, centered subject, single subject, plain background, readable silhouette, toy-like 3D render{guard_clause}, no text, no logo, no watermark"
+    },
+    {
+      "variant": "v03",
+      "conditioning_prompt": "simple {key}",
+      "prompt": "{subject} object, centered subject, single subject only, blank background, bold silhouette, clean low detail illustration{guard_clause}, no text, no logo, no watermark"
+    },
+    {
+      "variant": "v04",
+      "conditioning_prompt": "toy {key}",
+      "prompt": "{subject} as a simple toy object, centered subject, single subject, simple clean background, chunky readable shape, toy-like 3D render{guard_clause}, no text, no logo, no watermark"
+    },
+    {
+      "variant": "v05",
+      "conditioning_prompt": "small {key}",
+      "prompt": "{subject}, icon-like composition, centered, full object visible, single subject, plain light background, readable at small size{guard_clause}, no text, no logo, no watermark"
+    },
+    {
+      "variant": "v06",
+      "conditioning_prompt": "cartoon {key}",
+      "prompt": "{subject}, simple cartoon style, centered subject, full object visible, uncluttered background, strong silhouette{guard_clause}, no text, no logo, no watermark"
+    },
+    {
+      "variant": "v07",
+      "conditioning_prompt": "clean {key}",
+      "prompt": "{subject}, clean vector-like illustration, centered single subject, plain background, full object visible, low detail readable shape{guard_clause}, no text, no logo, no watermark"
+    }
+  ],
+  "presets": [
+    {
+      "key": "apple",
+      "title": "Apple",
+      "subject": "red apple fruit with stem and leaf",
+      "guard": "fruit only, no apple logo shape, no bite mark, no repeating pattern",
+      "qc_flags": ["possible_brand_shape"]
+    },
+    {
+      "key": "bird",
+      "title": "Bird",
+      "subject": "small bird"
+    },
+    {
+      "key": "car",
+      "title": "Car",
+      "subject": "small toy car vehicle",
+      "guard": "vehicle only, no people, no driver, no buildings, no street scene",
+      "qc_flags": ["avoid_people"]
+    },
+    {
+      "key": "castle",
+      "title": "Castle",
+      "subject": "simple castle"
+    },
+    {
+      "key": "cat",
+      "title": "Cat",
+      "subject": "cute cat"
+    },
+    {
+      "key": "dog",
+      "title": "Dog",
+      "subject": "cute dog"
+    },
+    {
+      "key": "face",
+      "title": "Face",
+      "subject": "single round human face only",
+      "qc_flags": ["face_may_be_multiple"]
+    },
+    {
+      "key": "fish",
+      "title": "Fish",
+      "subject": "single fish"
+    },
+    {
+      "key": "flower",
+      "title": "Flower",
+      "subject": "single flower"
+    },
+    {
+      "key": "house",
+      "title": "House",
+      "subject": "small house"
+    },
+    {
+      "key": "moon",
+      "title": "Moon",
+      "subject": "moon shape"
+    },
+    {
+      "key": "robot",
+      "title": "Robot",
+      "subject": "small robot"
+    },
+    {
+      "key": "star",
+      "title": "Star",
+      "subject": "single five pointed star"
+    },
+    {
+      "key": "sun",
+      "title": "Sun",
+      "subject": "single yellow sun",
+      "qc_flags": ["may_generate_multiple_icons"]
+    },
+    {
+      "key": "train",
+      "title": "Train",
+      "subject": "toy train engine"
+    },
+    {
+      "key": "tree",
+      "title": "Tree",
+      "subject": "single tree"
+    }
+  ]
+}

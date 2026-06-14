@@ -1,0 +1,255 @@
+{
+  "version": 2,
+  "targets": [
+    {
+      "key": "cat",
+      "title": "Cat",
+      "prompt": "a single cat, centered, clear silhouette, simple background",
+      "prompts": [
+        "a single cat, centered, clear silhouette, simple background",
+        "one cat portrait, centered subject, clean background",
+        "one cat only, iconic view, readable shape"
+      ],
+      "aliases": ["cat", "kitten", "kitty", "feline"],
+      "metadata_keywords": ["house cat", "tabby", "persian cat"]
+    },
+    {
+      "key": "dog",
+      "title": "Dog",
+      "prompt": "a single dog, centered, clear silhouette, simple background",
+      "prompts": [
+        "a single dog, centered, clear silhouette, simple background",
+        "one dog portrait, centered subject, clean background",
+        "one dog only, iconic view, readable shape"
+      ],
+      "aliases": ["dog", "puppy", "canine"],
+      "metadata_keywords": ["pet dog"]
+    },
+    {
+      "key": "bird",
+      "title": "Bird",
+      "prompt": "a single bird, centered, clear silhouette, simple background",
+      "prompts": [
+        "a single bird, centered, clear silhouette, simple background",
+        "one bird only, perched, readable outline",
+        "bird portrait, centered subject, uncluttered background"
+      ],
+      "aliases": ["bird"],
+      "metadata_keywords": ["sparrow", "parrot", "eagle", "owl"]
+    },
+    {
+      "key": "fish",
+      "title": "Fish",
+      "prompt": "a single fish, centered, clear silhouette, simple background",
+      "prompts": [
+        "a single fish, centered, clear silhouette, simple background",
+        "one fish only, side view, readable outline",
+        "fish portrait, isolated subject, uncluttered background"
+      ],
+      "aliases": ["fish"],
+      "metadata_keywords": ["goldfish", "koi"]
+    },
+    {
+      "key": "flower",
+      "title": "Flower",
+      "prompt": "a single flower, centered, clear silhouette, simple background",
+      "prompts": [
+        "a single flower, centered, clear silhouette, simple background",
+        "one flower only, centered bloom, uncluttered background",
+        "single blossom, iconic view, readable shape"
+      ],
+      "aliases": ["flower", "blossom"],
+      "metadata_keywords": ["rose", "tulip", "sunflower", "daisy"]
+    },
+    {
+      "key": "tree",
+      "title": "Tree",
+      "prompt": "a single tree, centered, clear silhouette, simple background",
+      "prompts": [
+        "a single tree, centered, clear silhouette, simple background",
+        "one tree only, readable canopy and trunk",
+        "isolated tree, iconic view, uncluttered scene"
+      ],
+      "aliases": ["tree"],
+      "metadata_keywords": ["oak", "pine", "palm tree"]
+    },
+    {
+      "key": "apple",
+      "title": "Apple",
+      "prompt": "a single apple, centered, clear silhouette, simple background",
+      "prompts": [
+        "a single apple, centered, clear silhouette, simple background",
+        "one apple only, iconic product photo, readable shape",
+        "single fruit apple, isolated subject"
+      ],
+      "aliases": ["apple"],
+      "metadata_keywords": ["red apple", "green apple"]
+    },
+    {
+      "key": "car",
+      "title": "Car",
+      "prompt": "a single car, centered, clear silhouette, simple background",
+      "prompts": [
+        "a single car, centered, clear silhouette, simple background",
+        "one car only, side or front view, readable outline",
+        "car portrait, isolated vehicle, uncluttered scene"
+      ],
+      "aliases": ["car", "automobile", "vehicle"],
+      "metadata_keywords": ["sedan", "coupe", "sports car"]
+    },
+    {
+      "key": "train",
+      "title": "Train",
+      "prompt": "a single train, centered, clear silhouette, simple background",
+      "prompts": [
+        "a single train, centered, clear silhouette, simple background",
+        "one train only, side or front view, readable outline",
+        "isolated train, iconic vehicle view"
+      ],
+      "aliases": ["train", "locomotive"],
+      "metadata_keywords": ["railway", "subway", "tram"]
+    },
+    {
+      "key": "house",
+      "title": "House",
+      "prompt": "a single house, centered, clear silhouette, simple background",
+      "prompts": [
+        "a single house, centered, clear silhouette, simple background",
+        "one house only, iconic exterior view, readable shape",
+        "small house, isolated building, uncluttered scene"
+      ],
+      "aliases": ["house", "home"],
+      "metadata_keywords": ["cottage", "residence"]
+    },
+    {
+      "key": "castle",
+      "title": "Castle",
+      "prompt": "a single castle, centered, clear silhouette, simple background",
+      "prompts": [
+        "a single castle, centered, clear silhouette, simple background",
+        "one castle only, iconic exterior view, readable towers",
+        "isolated castle building, uncluttered scene"
+      ],
+      "aliases": ["castle"],
+      "metadata_keywords": ["fortress", "palace"]
+    },
+    {
+      "key": "sun",
+      "title": "Sun",
+      "prompt": "a single sun symbol or sun in the sky, centered, clear silhouette, simple background",
+      "prompts": [
+        "a single sun symbol or sun in the sky, centered, clear silhouette, simple background",
+        "bright sun only, iconic round shape, uncluttered sky",
+        "single sun object, readable silhouette"
+      ],
+      "aliases": ["sun"],
+      "metadata_keywords": ["sunrise", "sunset"]
+    },
+    {
+      "key": "moon",
+      "title": "Moon",
+      "prompt": "a single moon, centered, clear silhouette, simple background",
+      "prompts": [
+        "a single moon, centered, clear silhouette, simple background",
+        "moon only, iconic round or crescent shape, uncluttered sky",
+        "single moon object, readable silhouette"
+      ],
+      "aliases": ["moon"],
+      "metadata_keywords": ["crescent moon", "full moon"]
+    },
+    {
+      "key": "star",
+      "title": "Star",
+      "prompt": "a single star, centered, clear silhouette, simple background",
+      "prompts": [
+        "a single star symbol, centered, clear silhouette, simple background",
+        "one star icon only, readable shape, uncluttered background",
+        "single star object, isolated symbol"
+      ],
+      "aliases": ["star"],
+      "metadata_keywords": ["star shape", "star icon"]
+    },
+    {
+      "key": "face",
+      "title": "Face",
+      "prompt": "a single human face portrait, centered, clear silhouette, simple background",
+      "prompts": [
+        "a single human face portrait, centered, clear silhouette, simple background",
+        "one person face only, centered portrait, uncluttered background",
+        "single face close-up, readable features, iconic portrait"
+      ],
+      "aliases": ["face", "portrait", "person"],
+      "metadata_keywords": ["headshot", "self portrait", "portrait photo"]
+    },
+    {
+      "key": "robot",
+      "title": "Robot",
+      "prompt": "a single robot, centered, clear silhouette, simple background",
+      "prompts": [
+        "a single robot, centered, clear silhouette, simple background",
+        "one robot only, iconic subject, readable outline",
+        "robot character portrait, uncluttered background"
+      ],
+      "aliases": ["robot", "android", "mecha"],
+      "metadata_keywords": ["robot toy"]
+    }
+  ],
+  "negatives": [
+    {
+      "key": "text",
+      "prompt": "visible text letters typography",
+      "prompts": [
+        "visible text letters typography",
+        "poster or sign with readable text"
+      ]
+    },
+    {
+      "key": "watermark",
+      "prompt": "watermark signature overlay",
+      "prompts": [
+        "watermark signature overlay",
+        "visible photographer watermark"
+      ]
+    },
+    {
+      "key": "logo",
+      "prompt": "logo icon brand mark",
+      "prompts": [
+        "logo icon brand mark",
+        "brand logo graphic"
+      ]
+    },
+    {
+      "key": "crowded_scene",
+      "prompt": "a crowded scene with many objects",
+      "prompts": [
+        "a crowded scene with many objects",
+        "busy cluttered scene with multiple subjects"
+      ]
+    },
+    {
+      "key": "multiple_objects",
+      "prompt": "multiple objects in one image",
+      "prompts": [
+        "multiple objects in one image",
+        "more than one main subject"
+      ]
+    },
+    {
+      "key": "human_group",
+      "prompt": "a group of people, multiple humans",
+      "prompts": [
+        "a group of people, multiple humans",
+        "crowd of people, group photo"
+      ]
+    },
+    {
+      "key": "blurry_image",
+      "prompt": "blurry low quality image",
+      "prompts": [
+        "blurry low quality image",
+        "out of focus motion blur"
+      ]
+    }
+  ]
+}

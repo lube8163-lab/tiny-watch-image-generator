@@ -1,0 +1,1699 @@
+{
+  "version": "watch75_sdxl_tiny_v7_focus_freeprompt",
+  "description": "Focused V7 teacher supplement for the v6 watch model. It keeps the existing vocabulary but targets food, clean symbols, tools, vehicles, and action/view pairs with lower-texture single-subject SDXL prompts.",
+  "default_negative_prompt": "text, logo, watermark, caption, signature, letters, low quality, blurry, noisy, distorted, deformed, cropped subject, multiple subjects, duplicate subject, repeated subject, many copies, group, collection, set, array, row of objects, icon sheet, collage, tiled layout, pattern, seamless pattern, repeating pattern, wallpaper, decorative background, decorative frame, ornamental border, stripes, checkerboard, busy background, cluttered background, detailed scenery, crowd, people in background, grain, speckles, mottled texture, paper texture, canvas texture, dirty background, noisy background, background pattern, tiny details, photorealistic clutter",
+  "defaults": {
+    "views_v2": [
+      "front view",
+      "side view",
+      "closeup",
+      "top view"
+    ],
+    "styles_v2": [
+      "icon",
+      "cartoon",
+      "toy",
+      "sketch"
+    ],
+    "modifiers_v2": [
+      "simple",
+      "small",
+      "round",
+      "bright"
+    ]
+  },
+  "variants": [
+    {
+      "variant": "clean00",
+      "conditioning_prompt": "{key}",
+      "prompt": "exactly one {subject}, isolated single subject, centered, full subject visible, flat vector style, smooth solid fills, minimal shading, clean readable silhouette, plain matte light gray background, empty background, no texture, no grain, no paper texture, not a collection{guard_clause}, no text, no logo, no watermark"
+    },
+    {
+      "variant": "clean01",
+      "conditioning_prompt": "simple {key}",
+      "prompt": "exactly one {subject}, very simple rounded object icon, centered, large clear silhouette, flat vector style, smooth solid fills, minimal shading, clean readable silhouette, plain matte light gray background, empty background, no texture, no grain, no paper texture, not a collection{guard_clause}, no text, no logo, no watermark"
+    },
+    {
+      "variant": "icon00",
+      "conditioning_prompt": "icon {key}",
+      "prompt": "exactly one {subject}, centered object icon, full subject visible, simple icon style, bold outline, smooth solid color areas, high contrast readable shape, plain light gray background, empty background, no texture, no pattern, no repeated objects, not a collection{guard_clause}, no text, no logo, no watermark"
+    },
+    {
+      "variant": "cartoon00",
+      "conditioning_prompt": "cartoon {key}",
+      "prompt": "exactly one {subject}, simple cartoon icon, centered, full subject visible, flat vector style, smooth solid fills, minimal shading, clean readable silhouette, plain matte light gray background, empty background, no texture, no grain, no paper texture, no repeated objects, not a collection{guard_clause}, no text, no logo, no watermark"
+    },
+    {
+      "variant": "toy00",
+      "conditioning_prompt": "toy {key}",
+      "prompt": "exactly one {subject}, small toy-like object, centered, full subject visible, flat vector style, smooth solid fills, minimal shading, clean readable silhouette, plain matte light gray background, empty background, no texture, no grain, no paper texture, no repeated objects, not a collection{guard_clause}, no text, no logo, no watermark"
+    },
+    {
+      "variant": "view{view_index}",
+      "slot_source": {
+        "view": "views_v2"
+      },
+      "max_expansions": 4,
+      "conditioning_prompt": "{key} {view}",
+      "prompt": "exactly one {subject}, {view}, isolated single subject, centered, full subject visible, flat vector style, smooth solid fills, minimal shading, clean readable silhouette, plain matte light gray background, empty background, no texture, no grain, no paper texture, no repeated objects, not a collection{guard_clause}, no text, no logo, no watermark"
+    },
+    {
+      "variant": "color{color_index}",
+      "slot_source": {
+        "color": "colors_v2"
+      },
+      "max_expansions": 4,
+      "conditioning_prompt": "{color} {key}",
+      "prompt": "exactly one {color} {subject}, isolated single subject, centered, full subject visible, flat vector style, smooth solid fills, minimal shading, clean readable silhouette, plain matte light gray background, empty background, no texture, no grain, no paper texture, no repeated objects, not a collection{guard_clause}, no text, no logo, no watermark"
+    },
+    {
+      "variant": "act{action_index}",
+      "slot_source": {
+        "action": "actions_v2"
+      },
+      "max_expansions": 5,
+      "conditioning_prompt": "{key} {action}",
+      "prompt": "exactly one {subject} {action}, simple readable pose, centered, full subject visible, flat vector style, smooth solid fills, minimal shading, clean readable silhouette, plain matte light gray background, empty background, no texture, no grain, no paper texture, no repeated objects, not a collection{guard_clause}, no text, no logo, no watermark"
+    },
+    {
+      "variant": "mod{modifier_index}",
+      "slot_source": {
+        "modifier": "modifiers_v2"
+      },
+      "max_expansions": 5,
+      "conditioning_prompt": "{modifier} {key}",
+      "prompt": "exactly one {modifier} {subject}, isolated single subject, centered, full subject visible, flat vector style, smooth solid fills, minimal shading, clean readable silhouette, plain matte light gray background, empty background, no texture, no grain, no paper texture, no repeated objects, not a collection{guard_clause}, no text, no logo, no watermark"
+    },
+    {
+      "variant": "cview{color_index}_{view_index}",
+      "slot_source": {
+        "color": "colors_v2",
+        "view": "views_v2"
+      },
+      "max_expansions": 6,
+      "conditioning_prompt": "{color} {key} {view}",
+      "prompt": "exactly one {color} {subject}, {view}, centered, full subject visible, flat vector style, smooth solid fills, minimal shading, clean readable silhouette, plain matte light gray background, empty background, no texture, no grain, no paper texture, no repeated objects, not a collection{guard_clause}, no text, no logo, no watermark"
+    },
+    {
+      "variant": "aview{action_index}_{view_index}",
+      "slot_source": {
+        "action": "actions_v2",
+        "view": "views_v2"
+      },
+      "max_expansions": 6,
+      "conditioning_prompt": "{key} {action} {view}",
+      "prompt": "exactly one {subject} {action}, {view}, centered, full subject visible, flat vector style, smooth solid fills, minimal shading, clean readable silhouette, plain matte light gray background, empty background, no texture, no grain, no paper texture, no repeated objects, not a collection{guard_clause}, no text, no logo, no watermark"
+    },
+    {
+      "variant": "mview{modifier_index}_{view_index}",
+      "slot_source": {
+        "modifier": "modifiers_v2",
+        "view": "views_v2"
+      },
+      "max_expansions": 6,
+      "conditioning_prompt": "{modifier} {key} {view}",
+      "prompt": "exactly one {modifier} {subject}, {view}, centered, full subject visible, flat vector style, smooth solid fills, minimal shading, clean readable silhouette, plain matte light gray background, empty background, no texture, no grain, no paper texture, no repeated objects, not a collection{guard_clause}, no text, no logo, no watermark"
+    },
+    {
+      "variant": "cact{color_index}_{action_index}",
+      "slot_source": {
+        "color": "colors_v2",
+        "action": "actions_v2"
+      },
+      "max_expansions": 6,
+      "conditioning_prompt": "{color} {key} {action}",
+      "prompt": "exactly one {color} {subject} {action}, centered, full subject visible, simple readable pose, flat vector style, smooth solid fills, minimal shading, clean readable silhouette, plain matte light gray background, empty background, no texture, no grain, no paper texture, no repeated objects, not a collection{guard_clause}, no text, no logo, no watermark"
+    }
+  ],
+  "presets": [
+    {
+      "key": "cat",
+      "title": "Cat",
+      "subject": "cute cat",
+      "colors_v2": [
+        "gray",
+        "white"
+      ],
+      "actions_v2": [
+        "sitting",
+        "standing",
+        "jumping",
+        "sleeping",
+        "looking"
+      ],
+      "modifiers_v2": [
+        "simple",
+        "small",
+        "round",
+        "bright",
+        "cute"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup",
+        "top view"
+      ],
+      "guard": null
+    },
+    {
+      "key": "dog",
+      "title": "Dog",
+      "subject": "cute dog",
+      "colors_v2": [
+        "brown",
+        "white"
+      ],
+      "actions_v2": [
+        "sitting",
+        "standing",
+        "running",
+        "jumping",
+        "looking"
+      ],
+      "modifiers_v2": [
+        "simple",
+        "small",
+        "round",
+        "bright",
+        "cute"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup",
+        "top view"
+      ],
+      "guard": null
+    },
+    {
+      "key": "rabbit",
+      "title": "Rabbit",
+      "subject": "cute rabbit",
+      "colors_v2": [
+        "white",
+        "gray"
+      ],
+      "actions_v2": [
+        "sitting",
+        "standing",
+        "jumping",
+        "looking"
+      ],
+      "modifiers_v2": [
+        "simple",
+        "small",
+        "round",
+        "bright",
+        "cute"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup",
+        "top view"
+      ],
+      "guard": null
+    },
+    {
+      "key": "fox",
+      "title": "Fox",
+      "subject": "cute fox",
+      "guard": "one fox only, no forest background",
+      "colors_v2": [
+        "orange"
+      ],
+      "actions_v2": [
+        "sitting",
+        "standing",
+        "jumping",
+        "looking"
+      ],
+      "modifiers_v2": [
+        "simple",
+        "small",
+        "round",
+        "bright",
+        "cute"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup",
+        "top view"
+      ]
+    },
+    {
+      "key": "owl",
+      "title": "Owl",
+      "subject": "cute owl",
+      "guard": "one owl only, no tree branch background",
+      "colors_v2": [
+        "brown"
+      ],
+      "actions_v2": [
+        "sitting",
+        "standing",
+        "looking"
+      ],
+      "modifiers_v2": [
+        "simple",
+        "small",
+        "round",
+        "bright",
+        "cute"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup",
+        "top view"
+      ]
+    },
+    {
+      "key": "fish",
+      "title": "Fish",
+      "subject": "single fish",
+      "colors_v2": [
+        "orange",
+        "blue"
+      ],
+      "actions_v2": [
+        "swimming",
+        "jumping",
+        "turning"
+      ],
+      "modifiers_v2": [
+        "simple",
+        "small",
+        "round",
+        "bright",
+        "striped"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup",
+        "top view"
+      ],
+      "guard": null
+    },
+    {
+      "key": "bird",
+      "title": "Bird",
+      "subject": "small bird",
+      "colors_v2": [
+        "blue",
+        "yellow"
+      ],
+      "actions_v2": [
+        "flying",
+        "standing",
+        "looking"
+      ],
+      "modifiers_v2": [
+        "simple",
+        "small",
+        "round",
+        "bright",
+        "striped"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup",
+        "top view"
+      ],
+      "guard": null
+    },
+    {
+      "key": "penguin",
+      "title": "Penguin",
+      "subject": "single cute penguin",
+      "colors_v2": [
+        "black",
+        "white",
+        "blue"
+      ],
+      "actions_v2": [
+        "standing",
+        "walking",
+        "sliding",
+        "looking"
+      ],
+      "modifiers_v2": [
+        "simple",
+        "small",
+        "round",
+        "bright",
+        "cute"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup",
+        "top view"
+      ],
+      "guard": null
+    },
+    {
+      "key": "duck",
+      "title": "Duck",
+      "subject": "single cute duck",
+      "colors_v2": [
+        "yellow",
+        "white",
+        "brown"
+      ],
+      "actions_v2": [
+        "standing",
+        "swimming",
+        "walking",
+        "looking"
+      ],
+      "modifiers_v2": [
+        "simple",
+        "small",
+        "round",
+        "bright",
+        "cute"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup",
+        "top view"
+      ],
+      "guard": null
+    },
+    {
+      "key": "frog",
+      "title": "Frog",
+      "subject": "single cute frog",
+      "colors_v2": [
+        "green",
+        "yellow",
+        "blue"
+      ],
+      "actions_v2": [
+        "sitting",
+        "jumping",
+        "standing",
+        "looking"
+      ],
+      "modifiers_v2": [
+        "simple",
+        "small",
+        "round",
+        "bright",
+        "cute"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup",
+        "top view"
+      ],
+      "guard": null
+    },
+    {
+      "key": "monkey",
+      "title": "Monkey",
+      "subject": "single cute monkey",
+      "colors_v2": [
+        "brown",
+        "orange",
+        "gray"
+      ],
+      "actions_v2": [
+        "sitting",
+        "jumping",
+        "climbing",
+        "looking",
+        "standing"
+      ],
+      "modifiers_v2": [
+        "simple",
+        "small",
+        "round",
+        "bright",
+        "cute"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup",
+        "top view"
+      ],
+      "guard": null
+    },
+    {
+      "key": "dragon",
+      "title": "Dragon",
+      "subject": "single cute dragon with small wings",
+      "colors_v2": [
+        "green",
+        "red",
+        "blue"
+      ],
+      "actions_v2": [
+        "standing",
+        "flying",
+        "sitting",
+        "looking"
+      ],
+      "modifiers_v2": [
+        "simple",
+        "small",
+        "round",
+        "bright",
+        "cute"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup",
+        "top view"
+      ],
+      "guard": null
+    },
+    {
+      "key": "alien",
+      "title": "Alien",
+      "subject": "single cute alien creature with a big head",
+      "colors_v2": [
+        "green",
+        "blue",
+        "purple"
+      ],
+      "actions_v2": [
+        "standing",
+        "walking",
+        "looking",
+        "smiling"
+      ],
+      "modifiers_v2": [
+        "simple",
+        "small",
+        "round",
+        "bright",
+        "cute"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup",
+        "top view"
+      ],
+      "guard": null
+    },
+    {
+      "key": "cloud",
+      "title": "Cloud",
+      "subject": "single simple fluffy cloud shape",
+      "guard": "one cloud only, no sky scene, no rain, no repeated clouds, no weather background",
+      "colors_v2": [
+        "white",
+        "blue",
+        "gray"
+      ],
+      "actions_v2": [
+        "floating",
+        "drifting",
+        "standing"
+      ],
+      "modifiers_v2": [
+        "simple",
+        "small",
+        "round",
+        "bright",
+        "fluffy"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup",
+        "top view"
+      ]
+    },
+    {
+      "key": "tree",
+      "title": "Tree",
+      "subject": "single tree",
+      "colors_v2": [
+        "green",
+        "brown"
+      ],
+      "actions_v2": [
+        "standing",
+        "leaning",
+        "swaying"
+      ],
+      "modifiers_v2": [
+        "simple",
+        "small",
+        "round",
+        "bright",
+        "large"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup",
+        "top view"
+      ],
+      "guard": null
+    },
+    {
+      "key": "flower",
+      "title": "Flower",
+      "subject": "single flower",
+      "colors_v2": [
+        "yellow",
+        "pink"
+      ],
+      "actions_v2": [
+        "standing",
+        "tilted"
+      ],
+      "modifiers_v2": [
+        "simple",
+        "small",
+        "round",
+        "bright",
+        "cute"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup",
+        "top view"
+      ],
+      "guard": null
+    },
+    {
+      "key": "heart",
+      "title": "Heart",
+      "subject": "single heart symbol with a clean bold outline",
+      "colors_v2": [
+        "red",
+        "pink",
+        "white"
+      ],
+      "actions_v2": [
+        "standing"
+      ],
+      "modifiers_v2": [
+        "simple",
+        "small",
+        "round",
+        "bright",
+        "striped"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup",
+        "top view"
+      ],
+      "guard": null
+    },
+    {
+      "key": "star",
+      "title": "Star",
+      "subject": "single five pointed star symbol with a clean bold outline",
+      "colors_v2": [
+        "blue",
+        "golden"
+      ],
+      "actions_v2": [
+        "shining",
+        "floating",
+        "tilted",
+        "standing"
+      ],
+      "modifiers_v2": [
+        "simple",
+        "small",
+        "round",
+        "bright",
+        "large"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup",
+        "top view"
+      ],
+      "guard": null
+    },
+    {
+      "key": "ball",
+      "title": "Ball",
+      "subject": "single round ball with one simple shadow",
+      "guard": "one ball only, no sports field, no repeated balls",
+      "colors_v2": [
+        "red",
+        "blue",
+        "yellow"
+      ],
+      "actions_v2": [
+        "rolling",
+        "bouncing",
+        "floating",
+        "standing"
+      ],
+      "modifiers_v2": [
+        "simple",
+        "small",
+        "round",
+        "bright",
+        "large"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup",
+        "top view"
+      ]
+    },
+    {
+      "key": "fire",
+      "title": "Fire",
+      "subject": "single simple flame icon",
+      "colors_v2": [
+        "orange",
+        "red",
+        "yellow"
+      ],
+      "actions_v2": [
+        "shining",
+        "floating",
+        "spinning",
+        "standing"
+      ],
+      "modifiers_v2": [
+        "simple",
+        "small",
+        "round",
+        "bright",
+        "shining"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup",
+        "top view"
+      ],
+      "guard": "one flame only, no campfire, no candle, no smoke, no repeated flames"
+    },
+    {
+      "key": "diamond",
+      "title": "Diamond",
+      "subject": "single diamond gem",
+      "colors_v2": [
+        "blue",
+        "white",
+        "purple"
+      ],
+      "actions_v2": [
+        "shining",
+        "floating",
+        "spinning",
+        "tilted",
+        "standing"
+      ],
+      "modifiers_v2": [
+        "simple",
+        "small",
+        "round",
+        "bright",
+        "transparent"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup",
+        "top view"
+      ],
+      "guard": null
+    },
+    {
+      "key": "crown",
+      "title": "Crown",
+      "subject": "single crown",
+      "colors_v2": [
+        "golden",
+        "yellow",
+        "silver"
+      ],
+      "actions_v2": [
+        "standing",
+        "floating",
+        "shining"
+      ],
+      "modifiers_v2": [
+        "simple",
+        "small",
+        "round",
+        "bright",
+        "golden"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup",
+        "top view"
+      ],
+      "guard": null
+    },
+    {
+      "key": "train",
+      "title": "Train",
+      "subject": "single toy train engine side silhouette",
+      "colors_v2": [
+        "red",
+        "blue"
+      ],
+      "actions_v2": [
+        "parked",
+        "standing"
+      ],
+      "modifiers_v2": [
+        "simple",
+        "small",
+        "round",
+        "bright",
+        "striped"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup",
+        "top view"
+      ],
+      "guard": "one train engine only, no tracks, no station, no scenery, no multiple cars"
+    },
+    {
+      "key": "car",
+      "title": "Car",
+      "subject": "single small toy car side silhouette",
+      "guard": "one car only, no road, no driver, no buildings, no scenery",
+      "qc_flags": [
+        "avoid_people"
+      ],
+      "colors_v2": [
+        "red",
+        "blue"
+      ],
+      "actions_v2": [
+        "parked",
+        "tilted"
+      ],
+      "modifiers_v2": [
+        "simple",
+        "small",
+        "round",
+        "bright",
+        "striped"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup",
+        "top view"
+      ]
+    },
+    {
+      "key": "bicycle",
+      "title": "Bicycle",
+      "subject": "single simple bicycle side silhouette",
+      "guard": "one bicycle only, no rider, no street, no scenery",
+      "colors_v2": [
+        "red",
+        "black"
+      ],
+      "actions_v2": [
+        "standing",
+        "tilted"
+      ],
+      "modifiers_v2": [
+        "simple",
+        "small",
+        "round",
+        "bright",
+        "striped"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup",
+        "top view"
+      ]
+    },
+    {
+      "key": "airplane",
+      "title": "Airplane",
+      "subject": "single simple airplane silhouette",
+      "guard": "one airplane only, no airport, no clouds, no sky scene",
+      "colors_v2": [
+        "red",
+        "white"
+      ],
+      "actions_v2": [
+        "flying",
+        "tilted"
+      ],
+      "modifiers_v2": [
+        "simple",
+        "small",
+        "round",
+        "bright",
+        "striped"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup",
+        "top view"
+      ]
+    },
+    {
+      "key": "boat",
+      "title": "Boat",
+      "subject": "single small simple boat silhouette",
+      "guard": "one boat only, no ocean scene, no waves, no people",
+      "colors_v2": [
+        "blue",
+        "brown"
+      ],
+      "actions_v2": [
+        "floating",
+        "parked"
+      ],
+      "modifiers_v2": [
+        "simple",
+        "small",
+        "round",
+        "bright",
+        "striped"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup",
+        "top view"
+      ]
+    },
+    {
+      "key": "umbrella",
+      "title": "Umbrella",
+      "subject": "single open umbrella",
+      "colors_v2": [
+        "red",
+        "blue",
+        "yellow",
+        "black"
+      ],
+      "actions_v2": [
+        "standing",
+        "tilted",
+        "floating"
+      ],
+      "modifiers_v2": [
+        "simple",
+        "small",
+        "round",
+        "bright",
+        "open"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup",
+        "top view"
+      ],
+      "guard": "one umbrella only, no rain scene, no person, no repeated umbrellas"
+    },
+    {
+      "key": "key",
+      "title": "Key",
+      "subject": "single simple metal key icon",
+      "colors_v2": [
+        "golden",
+        "silver",
+        "gray"
+      ],
+      "actions_v2": [
+        "floating",
+        "tilted",
+        "standing"
+      ],
+      "modifiers_v2": [
+        "simple",
+        "small",
+        "round",
+        "bright",
+        "metallic"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup",
+        "top view"
+      ],
+      "guard": "one key only, no keychain, no lock, no repeated keys"
+    },
+    {
+      "key": "bottle",
+      "title": "Bottle",
+      "subject": "single simple bottle icon",
+      "colors_v2": [
+        "blue",
+        "green",
+        "white",
+        "brown"
+      ],
+      "actions_v2": [
+        "standing",
+        "tilted",
+        "floating"
+      ],
+      "modifiers_v2": [
+        "simple",
+        "small",
+        "round",
+        "bright",
+        "transparent"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup",
+        "top view"
+      ],
+      "guard": "one bottle only, no label text, no table, no repeated bottles"
+    },
+    {
+      "key": "pencil",
+      "title": "Pencil",
+      "subject": "single simple pencil icon",
+      "colors_v2": [
+        "yellow",
+        "red",
+        "blue"
+      ],
+      "actions_v2": [
+        "standing",
+        "tilted",
+        "floating"
+      ],
+      "modifiers_v2": [
+        "simple",
+        "small",
+        "round",
+        "bright",
+        "wooden"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup",
+        "top view"
+      ],
+      "guard": "one pencil only, no paper, no text, no repeated pencils"
+    },
+    {
+      "key": "phone",
+      "title": "Phone",
+      "subject": "single simple smartphone icon",
+      "colors_v2": [
+        "black",
+        "white",
+        "blue"
+      ],
+      "actions_v2": [
+        "standing",
+        "tilted",
+        "floating"
+      ],
+      "modifiers_v2": [
+        "simple",
+        "small",
+        "round",
+        "bright",
+        "black"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup",
+        "top view"
+      ],
+      "guard": "one phone only, blank screen, no text, no app icons, no hand"
+    },
+    {
+      "key": "computer",
+      "title": "Computer",
+      "subject": "single open laptop computer icon",
+      "colors_v2": [
+        "gray",
+        "black",
+        "silver"
+      ],
+      "actions_v2": [
+        "standing",
+        "open",
+        "tilted"
+      ],
+      "modifiers_v2": [
+        "simple",
+        "small",
+        "round",
+        "bright",
+        "open"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup",
+        "top view"
+      ],
+      "guard": "one laptop only, blank screen, no text, no desk, no hand"
+    },
+    {
+      "key": "sword",
+      "title": "Sword",
+      "subject": "single simple sword icon",
+      "colors_v2": [
+        "silver",
+        "gray",
+        "blue"
+      ],
+      "actions_v2": [
+        "standing",
+        "tilted",
+        "shining"
+      ],
+      "modifiers_v2": [
+        "simple",
+        "small",
+        "round",
+        "bright",
+        "metallic"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup",
+        "top view"
+      ],
+      "guard": "one sword only, no person, no shield, no background scene"
+    },
+    {
+      "key": "shield",
+      "title": "Shield",
+      "subject": "single simple shield icon",
+      "colors_v2": [
+        "red",
+        "blue",
+        "silver"
+      ],
+      "actions_v2": [
+        "standing",
+        "tilted",
+        "shining"
+      ],
+      "modifiers_v2": [
+        "simple",
+        "small",
+        "round",
+        "bright",
+        "metallic"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup",
+        "top view"
+      ],
+      "guard": "one shield only, no person, no sword, no emblem text"
+    },
+    {
+      "key": "apple",
+      "title": "Apple",
+      "subject": "single apple fruit icon with a stem",
+      "guard": "fruit only, no apple logo, no bite mark, no repeated fruit",
+      "qc_flags": [
+        "possible_brand_shape"
+      ],
+      "colors_v2": [
+        "red",
+        "green"
+      ],
+      "actions_v2": [
+        "standing",
+        "floating",
+        "tilted"
+      ],
+      "modifiers_v2": [
+        "simple",
+        "small",
+        "round",
+        "bright",
+        "striped"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup",
+        "top view"
+      ]
+    },
+    {
+      "key": "banana",
+      "title": "Banana",
+      "subject": "single banana fruit icon",
+      "guard": "fruit only, no bunch, no repeated bananas",
+      "colors_v2": [
+        "yellow"
+      ],
+      "actions_v2": [
+        "floating",
+        "tilted",
+        "standing"
+      ],
+      "modifiers_v2": [
+        "simple",
+        "small",
+        "round",
+        "bright",
+        "striped"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup",
+        "top view"
+      ]
+    },
+    {
+      "key": "orange",
+      "title": "Orange",
+      "subject": "single orange fruit icon",
+      "guard": "fruit only, one orange only, no orange slices, no repeated fruit, no pattern",
+      "colors_v2": [
+        "red",
+        "orange"
+      ],
+      "actions_v2": [
+        "standing",
+        "floating",
+        "tilted"
+      ],
+      "modifiers_v2": [
+        "simple",
+        "small",
+        "round",
+        "bright",
+        "striped"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup",
+        "top view"
+      ]
+    },
+    {
+      "key": "strawberry",
+      "title": "Strawberry",
+      "subject": "single strawberry fruit icon",
+      "guard": "fruit only, one strawberry only, no repeated berries",
+      "colors_v2": [
+        "red",
+        "pink"
+      ],
+      "actions_v2": [
+        "standing",
+        "floating",
+        "tilted"
+      ],
+      "modifiers_v2": [
+        "simple",
+        "small",
+        "round",
+        "bright",
+        "striped"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup",
+        "top view"
+      ]
+    },
+    {
+      "key": "bread",
+      "title": "Bread",
+      "subject": "single bread loaf icon",
+      "guard": "one bread loaf only, no basket, no plate, no multiple loaves, no repeated pattern",
+      "colors_v2": [
+        "brown",
+        "golden"
+      ],
+      "actions_v2": [
+        "standing",
+        "floating",
+        "tilted"
+      ],
+      "modifiers_v2": [
+        "simple",
+        "small",
+        "round",
+        "bright",
+        "striped"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup",
+        "top view"
+      ]
+    },
+    {
+      "key": "pizza",
+      "title": "Pizza",
+      "subject": "single pizza slice icon",
+      "guard": "one pizza slice only, no full pizza, no plate, no multiple slices, no repeated toppings pattern",
+      "colors_v2": [
+        "yellow",
+        "orange"
+      ],
+      "actions_v2": [
+        "standing",
+        "floating",
+        "tilted"
+      ],
+      "modifiers_v2": [
+        "simple",
+        "small",
+        "round",
+        "bright",
+        "striped"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup",
+        "top view"
+      ]
+    },
+    {
+      "key": "cake",
+      "title": "Cake",
+      "subject": "single cake slice icon",
+      "guard": "one cake slice only, no candles, no plate, no text, no multiple desserts",
+      "colors_v2": [
+        "pink",
+        "white",
+        "brown"
+      ],
+      "actions_v2": [
+        "standing",
+        "floating"
+      ],
+      "modifiers_v2": [
+        "simple",
+        "small",
+        "round",
+        "bright",
+        "striped"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup",
+        "top view"
+      ]
+    },
+    {
+      "key": "icecream",
+      "title": "Ice Cream",
+      "subject": "single ice cream cone with one scoop",
+      "colors_v2": [
+        "pink",
+        "white",
+        "brown",
+        "yellow"
+      ],
+      "actions_v2": [
+        "standing",
+        "tilted",
+        "floating"
+      ],
+      "modifiers_v2": [
+        "simple",
+        "small",
+        "round",
+        "bright",
+        "cute"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup",
+        "top view"
+      ],
+      "guard": "one ice cream cone only, no cup, no spoon, no text, no repeated desserts"
+    },
+    {
+      "key": "donut",
+      "title": "Donut",
+      "subject": "single donut icon",
+      "colors_v2": [
+        "brown",
+        "pink",
+        "white"
+      ],
+      "actions_v2": [
+        "standing",
+        "floating",
+        "rolling"
+      ],
+      "modifiers_v2": [
+        "simple",
+        "small",
+        "round",
+        "bright",
+        "cute"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup",
+        "top view"
+      ],
+      "guard": "one donut only, no plate, no multiple donuts, no sprinkles pattern background"
+    },
+    {
+      "key": "sushi",
+      "title": "Sushi",
+      "subject": "single sushi piece icon",
+      "colors_v2": [
+        "white",
+        "orange",
+        "black"
+      ],
+      "actions_v2": [
+        "standing",
+        "tilted",
+        "floating"
+      ],
+      "modifiers_v2": [
+        "simple",
+        "small",
+        "round",
+        "bright",
+        "white"
+      ],
+      "styles_v2": [
+        "icon",
+        "cartoon",
+        "toy",
+        "sketch"
+      ],
+      "views_v2": [
+        "front view",
+        "side view",
+        "closeup",
+        "top view"
+      ],
+      "guard": "one sushi piece only, no plate, no chopsticks, no multiple sushi pieces"
+    }
+  ]
+}

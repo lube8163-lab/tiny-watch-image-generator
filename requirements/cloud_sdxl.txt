@@ -1,0 +1,8 @@
+accelerate==1.13.0
+diffusers==0.38.0
+huggingface_hub>=0.25,<1.0
+numpy>=1.26,<2.0
+pillow>=10.0,<13.0
+safetensors>=0.4
+sentencepiece>=0.2
+transformers>=4.45,<5.0

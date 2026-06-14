@@ -1,0 +1,12 @@
+accelerate>=0.34
+coremltools>=8.0
+datasets>=2.21
+diffusers>=0.31
+huggingface_hub>=0.25
+numpy>=1.26
+pillow>=10.0
+safetensors>=0.4
+scikit-learn==1.5.1
+sentencepiece>=0.2
+torch==2.7.0
+transformers>=4.45

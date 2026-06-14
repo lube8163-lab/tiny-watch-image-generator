@@ -1,0 +1,20 @@
+{
+  "target": "apple_watch_txt2img_technical_demo",
+  "first_real_resolution": 64,
+  "maximum_steps": 8,
+  "preferred_runtime": "Core ML mlprogram",
+  "components": {
+    "text_encoder": {
+      "target_params_millions": [5, 30],
+      "fallback": "prompt_hash_or_preset_embedding"
+    },
+    "denoiser": {
+      "target_params_millions": [80, 250],
+      "quantization": ["palettize4", "linear8_fallback"]
+    },
+    "decoder": {
+      "target_params_millions": [1, 15],
+      "quantization": ["linear8", "palettize4"]
+    }
+  }
+}
