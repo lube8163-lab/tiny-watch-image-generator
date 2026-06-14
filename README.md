@@ -91,12 +91,12 @@ python3 tools/make_watch_eval_contact_sheet.py \
   --seeds 0
 ```
 
-出力先はデフォルトで `reports/watch_eval/YYYYMMDD_HHMMSS/` です。`reports/` は Git 管理外なので、生成画像を誤ってコミットしにくい構成です。
+出力先はデフォルトで `reports/watch_eval/YYYYMMDD_HHMMSS/` です。`reports/` は Git 管理外なので、生成画像を誤ってコミットしにくい構成です。Swift evaluator はデフォルトで release build を使います。
 
 Swift evaluator だけを直接使う場合:
 
 ```sh
-swift run TinyWatchEval \
+swift run -c release TinyWatchEval \
   --config configs/prompt_eval_suite.json \
   --out-dir reports/watch_eval/current \
   --groups core_nouns \
@@ -134,6 +134,7 @@ python3 tools/train_tiny_coordinate_mlp.py --help
 
 進捗メモ:
 
+- [docs/watch_eval_baseline.md](docs/watch_eval_baseline.md)
 - [docs/articles/tiny_watch_image_generator_progress_2026-06-14.md](docs/articles/tiny_watch_image_generator_progress_2026-06-14.md)
 - [docs/model_improvement_plan.md](docs/model_improvement_plan.md)
 - [docs/watch_txt2img_plan.md](docs/watch_txt2img_plan.md)

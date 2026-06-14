@@ -13,10 +13,10 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def require_pillow():
     try:
-        from PIL import Image, ImageDraw
+        from PIL import Image, ImageDraw, ImageFont
     except ImportError as exc:
         raise SystemExit("Pillow is required: python3 -m pip install pillow") from exc
-    return Image, ImageDraw
+    return Image, ImageDraw, ImageFont
 
 
 def csv_items(value: str) -> list[str]:
@@ -31,6 +31,8 @@ def run_eval(args: argparse.Namespace, out_dir: Path) -> None:
     cmd = [
         "swift",
         "run",
+        "-c",
+        args.configuration,
         "TinyWatchEval",
         "--config",
         str(args.config),
@@ -65,10 +67,11 @@ def entry_image_path(out_dir: Path, entry: dict) -> Path:
 
 
 def draw_sheet(entries: list[dict], out_dir: Path, out_path: Path, columns: int, cell: int, label_height: int) -> None:
-    Image, ImageDraw = require_pillow()
+    Image, ImageDraw, ImageFont = require_pillow()
     if not entries:
         return
 
+    label_font = load_label_font(ImageFont, size=11)
     columns = max(1, min(columns, len(entries)))
     rows = (len(entries) + columns - 1) // columns
     sheet = Image.new("RGB", (columns * cell, rows * (cell + label_height)), "white")
@@ -85,18 +88,35 @@ def draw_sheet(entries: list[dict], out_dir: Path, out_path: Path, columns: int,
         label = shorten_label(entry["prompt"], 22)
         seed = f's{entry["seed"]}'
         elapsed = f'{entry["elapsedMs"]}ms'
-        draw_text_safe(draw, (x + 4, y + cell + 4), label, fill=(0, 0, 0))
-        draw_text_safe(draw, (x + 4, y + cell + 20), f"{seed} {elapsed}", fill=(80, 80, 80))
+        draw_text_safe(draw, (x + 4, y + cell + 4), label, fill=(0, 0, 0), font=label_font)
+        draw_text_safe(draw, (x + 4, y + cell + 20), f"{seed} {elapsed}", fill=(80, 80, 80), font=label_font)
 
     out_path.parent.mkdir(parents=True, exist_ok=True)
     sheet.save(out_path)
 
 
-def draw_text_safe(draw, xy: tuple[int, int], text: str, fill: tuple[int, int, int]) -> None:
+def load_label_font(ImageFont, size: int):
+    candidates = [
+        "/System/Library/Fonts/ヒラギノ角ゴシック W3.ttc",
+        "/System/Library/Fonts/Hiragino Sans GB.ttc",
+        "/System/Library/Fonts/Supplemental/Arial Unicode.ttf",
+        "/Library/Fonts/Arial Unicode.ttf",
+    ]
+    for candidate in candidates:
+        path = Path(candidate)
+        if path.exists():
+            try:
+                return ImageFont.truetype(str(path), size=size)
+            except OSError:
+                pass
+    return ImageFont.load_default()
+
+
+def draw_text_safe(draw, xy: tuple[int, int], text: str, fill: tuple[int, int, int], font) -> None:
     try:
-        draw.text(xy, text, fill=fill)
+        draw.text(xy, text, fill=fill, font=font)
     except UnicodeEncodeError:
-        draw.text(xy, text.encode("ascii", "replace").decode("ascii"), fill=fill)
+        draw.text(xy, text.encode("ascii", "replace").decode("ascii"), fill=fill, font=font)
 
 
 def load_manifest(out_dir: Path) -> dict:
@@ -165,6 +185,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--columns", type=int, default=4)
     parser.add_argument("--cell", type=int, default=None)
     parser.add_argument("--label-height", type=int, default=38)
+    parser.add_argument(
+        "--configuration",
+        choices=("release", "debug"),
+        default="release",
+        help="SwiftPM configuration for TinyWatchEval. Release is much faster.",
+    )
     parser.add_argument("--raw", action="store_true", help="Disable watch postprocess.")
     parser.add_argument("--skip-generate", action="store_true", help="Use an existing manifest in --out-dir.")
     return parser.parse_args()
