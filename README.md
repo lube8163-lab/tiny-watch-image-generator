@@ -78,6 +78,38 @@ swift run TinyPreview --raw 7 cat > /tmp/cat_raw.ppm
 
 `--raw` を付けない場合は watchOS 側と同じ軽量 postprocess を通します。
 
+## Watch Eval Contact Sheets
+
+モデル変更や prompt normalization 変更の前後比較用に、固定 prompt / seed の評価画像をまとめて生成できます。これは Watch アプリと同じ Swift generator を使うため、Python 側の近似実装ではなく実機コードに近い結果を見られます。
+
+軽い smoke eval:
+
+```sh
+python3 tools/make_watch_eval_contact_sheet.py \
+  --groups core_nouns,adjectives,actions,styles,japanese_aliases \
+  --prompts-per-group 2 \
+  --seeds 0
+```
+
+出力先はデフォルトで `reports/watch_eval/YYYYMMDD_HHMMSS/` です。`reports/` は Git 管理外なので、生成画像を誤ってコミットしにくい構成です。
+
+Swift evaluator だけを直接使う場合:
+
+```sh
+swift run TinyWatchEval \
+  --config configs/prompt_eval_suite.json \
+  --out-dir reports/watch_eval/current \
+  --groups core_nouns \
+  --prompts-per-group 4 \
+  --seeds 0,7
+```
+
+PNG contact sheet 作成には Pillow が必要です。
+
+```sh
+python3 -m pip install pillow
+```
+
 ## Current Watch App
 
 - 128x128 RGBA output

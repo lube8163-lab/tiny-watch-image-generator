@@ -19,6 +19,10 @@ let package = Package(
         .executableTarget(
             name: "TinyPreview",
             dependencies: ["TinyWatchGenerator"]
+        ),
+        .executableTarget(
+            name: "TinyWatchEval",
+            dependencies: ["TinyWatchGenerator"]
         )
     ]
 )
