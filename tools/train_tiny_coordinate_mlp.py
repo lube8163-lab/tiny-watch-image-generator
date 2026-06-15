@@ -454,6 +454,49 @@ def export_weights(
     swift_out.write_text(source)
 
 
+def load_exported_weights(
+    model: TinyCoordinateMLP,
+    weights_path: Path,
+    prompt_encoder: str,
+) -> None:
+    payload = json.loads(weights_path.read_text(encoding="utf-8"))
+    expected = {
+        "latent": model.latent_count,
+        "input": model.input_count,
+        "hidden": model.hidden_count,
+        "hiddenLayerCount": model.hidden_layers,
+        "output": 3,
+        "promptEncoder": prompt_encoder,
+    }
+    for key, value in expected.items():
+        if payload.get(key) != value:
+            raise SystemExit(
+                f"init weights are incompatible: {key}={payload.get(key)!r} expected {value!r}"
+            )
+    payload_frequencies = [float(v) for v in payload.get("coordFrequencies", [])]
+    if payload_frequencies != [float(v) for v in model.coord_frequencies]:
+        raise SystemExit(
+            "init weights are incompatible: "
+            f"coordFrequencies={payload_frequencies!r} expected {model.coord_frequencies!r}"
+        )
+
+    for index, layer in enumerate(list(model.layers) + [model.output_layer], start=1):
+        scale = float(payload[f"w{index}Scale"])
+        weight_values = np.asarray(payload[f"w{index}"], dtype=np.float32) * scale
+        bias_values = np.asarray(payload[f"b{index}"], dtype=np.float32)
+        weight = torch.from_numpy(weight_values.reshape(tuple(layer.weight.shape))).to(
+            device=layer.weight.device,
+            dtype=layer.weight.dtype,
+        )
+        bias = torch.from_numpy(bias_values.reshape(tuple(layer.bias.shape))).to(
+            device=layer.bias.device,
+            dtype=layer.bias.dtype,
+        )
+        with torch.no_grad():
+            layer.weight.copy_(weight)
+            layer.bias.copy_(bias)
+
+
 @torch.no_grad()
 def render_preview(
     model: TinyCoordinateMLP,
@@ -588,6 +631,11 @@ def main() -> None:
     parser.add_argument("--progress-every", type=int, default=250)
     parser.add_argument("--preview-prompts", default="cat,dog,apple,robot,star,sun,moon,car,tree,flower,house,bird,fish,train,castle,face")
     parser.add_argument("--preview-prompts-file", type=Path)
+    parser.add_argument(
+        "--init-json",
+        type=Path,
+        help="Optional exported tiny_weights.json used to initialize the model before training.",
+    )
     parser.add_argument("--out-json", type=Path, default=JSON_OUT)
     parser.add_argument("--out-swift", type=Path, default=SWIFT_OUT)
     parser.add_argument("--out-bin", type=Path, default=BIN_OUT)
@@ -679,6 +727,9 @@ def main() -> None:
     latents = latents.to(device)
     coord_frequencies = [float(v.strip()) for v in args.coord_frequencies.split(",") if v.strip()]
     model = TinyCoordinateMLP(args.latent, args.hidden, coord_frequencies, args.hidden_layers).to(device)
+    if args.init_json:
+        load_exported_weights(model, args.init_json, args.prompt_encoder)
+        print(f"loaded init weights: {args.init_json}", flush=True)
     optimizer = torch.optim.AdamW(model.parameters(), lr=args.lr, weight_decay=1e-5)
     loss_fn = torch.nn.MSELoss()
 
@@ -744,6 +795,7 @@ def main() -> None:
         "lr": args.lr,
         "smoothness_loss_weight": args.smoothness_loss_weight,
         "smoothness_step_pixels": args.smoothness_step_pixels,
+        "init_json": str(args.init_json) if args.init_json else None,
         "device": str(device),
         "json_out": str(args.out_json),
         "swift_out": str(args.out_swift),

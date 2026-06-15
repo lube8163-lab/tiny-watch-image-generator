@@ -78,6 +78,44 @@ def image_quality_score(row: dict[str, Any]) -> float:
     return score
 
 
+def quality_stats(row: dict[str, Any]) -> dict[str, Any]:
+    stats = row.get("image_stats")
+    if isinstance(stats, dict):
+        return stats
+    stats = row.get("validation_stats")
+    return stats if isinstance(stats, dict) else {}
+
+
+def passes_quality_thresholds(
+    row: dict[str, Any],
+    max_border_edge_density: float,
+    max_border_std: float,
+    max_foreground_components: int,
+    min_largest_foreground_component_ratio: float,
+) -> bool:
+    stats = quality_stats(row)
+    if not stats:
+        return True
+
+    if max_border_edge_density > 0:
+        value = stats.get("border_edge_density")
+        if value is not None and float(value) > max_border_edge_density:
+            return False
+    if max_border_std > 0:
+        value = stats.get("border_std")
+        if value is not None and float(value) > max_border_std:
+            return False
+    if max_foreground_components > 0:
+        value = stats.get("foreground_component_count")
+        if value is not None and int(value) > max_foreground_components:
+            return False
+    if min_largest_foreground_component_ratio > 0:
+        value = stats.get("largest_foreground_component_ratio")
+        if value is not None and float(value) < min_largest_foreground_component_ratio:
+            return False
+    return True
+
+
 def apply_max_per_key(rows: list[dict[str, Any]], max_per_key: int, strategy: str) -> list[dict[str, Any]]:
     if max_per_key <= 0:
         return rows
@@ -131,6 +169,10 @@ def should_keep(
     exclude_variants: set[str],
     include_keys: set[str],
     exclude_keys: set[str],
+    max_border_edge_density: float,
+    max_border_std: float,
+    max_foreground_components: int,
+    min_largest_foreground_component_ratio: float,
 ) -> bool:
     if not include_rejected and row.get("accepted") is not True:
         return False
@@ -155,6 +197,14 @@ def should_keep(
     if include_keys and key not in include_keys:
         return False
     if key in exclude_keys:
+        return False
+    if not passes_quality_thresholds(
+        row,
+        max_border_edge_density,
+        max_border_std,
+        max_foreground_components,
+        min_largest_foreground_component_ratio,
+    ):
         return False
     return True
 
@@ -200,6 +250,10 @@ def main() -> None:
     parser.add_argument("--exclude-keys", default="")
     parser.add_argument("--include-keys", default="")
     parser.add_argument("--include-rejected", action="store_true")
+    parser.add_argument("--max-border-edge-density", type=float, default=0.0)
+    parser.add_argument("--max-border-std", type=float, default=0.0)
+    parser.add_argument("--max-foreground-components", type=int, default=0)
+    parser.add_argument("--min-largest-foreground-component-ratio", type=float, default=0.0)
     parser.add_argument("--max-per-key", type=int, default=0)
     parser.add_argument("--max-per-key-strategy", choices=["first", "even", "quality", "quality_diverse"], default="even")
     parser.add_argument("--link-mode", choices=["hardlink", "copy", "symlink"], default="hardlink")
@@ -241,6 +295,10 @@ def main() -> None:
             exclude_variants,
             include_keys,
             exclude_keys,
+            args.max_border_edge_density,
+            args.max_border_std,
+            args.max_foreground_components,
+            args.min_largest_foreground_component_ratio,
         )
     ]
     selected = apply_max_per_key(selected, args.max_per_key, args.max_per_key_strategy)
@@ -278,6 +336,10 @@ def main() -> None:
                 "exclude_variants": sorted(exclude_variants),
                 "include_keys": sorted(include_keys),
                 "exclude_keys": sorted(exclude_keys),
+                "max_border_edge_density": args.max_border_edge_density,
+                "max_border_std": args.max_border_std,
+                "max_foreground_components": args.max_foreground_components,
+                "min_largest_foreground_component_ratio": args.min_largest_foreground_component_ratio,
                 "max_per_key": args.max_per_key,
                 "max_per_key_strategy": args.max_per_key_strategy,
             },
