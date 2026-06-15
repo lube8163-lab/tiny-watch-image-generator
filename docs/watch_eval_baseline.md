@@ -83,3 +83,13 @@ python3 tools/make_watch_postprocess_compare.py \
 ```
 
 The current 24-prompt comparison reduces mean border color standard deviation from roughly `13.77` to `10.48` with similar local generation time. The tradeoff remains visible: background noise is lower, but very soft foregrounds still need retraining rather than heavier watch-side filtering.
+
+## Prompt Coverage Audit
+
+Prompt alias, slot parsing, and Watch UI preset coverage can be checked without GPU work:
+
+```sh
+python3 tools/audit_watch_prompt_coverage.py --fail-on-missing-ui --fail-on-unknown
+```
+
+Current result: `122` eval prompts, `0` without a subject slot, `0` with unknown tokens, and no generator subject missing from the Watch UI presets.

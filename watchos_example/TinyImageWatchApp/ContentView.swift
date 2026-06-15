@@ -10,8 +10,15 @@ struct WatchPromptPreset: Identifiable, Hashable {
 private struct WatchPromptSlotOption: Identifiable, Hashable {
     let key: String
     let title: String
+    let aliases: [String]
 
     var id: String { key }
+
+    init(key: String, title: String, aliases: [String] = []) {
+        self.key = key
+        self.title = title
+        self.aliases = aliases
+    }
 }
 
 private enum WatchPromptInputMode: String, CaseIterable, Identifiable {
@@ -85,59 +92,156 @@ struct ContentView: View {
         .init(key: "guitar", title: "Guitar"),
         .init(key: "camera", title: "Camera"),
         .init(key: "shoe", title: "Shoe"),
-        .init(key: "face", title: "Face")
+        .init(key: "face", title: "Face"),
+        .init(key: "astronaut", title: "Astronaut"),
+        .init(key: "alien", title: "Alien"),
+        .init(key: "dragon", title: "Dragon"),
+        .init(key: "penguin", title: "Penguin"),
+        .init(key: "turtle", title: "Turtle"),
+        .init(key: "elephant", title: "Elephant"),
+        .init(key: "lion", title: "Lion"),
+        .init(key: "monkey", title: "Monkey"),
+        .init(key: "frog", title: "Frog"),
+        .init(key: "duck", title: "Duck"),
+        .init(key: "deer", title: "Deer"),
+        .init(key: "whale", title: "Whale"),
+        .init(key: "umbrella", title: "Umbrella"),
+        .init(key: "key", title: "Key"),
+        .init(key: "bottle", title: "Bottle"),
+        .init(key: "pencil", title: "Pencil"),
+        .init(key: "lamp", title: "Lamp"),
+        .init(key: "phone", title: "Phone"),
+        .init(key: "computer", title: "Computer"),
+        .init(key: "crown", title: "Crown"),
+        .init(key: "diamond", title: "Diamond"),
+        .init(key: "sword", title: "Sword"),
+        .init(key: "shield", title: "Shield"),
+        .init(key: "cactus", title: "Cactus"),
+        .init(key: "volcano", title: "Volcano"),
+        .init(key: "fire", title: "Fire"),
+        .init(key: "icecream", title: "Ice Cream"),
+        .init(key: "donut", title: "Donut"),
+        .init(key: "sushi", title: "Sushi")
     ]
     private static let subjectSlots = presets.map {
-        WatchPromptSlotOption(key: $0.key, title: $0.title)
+        WatchPromptSlotOption(key: $0.key, title: $0.title, aliases: subjectAliases[$0.key] ?? [])
     }
     private static let colorSlots: [WatchPromptSlotOption] = [
         .init(key: "", title: "Any"),
-        .init(key: "red", title: "Red"),
-        .init(key: "orange", title: "Orange"),
-        .init(key: "yellow", title: "Yellow"),
-        .init(key: "green", title: "Green"),
-        .init(key: "blue", title: "Blue"),
-        .init(key: "purple", title: "Purple"),
-        .init(key: "pink", title: "Pink"),
-        .init(key: "brown", title: "Brown"),
-        .init(key: "black", title: "Black"),
-        .init(key: "white", title: "White"),
-        .init(key: "gray", title: "Gray")
+        .init(key: "red", title: "Red", aliases: ["scarlet", "赤", "赤い"]),
+        .init(key: "orange", title: "Orange", aliases: ["橙", "オレンジ色"]),
+        .init(key: "yellow", title: "Yellow", aliases: ["gold", "golden", "黄色", "金色"]),
+        .init(key: "green", title: "Green", aliases: ["緑", "緑色"]),
+        .init(key: "blue", title: "Blue", aliases: ["cyan", "青", "青い", "水色"]),
+        .init(key: "purple", title: "Purple", aliases: ["violet", "紫"]),
+        .init(key: "pink", title: "Pink", aliases: ["ピンク"]),
+        .init(key: "brown", title: "Brown", aliases: ["茶色"]),
+        .init(key: "black", title: "Black", aliases: ["黒", "黒い"]),
+        .init(key: "white", title: "White", aliases: ["白", "白い"]),
+        .init(key: "gray", title: "Gray", aliases: ["grey", "silver", "銀色", "灰色"])
     ]
     private static let actionSlots: [WatchPromptSlotOption] = [
         .init(key: "", title: "Still"),
-        .init(key: "sitting", title: "Sitting"),
-        .init(key: "standing", title: "Standing"),
-        .init(key: "running", title: "Running"),
-        .init(key: "walking", title: "Walking"),
-        .init(key: "flying", title: "Flying"),
-        .init(key: "swimming", title: "Swimming"),
-        .init(key: "sleeping", title: "Sleeping"),
-        .init(key: "eating", title: "Eating"),
-        .init(key: "holding", title: "Holding"),
-        .init(key: "jumping", title: "Jumping"),
-        .init(key: "floating", title: "Floating"),
-        .init(key: "tilted", title: "Tilted"),
-        .init(key: "shining", title: "Shining"),
-        .init(key: "smiling", title: "Smiling")
+        .init(key: "sitting", title: "Sitting", aliases: ["sit", "seated", "座る", "座っている"]),
+        .init(key: "standing", title: "Standing", aliases: ["stand", "立つ", "立っている"]),
+        .init(key: "running", title: "Running", aliases: ["run", "走る", "走っている"]),
+        .init(key: "walking", title: "Walking", aliases: ["walk", "歩く", "歩いている"]),
+        .init(key: "flying", title: "Flying", aliases: ["fly", "飛ぶ", "飛んでいる"]),
+        .init(key: "swimming", title: "Swimming", aliases: ["swim", "泳ぐ", "泳いでいる"]),
+        .init(key: "sleeping", title: "Sleeping", aliases: ["sleep", "眠る", "寝ている"]),
+        .init(key: "eating", title: "Eating", aliases: ["eat", "食べる", "食べている"]),
+        .init(key: "holding", title: "Holding", aliases: ["hold", "持つ", "持っている"]),
+        .init(key: "jumping", title: "Jumping", aliases: ["jump", "跳ぶ", "ジャンプ"]),
+        .init(key: "floating", title: "Floating", aliases: ["float", "drifting", "drift", "浮く", "浮いている"]),
+        .init(key: "tilted", title: "Tilted", aliases: ["leaning", "lean", "turning", "turn", "傾く", "斜め"]),
+        .init(key: "shining", title: "Shining", aliases: ["shine", "glowing", "glow", "sparkling", "sparkle", "輝く", "光る"]),
+        .init(key: "smiling", title: "Smiling", aliases: ["smile", "happy", "笑顔", "笑う"]),
+        .init(key: "parked", title: "Parked", aliases: ["parking", "駐車"]),
+        .init(key: "rolling", title: "Rolling", aliases: ["roll", "転がる", "転がっている"]),
+        .init(key: "bouncing", title: "Bounce", aliases: ["bounce", "跳ねる", "弾む"]),
+        .init(key: "sliding", title: "Sliding", aliases: ["slide", "滑る", "滑っている"])
     ]
     private static let viewSlots: [WatchPromptSlotOption] = [
         .init(key: "", title: "Any"),
-        .init(key: "front view", title: "Front"),
-        .init(key: "side view", title: "Side"),
-        .init(key: "back view", title: "Back"),
-        .init(key: "top view", title: "Top"),
-        .init(key: "closeup", title: "Close")
+        .init(key: "front view", title: "Front", aliases: ["front", "正面"]),
+        .init(key: "side view", title: "Side", aliases: ["side", "profile", "横向き", "横"]),
+        .init(key: "back view", title: "Back", aliases: ["back", "rear", "後ろ"]),
+        .init(key: "top view", title: "Top", aliases: ["top", "overhead", "上から"]),
+        .init(key: "closeup", title: "Close", aliases: ["close up", "close-up", "macro", "アップ"])
     ]
     private static let styleSlots: [WatchPromptSlotOption] = [
         .init(key: "", title: "Plain"),
-        .init(key: "icon", title: "Icon"),
-        .init(key: "cartoon", title: "Cartoon"),
-        .init(key: "anime", title: "Anime"),
-        .init(key: "photo", title: "Photo"),
-        .init(key: "toy", title: "Toy"),
-        .init(key: "watercolor", title: "Paint"),
-        .init(key: "sketch", title: "Sketch")
+        .init(key: "icon", title: "Icon", aliases: ["symbol", "emoji", "sticker", "アイコン"]),
+        .init(key: "cartoon", title: "Cartoon", aliases: ["toon", "comic"]),
+        .init(key: "anime", title: "Anime", aliases: ["manga", "アニメ"]),
+        .init(key: "photo", title: "Photo", aliases: ["photograph", "realistic", "写真"]),
+        .init(key: "toy", title: "Toy", aliases: ["plush", "figurine", "おもちゃ"]),
+        .init(key: "watercolor", title: "Paint", aliases: ["painting", "painted", "水彩"]),
+        .init(key: "sketch", title: "Sketch", aliases: ["drawing", "lineart", "線画"])
+    ]
+    private static let subjectAliases: [String: [String]] = [
+        "astronaut": ["spaceperson", "spaceman", "宇宙飛行士"],
+        "alien": ["aliens", "extraterrestrial", "宇宙人"],
+        "dragon": ["dragons", "竜", "ドラゴン"],
+        "penguin": ["penguins", "ペンギン"],
+        "turtle": ["turtles", "亀", "カメ"],
+        "elephant": ["elephants", "象", "ゾウ"],
+        "lion": ["lions", "ライオン"],
+        "monkey": ["monkeys", "猿", "サル"],
+        "frog": ["frogs", "蛙", "カエル"],
+        "duck": ["ducks", "アヒル", "鴨"],
+        "deer": ["鹿", "シカ"],
+        "whale": ["whales", "くじら", "クジラ"],
+        "cat": ["cats", "kitten", "kitty", "ねこ", "ネコ", "猫"],
+        "dog": ["dogs", "puppy", "いぬ", "イヌ", "犬"],
+        "rabbit": ["rabbits", "bunny", "うさぎ", "兎"],
+        "horse": ["horses", "pony", "馬"],
+        "bear": ["bears", "熊"],
+        "fox": ["foxes", "きつね", "狐"],
+        "owl": ["owls", "ふくろう"],
+        "butterfly": ["butterflies", "蝶"],
+        "apple": ["apples", "りんご", "リンゴ"],
+        "strawberry": ["strawberries", "いちご"],
+        "car": ["cars", "auto", "automobile", "vehicle", "車"],
+        "bicycle": ["bicycles", "bike", "cycle", "自転車"],
+        "airplane": ["airplanes", "plane", "aircraft", "飛行機"],
+        "boat": ["boats", "ship", "船"],
+        "tree": ["trees", "forest", "木", "森"],
+        "mountain": ["mountains", "山"],
+        "cloud": ["clouds", "雲"],
+        "flower": ["flowers", "floral", "blossom", "rose", "tulip", "sunflower", "daisy", "orchid", "花"],
+        "house": ["houses", "home", "building", "家"],
+        "bird": ["birds", "cardinal", "peacock", "parrot", "eagle", "sparrow", "鳥"],
+        "fish": ["fishes", "魚"],
+        "train": ["trains", "railway", "電車", "列車"],
+        "castle": ["castles", "城"],
+        "book": ["books", "本"],
+        "chair": ["chairs", "椅子"],
+        "clock": ["clocks", "watch", "時計"],
+        "cup": ["cups", "mug", "コップ"],
+        "mushroom": ["mushrooms", "きのこ"],
+        "heart": ["hearts", "ハート"],
+        "guitar": ["guitars", "ギター"],
+        "camera": ["cameras", "カメラ"],
+        "shoe": ["shoes", "sneaker", "靴"],
+        "umbrella": ["umbrellas", "傘", "かさ"],
+        "key": ["keys", "鍵", "かぎ"],
+        "bottle": ["bottles", "ボトル", "瓶"],
+        "pencil": ["pencils", "鉛筆", "えんぴつ"],
+        "lamp": ["lamps", "light", "ライト", "ランプ"],
+        "phone": ["phones", "smartphone", "スマホ", "携帯"],
+        "computer": ["computers", "laptop", "pc", "パソコン"],
+        "crown": ["crowns", "王冠"],
+        "diamond": ["diamonds", "gem", "jewel", "宝石", "ダイヤ"],
+        "sword": ["swords", "剣"],
+        "shield": ["shields", "盾"],
+        "cactus": ["cacti", "サボテン"],
+        "volcano": ["volcanoes", "火山"],
+        "fire": ["flame", "flames", "炎", "火"],
+        "icecream": ["ice cream", "ice-cream", "アイス", "アイスクリーム"],
+        "donut": ["donuts", "doughnut", "doughnuts", "ドーナツ"],
+        "sushi": ["寿司", "すし"],
+        "face": ["faces", "portrait", "person", "girl", "boy", "顔", "人物", "女の子", "男の子"]
     ]
 
     @State private var inputMode: WatchPromptInputMode = .slots
@@ -527,13 +631,55 @@ struct ContentView: View {
         prompt: String
     ) -> WatchPromptSlotOption? {
         let normalizedPrompt = Self.normalizedPrompt(prompt)
+        let promptTokens = Set(Self.promptTokens(normalizedPrompt))
         return options
             .filter { !$0.key.isEmpty }
             .sorted { $0.key.count > $1.key.count }
             .first { option in
-                let key = Self.normalizedPrompt(option.key)
-                return normalizedPrompt == key || normalizedPrompt.contains(key)
+                Self.aliasMatches(tokens: promptTokens, phrase: normalizedPrompt, alias: option.key) ||
+                    option.aliases.contains { alias in
+                        Self.aliasMatches(tokens: promptTokens, phrase: normalizedPrompt, alias: alias)
+                    }
             }
+    }
+
+    private static func promptTokens(_ prompt: String) -> [String] {
+        var tokens: [String] = []
+        var current = ""
+        for scalar in normalizedPrompt(prompt).unicodeScalars {
+            if isPromptTokenScalar(scalar) {
+                current.unicodeScalars.append(scalar)
+            } else if !current.isEmpty {
+                tokens.append(current)
+                current = ""
+            }
+        }
+        if !current.isEmpty {
+            tokens.append(current)
+        }
+        return tokens
+    }
+
+    private static func isPromptTokenScalar(_ scalar: UnicodeScalar) -> Bool {
+        let value = scalar.value
+        return (value >= 48 && value <= 57) ||
+            (value >= 97 && value <= 122) ||
+            (value >= 0x3040 && value <= 0x30ff) ||
+            (value >= 0x3400 && value <= 0x9fff)
+    }
+
+    private static func aliasMatches(tokens: Set<String>, phrase: String, alias: String) -> Bool {
+        let aliasTokens = promptTokens(alias)
+        guard !aliasTokens.isEmpty else { return false }
+        if aliasTokens.allSatisfy({ tokens.contains($0) }) {
+            return true
+        }
+        if alias.unicodeScalars.contains(where: { $0.value > 127 }) {
+            let compactAlias = normalizedPrompt(alias).replacingOccurrences(of: " ", with: "")
+            let compactPhrase = phrase.replacingOccurrences(of: " ", with: "")
+            return compactPhrase.contains(compactAlias)
+        }
+        return false
     }
 
     private static func randomOptionalSlot(

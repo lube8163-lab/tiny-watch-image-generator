@@ -100,6 +100,12 @@ python3 tools/make_watch_postprocess_compare.py \
   --seeds 0
 ```
 
+prompt alias / slot / Watch UI preset のカバレッジを確認する場合:
+
+```sh
+python3 tools/audit_watch_prompt_coverage.py --fail-on-missing-ui --fail-on-unknown
+```
+
 通常 eval の出力先はデフォルトで `reports/watch_eval/YYYYMMDD_HHMMSS/`、postprocess 比較の出力先は `reports/watch_postprocess_compare/YYYYMMDD_HHMMSS/` です。`reports/` は Git 管理外なので、生成画像を誤ってコミットしにくい構成です。Swift evaluator はデフォルトで release build を使います。
 
 Swift evaluator だけを直接使う場合:

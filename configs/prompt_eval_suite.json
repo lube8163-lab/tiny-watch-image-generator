@@ -96,6 +96,23 @@
       ]
     },
     {
+      "key": "alias_slot_smoke",
+      "prompts": [
+        "宇宙飛行士",
+        "ドラゴン flying",
+        "ペンギン sliding",
+        "横向き 車",
+        "上から ピザ",
+        "写真 りんご",
+        "水彩 花",
+        "アイコン 星",
+        "青い鳥 closeup",
+        "黒い犬 sleeping",
+        "ピンクの花",
+        "小さな家 正面"
+      ]
+    },
+    {
       "key": "v5_freeprompt_edges",
       "prompts": [
         "floating cloud",
