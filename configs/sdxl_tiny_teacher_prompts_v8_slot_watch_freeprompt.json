@@ -1,7 +1,7 @@
 {
   "version": "watch75_sdxl_tiny_v8_slot_freeprompt",
   "description": "Eval-aligned V8 teacher supplement for color/action/view/style slot binding. This is intentionally narrower than v7 and should be mixed with existing base/focus datasets.",
-  "default_negative_prompt": "text, logo, watermark, caption, signature, letters, low quality, blurry, noisy, distorted, deformed, cropped subject, multiple subjects, duplicate subject, repeated subject, many copies, group, collection, set, array, row of objects, icon sheet, collage, tiled layout, pattern, seamless pattern, repeating pattern, wallpaper, decorative background, decorative frame, ornamental border, stripes, checkerboard, busy background, cluttered background, detailed scenery, crowd, people in background, grain, speckles, mottled texture, paper texture, canvas texture, dirty background, noisy background, background pattern, complex scenery, repeated objects, tiny details, photorealistic clutter",
+  "default_negative_prompt": "text, logo, watermark, blurry, noisy, deformed, cropped subject, multiple subjects, group, duplicate subject, collection, collage, patterned background, busy background, cluttered background, scenery, crowd, grain, speckles",
   "defaults": {
     "colors_v2": [
       "red",
@@ -38,12 +38,12 @@
     {
       "variant": "slot_base00",
       "conditioning_prompt": "{key}",
-      "prompt": "exactly one {subject}, isolated single subject, centered, full subject visible, clear readable silhouette, plain matte light gray background, empty background, low texture, smooth simple shading, no repeated objects, not a collection{guard_clause}, no scenery, no background pattern, no text, no logo, no watermark"
+      "prompt": "exactly one {subject}, centered, whole subject visible, readable silhouette, plain light gray background, empty background, single subject only, no repeated objects{guard_clause}, no scenery, no text"
     },
     {
       "variant": "slot_base01",
       "conditioning_prompt": "simple {key}",
-      "prompt": "exactly one {subject}, simple object icon, large clear shape, isolated single subject, centered, full subject visible, clear readable silhouette, plain matte light gray background, empty background, low texture, smooth simple shading, no repeated objects, not a collection{guard_clause}, no scenery, no background pattern, no text, no logo, no watermark"
+      "prompt": "exactly one {subject}, simple icon, large clear shape, centered, whole subject visible, readable silhouette, plain light gray background, empty background, single subject only, no repeated objects{guard_clause}, no scenery, no text"
     },
     {
       "variant": "slot_color_{color_token}",
@@ -52,7 +52,7 @@
       },
       "max_expansions": 7,
       "conditioning_prompt": "{color} {key}",
-      "prompt": "exactly one {color} {subject}, the whole subject is clearly {color}, isolated single subject, centered, full subject visible, clear readable silhouette, plain matte light gray background, empty background, low texture, smooth simple shading, no repeated objects, not a collection{guard_clause}, no scenery, no background pattern, no text, no logo, no watermark"
+      "prompt": "exactly one {color} {subject}, clearly {color}, centered, whole subject visible, readable silhouette, plain light gray background, empty background, single subject only, no repeated objects{guard_clause}, no scenery, no text"
     },
     {
       "variant": "slot_action_{action_token}",
@@ -61,7 +61,7 @@
       },
       "max_expansions": 5,
       "conditioning_prompt": "{key} {action}",
-      "prompt": "exactly one {subject} {action}, exaggerated simple readable pose, clear limb or body direction when applicable, isolated single subject, centered, full subject visible, clear readable silhouette, plain matte light gray background, empty background, low texture, smooth simple shading, no repeated objects, not a collection{guard_clause}, no scenery, no background pattern, no text, no logo, no watermark"
+      "prompt": "exactly one {subject} {action}, simple readable pose, centered, whole subject visible, readable silhouette, plain light gray background, empty background, single subject only, no repeated objects{guard_clause}, no scenery, no text"
     },
     {
       "variant": "slot_view_{view_token}",
@@ -70,7 +70,7 @@
       },
       "max_expansions": 4,
       "conditioning_prompt": "{key} {view}",
-      "prompt": "exactly one {subject}, {view}, viewpoint is unambiguous, isolated single subject, centered, full subject visible, clear readable silhouette, plain matte light gray background, empty background, low texture, smooth simple shading, no repeated objects, not a collection{guard_clause}, no scenery, no background pattern, no text, no logo, no watermark"
+      "prompt": "exactly one {subject}, {view}, clear viewpoint, centered, whole subject visible, readable silhouette, plain light gray background, empty background, single subject only, no repeated objects{guard_clause}, no scenery, no text"
     },
     {
       "variant": "slot_style_simple_{style_token}",
@@ -82,7 +82,7 @@
         ]
       },
       "conditioning_prompt": "{style} {key}",
-      "prompt": "exactly one {subject}, {style} style, bold simple outline, smooth solid color areas, centered, full subject visible, strong readable silhouette, plain matte light gray background, empty background, no repeated objects, no text, no logo, no watermark{guard_clause}"
+      "prompt": "exactly one {subject}, {style} style, bold simple outline, smooth solid color areas, centered, whole subject visible, readable silhouette, plain light gray background, empty background, single subject only, no repeated objects, no text{guard_clause}"
     },
     {
       "variant": "slot_style_art_{style_token}",
@@ -94,7 +94,7 @@
         ]
       },
       "conditioning_prompt": "{style} {key}",
-      "prompt": "exactly one {subject}, {style} style, simple clean illustration, minimal detail, centered, full subject visible, strong readable silhouette, plain matte light gray background, empty background, no repeated objects, no text, no logo, no watermark{guard_clause}"
+      "prompt": "exactly one {subject}, {style} style, simple clean illustration, minimal detail, centered, whole subject visible, readable silhouette, plain light gray background, empty background, single subject only, no repeated objects, no text{guard_clause}"
     },
     {
       "variant": "slot_style_photo",
@@ -104,7 +104,7 @@
         ]
       },
       "conditioning_prompt": "{style} {key}",
-      "prompt": "studio product photo of exactly one {subject}, simple soft lighting, centered, full subject visible, strong readable silhouette, plain matte light gray background, empty background, no repeated objects, no text, no logo, no watermark{guard_clause}"
+      "prompt": "studio product photo of exactly one {subject}, simple soft lighting, centered, whole subject visible, readable silhouette, plain light gray background, empty background, single subject only, no repeated objects, no text{guard_clause}"
     },
     {
       "variant": "slot_color_action_{color_token}_{action_token}",
@@ -115,7 +115,7 @@
       "slot_strategy": "zip_cycle",
       "max_expansions": 7,
       "conditioning_prompt": "{color} {key} {action}",
-      "prompt": "exactly one {color} {subject} {action}, the subject color is clearly {color}, exaggerated simple readable pose, isolated single subject, centered, full subject visible, clear readable silhouette, plain matte light gray background, empty background, low texture, smooth simple shading, no repeated objects, not a collection{guard_clause}, no scenery, no background pattern, no text, no logo, no watermark"
+      "prompt": "exactly one {color} {subject} {action}, clearly {color}, simple readable pose, centered, whole subject visible, readable silhouette, plain light gray background, empty background, single subject only, no repeated objects{guard_clause}, no scenery, no text"
     },
     {
       "variant": "slot_action_view_{action_token}_{view_token}",
@@ -126,7 +126,7 @@
       "slot_strategy": "zip_cycle",
       "max_expansions": 8,
       "conditioning_prompt": "{key} {action} {view}",
-      "prompt": "exactly one {subject} {action}, {view}, viewpoint and pose are unambiguous, isolated single subject, centered, full subject visible, clear readable silhouette, plain matte light gray background, empty background, low texture, smooth simple shading, no repeated objects, not a collection{guard_clause}, no scenery, no background pattern, no text, no logo, no watermark"
+      "prompt": "exactly one {subject} {action}, {view}, clear pose and viewpoint, centered, whole subject visible, readable silhouette, plain light gray background, empty background, single subject only, no repeated objects{guard_clause}, no scenery, no text"
     },
     {
       "variant": "slot_style_color_{style_token}_{color_token}",
@@ -137,7 +137,7 @@
       "slot_strategy": "zip_cycle",
       "max_expansions": 7,
       "conditioning_prompt": "{style} {color} {key}",
-      "prompt": "exactly one {color} {subject}, {style} style, the subject color is clearly {color}, isolated single subject, centered, full subject visible, clear readable silhouette, plain matte light gray background, empty background, low texture, smooth simple shading, no repeated objects, not a collection{guard_clause}, no scenery, no background pattern, no text, no logo, no watermark"
+      "prompt": "exactly one {color} {subject}, {style} style, clearly {color}, centered, whole subject visible, readable silhouette, plain light gray background, empty background, single subject only, no repeated objects{guard_clause}, no scenery, no text"
     },
     {
       "variant": "slot_full_{style_token}_{color_token}_{action_token}_{view_token}",
@@ -150,7 +150,7 @@
       "slot_strategy": "zip_cycle",
       "max_expansions": 14,
       "conditioning_prompt": "{style} {color} {key} {action} {view}",
-      "prompt": "exactly one {color} {subject} {action}, {view}, {style} style, subject color, pose, and viewpoint are all clearly readable, isolated single subject, centered, full subject visible, clear readable silhouette, plain matte light gray background, empty background, low texture, smooth simple shading, no repeated objects, not a collection{guard_clause}, no scenery, no background pattern, no text, no logo, no watermark"
+      "prompt": "exactly one {color} {subject} {action}, {view}, {style} style, clear color, pose, and viewpoint, centered, whole subject visible, readable silhouette, plain light gray background, empty background, single subject only, no repeated objects{guard_clause}, no scenery, no text"
     }
   ],
   "presets": [
@@ -332,7 +332,7 @@
       "key": "car",
       "title": "Car",
       "subject": "single small toy car side silhouette",
-      "guard": "one car only, no road, no driver, no buildings, no scenery",
+      "guard": "no road, no driver",
       "qc_flags": [
         "avoid_people"
       ],
@@ -544,7 +544,7 @@
       "key": "pizza",
       "title": "Pizza",
       "subject": "single pizza slice icon",
-      "guard": "one pizza slice only, no full pizza, no plate, no multiple slices, no repeated toppings pattern",
+      "guard": "one slice only",
       "colors_v2": [
         "red",
         "blue",
@@ -586,7 +586,7 @@
       "key": "apple",
       "title": "Apple",
       "subject": "single apple fruit icon with a stem",
-      "guard": "fruit only, no apple logo, no bite mark, no repeated fruit",
+      "guard": "no logo, no bite",
       "qc_flags": [
         "possible_brand_shape"
       ],

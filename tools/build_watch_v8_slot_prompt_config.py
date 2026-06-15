@@ -38,6 +38,32 @@ SLOT_FOCUS_KEYS = [
 SLOT_COLORS = ["red", "blue", "white", "black", "pink", "yellow", "green"]
 SLOT_VIEWS = ["front view", "side view", "top view", "closeup"]
 SLOT_STYLES = ["icon", "cartoon", "toy", "anime", "watercolor", "sketch", "photo"]
+V8_NEGATIVE_TERMS = [
+    "text",
+    "logo",
+    "watermark",
+    "blurry",
+    "noisy",
+    "deformed",
+    "cropped subject",
+    "multiple subjects",
+    "group",
+    "duplicate subject",
+    "collection",
+    "collage",
+    "patterned background",
+    "busy background",
+    "cluttered background",
+    "scenery",
+    "crowd",
+    "grain",
+    "speckles",
+]
+V8_GUARD_OVERRIDES = {
+    "apple": "no logo, no bite",
+    "car": "no road, no driver",
+    "pizza": "one slice only",
+}
 
 
 ACTION_FALLBACKS = {
@@ -63,6 +89,8 @@ ACTION_FALLBACKS = {
 def slot_preset(preset: dict[str, Any]) -> dict[str, Any]:
     output = clean_preset(preset)
     key = str(output["key"])
+    if key in V8_GUARD_OVERRIDES:
+        output["guard"] = V8_GUARD_OVERRIDES[key]
     output["colors_v2"] = dedupe(SLOT_COLORS + list(output.get("colors_v2") or []))[:7]
     output["views_v2"] = dedupe(SLOT_VIEWS + list(output.get("views_v2") or []))[:4]
     output["styles_v2"] = SLOT_STYLES
@@ -73,16 +101,13 @@ def slot_preset(preset: dict[str, Any]) -> dict[str, Any]:
 
 def variants() -> list[dict[str, Any]]:
     clean_suffix = (
-        "isolated single subject, centered, full subject visible, clear readable silhouette, "
-        "plain matte light gray background, empty background, low texture, smooth simple shading"
+        "centered, whole subject visible, readable silhouette, "
+        "plain light gray background, empty background"
     )
-    strict_suffix = (
-        "no repeated objects, not a collection{guard_clause}, no scenery, no background pattern, "
-        "no text, no logo, no watermark"
-    )
+    strict_suffix = "single subject only, no repeated objects{guard_clause}, no scenery, no text"
     style_suffix = (
-        "centered, full subject visible, strong readable silhouette, plain matte light gray background, "
-        "empty background, no repeated objects, no text, no logo, no watermark"
+        "centered, whole subject visible, readable silhouette, plain light gray background, "
+        "empty background, single subject only, no repeated objects, no text"
     )
     return [
         {
@@ -97,7 +122,7 @@ def variants() -> list[dict[str, Any]]:
             "variant": "slot_base01",
             "conditioning_prompt": "simple {key}",
             "prompt": (
-                "exactly one {subject}, simple object icon, large clear shape, "
+                "exactly one {subject}, simple icon, large clear shape, "
                 f"{clean_suffix}, {strict_suffix}"
             ),
         },
@@ -107,7 +132,7 @@ def variants() -> list[dict[str, Any]]:
             "max_expansions": 7,
             "conditioning_prompt": "{color} {key}",
             "prompt": (
-                "exactly one {color} {subject}, the whole subject is clearly {color}, "
+                "exactly one {color} {subject}, clearly {color}, "
                 f"{clean_suffix}, {strict_suffix}"
             ),
         },
@@ -117,8 +142,7 @@ def variants() -> list[dict[str, Any]]:
             "max_expansions": 5,
             "conditioning_prompt": "{key} {action}",
             "prompt": (
-                "exactly one {subject} {action}, exaggerated simple readable pose, "
-                "clear limb or body direction when applicable, "
+                "exactly one {subject} {action}, simple readable pose, "
                 f"{clean_suffix}, {strict_suffix}"
             ),
         },
@@ -128,7 +152,7 @@ def variants() -> list[dict[str, Any]]:
             "max_expansions": 4,
             "conditioning_prompt": "{key} {view}",
             "prompt": (
-                "exactly one {subject}, {view}, viewpoint is unambiguous, "
+                "exactly one {subject}, {view}, clear viewpoint, "
                 f"{clean_suffix}, {strict_suffix}"
             ),
         },
@@ -166,8 +190,7 @@ def variants() -> list[dict[str, Any]]:
             "max_expansions": 7,
             "conditioning_prompt": "{color} {key} {action}",
             "prompt": (
-                "exactly one {color} {subject} {action}, the subject color is clearly {color}, "
-                "exaggerated simple readable pose, "
+                "exactly one {color} {subject} {action}, clearly {color}, simple readable pose, "
                 f"{clean_suffix}, {strict_suffix}"
             ),
         },
@@ -178,7 +201,7 @@ def variants() -> list[dict[str, Any]]:
             "max_expansions": 8,
             "conditioning_prompt": "{key} {action} {view}",
             "prompt": (
-                "exactly one {subject} {action}, {view}, viewpoint and pose are unambiguous, "
+                "exactly one {subject} {action}, {view}, clear pose and viewpoint, "
                 f"{clean_suffix}, {strict_suffix}"
             ),
         },
@@ -189,7 +212,7 @@ def variants() -> list[dict[str, Any]]:
             "max_expansions": 7,
             "conditioning_prompt": "{style} {color} {key}",
             "prompt": (
-                "exactly one {color} {subject}, {style} style, the subject color is clearly {color}, "
+                "exactly one {color} {subject}, {style} style, clearly {color}, "
                 f"{clean_suffix}, {strict_suffix}"
             ),
         },
@@ -206,7 +229,7 @@ def variants() -> list[dict[str, Any]]:
             "conditioning_prompt": "{style} {color} {key} {action} {view}",
             "prompt": (
                 "exactly one {color} {subject} {action}, {view}, {style} style, "
-                "subject color, pose, and viewpoint are all clearly readable, "
+                "clear color, pose, and viewpoint, "
                 f"{clean_suffix}, {strict_suffix}"
             ),
         },
@@ -249,25 +272,7 @@ def main() -> None:
         raise SystemExit(f"missing v6 presets: {missing}")
     presets = [slot_preset(by_key[key]) for key in SLOT_FOCUS_KEYS]
 
-    negative = ", ".join(
-        dedupe(
-            [
-                source["default_negative_prompt"],
-                "grain",
-                "speckles",
-                "mottled texture",
-                "paper texture",
-                "canvas texture",
-                "dirty background",
-                "noisy background",
-                "background pattern",
-                "complex scenery",
-                "repeated objects",
-                "tiny details",
-                "photorealistic clutter",
-            ]
-        )
-    )
+    negative = ", ".join(dedupe(V8_NEGATIVE_TERMS))
     payload: dict[str, Any] = {
         "version": "watch75_sdxl_tiny_v8_slot_freeprompt",
         "description": (
