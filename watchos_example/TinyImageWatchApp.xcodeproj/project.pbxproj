@@ -12,6 +12,9 @@
 		0B0000010000000000000003 /* TinyImageGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B0000010000000000000013 /* TinyImageGenerator.swift */; };
 		0B0000010000000000000004 /* TinyWeights.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B0000010000000000000014 /* TinyWeights.swift */; };
 		0B0000010000000000000005 /* TinyWeights.bin in Resources */ = {isa = PBXBuildFile; fileRef = 0B0000010000000000000015 /* TinyWeights.bin */; };
+		0B0000020000000000000001 /* WatchStressTestApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B0000020000000000000011 /* WatchStressTestApp.swift */; };
+		0B0000020000000000000002 /* StressTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B0000020000000000000012 /* StressTestView.swift */; };
+		0B0000020000000000000003 /* Models in Resources */ = {isa = PBXBuildFile; fileRef = 0B0000020000000000000013 /* Models */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -20,11 +23,22 @@
 		0B0000010000000000000012 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		0B0000010000000000000013 /* TinyImageGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TinyImageGenerator.swift; path = ../Sources/TinyWatchGenerator/TinyImageGenerator.swift; sourceTree = "<group>"; };
 		0B0000010000000000000014 /* TinyWeights.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TinyWeights.swift; path = ../Sources/TinyWatchGenerator/TinyWeights.swift; sourceTree = "<group>"; };
-		0B0000010000000000000015 /* TinyWeights.bin */ = {isa = PBXFileReference; lastKnownFileType = file; path = TinyWeights.bin; sourceTree = "<group>"; };
+		0B0000010000000000000015 /* TinyWeights.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = TinyWeights.bin; sourceTree = "<group>"; };
+		0B0000020000000000000010 /* WatchStressTestApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WatchStressTestApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		0B0000020000000000000011 /* WatchStressTestApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchStressTestApp.swift; sourceTree = "<group>"; };
+		0B0000020000000000000012 /* StressTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StressTestView.swift; sourceTree = "<group>"; };
+		0B0000020000000000000013 /* Models */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Models; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		0B0000010000000000000020 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0B0000020000000000000020 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -38,6 +52,7 @@
 			isa = PBXGroup;
 			children = (
 				0B0000010000000000000031 /* TinyImageWatchApp */,
+				0B0000020000000000000031 /* WatchStressTestApp */,
 				0B0000010000000000000032 /* TinyWatchGenerator */,
 				0B0000010000000000000033 /* Products */,
 			);
@@ -66,8 +81,19 @@
 			isa = PBXGroup;
 			children = (
 				0B0000010000000000000010 /* TinyImageWatchApp.app */,
+				0B0000020000000000000010 /* WatchStressTestApp.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		0B0000020000000000000031 /* WatchStressTestApp */ = {
+			isa = PBXGroup;
+			children = (
+				0B0000020000000000000011 /* WatchStressTestApp.swift */,
+				0B0000020000000000000012 /* StressTestView.swift */,
+				0B0000020000000000000013 /* Models */,
+			);
+			path = WatchStressTestApp;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -90,6 +116,23 @@
 			productReference = 0B0000010000000000000010 /* TinyImageWatchApp.app */;
 			productType = "com.apple.product-type.application";
 		};
+		0B0000020000000000000040 /* WatchStressTestApp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0B0000020000000000000070 /* Build configuration list for PBXNativeTarget "WatchStressTestApp" */;
+			buildPhases = (
+				0B0000020000000000000050 /* Sources */,
+				0B0000020000000000000020 /* Frameworks */,
+				0B0000020000000000000060 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = WatchStressTestApp;
+			productName = WatchStressTestApp;
+			productReference = 0B0000020000000000000010 /* WatchStressTestApp.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -101,6 +144,9 @@
 				LastUpgradeCheck = 2650;
 				TargetAttributes = {
 					0B0000010000000000000040 = {
+						CreatedOnToolsVersion = 26.5;
+					};
+					0B0000020000000000000040 = {
 						CreatedOnToolsVersion = 26.5;
 					};
 				};
@@ -119,6 +165,7 @@
 			projectRoot = "";
 			targets = (
 				0B0000010000000000000040 /* TinyImageWatchApp */,
+				0B0000020000000000000040 /* WatchStressTestApp */,
 			);
 		};
 /* End PBXProject section */
@@ -129,6 +176,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				0B0000010000000000000005 /* TinyWeights.bin in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0B0000020000000000000060 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0B0000020000000000000003 /* Models in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -143,6 +198,15 @@
 				0B0000010000000000000002 /* ContentView.swift in Sources */,
 				0B0000010000000000000003 /* TinyImageGenerator.swift in Sources */,
 				0B0000010000000000000004 /* TinyWeights.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0B0000020000000000000050 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0B0000020000000000000001 /* WatchStressTestApp.swift in Sources */,
+				0B0000020000000000000002 /* StressTestView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -317,6 +381,60 @@
 			};
 			name = Release;
 		};
+		0B00000200000000000000B0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = YY58VZMU56;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Watch Stress";
+				INFOPLIST_KEY_WKApplication = YES;
+				INFOPLIST_KEY_WKWatchOnly = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "-";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SUPPORTED_PLATFORMS = "watchos watchsimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Debug;
+		};
+		0B00000200000000000000B1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = YY58VZMU56;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Watch Stress";
+				INFOPLIST_KEY_WKApplication = YES;
+				INFOPLIST_KEY_WKWatchOnly = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "-";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SUPPORTED_PLATFORMS = "watchos watchsimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -334,6 +452,15 @@
 			buildConfigurations = (
 				0B00000100000000000000A0 /* Debug */,
 				0B00000100000000000000A1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		0B0000020000000000000070 /* Build configuration list for PBXNativeTarget "WatchStressTestApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0B00000200000000000000B0 /* Debug */,
+				0B00000200000000000000B1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

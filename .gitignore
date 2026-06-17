@@ -15,6 +15,15 @@ reports/
 datasets/
 out/
 
+# Keep tiny app model drop-zone notes in Git while compiled models stay ignored.
+!watchos_example/WatchStressTestApp/Models/
+!watchos_example/WatchStressTestApp/Models/README.md
+
+# Keep hand-written watch SD scheme reports in Git; generated report data stays ignored.
+!schemes/watch_sd_quantization/reports/
+schemes/watch_sd_quantization/reports/*
+!schemes/watch_sd_quantization/reports/*.md
+
 # Generated Core ML / model artifacts are too large for normal GitHub storage.
 *.mlmodelc/
 *.mlpackage/

@@ -4,10 +4,18 @@
 
 ## Boundary
 
-- 既存の `tools/`, `docs/`, `dist/`, `models/`, `ios_example/`, `watchos_example/` は編集しない。
-- このスキームの生成物は `schemes/watch_sd_quantization/artifacts/` と `schemes/watch_sd_quantization/reports/` だけに置く。
+- 既存の `TinyImageWatchApp` target/source は壊さない。
+- watchOS 実機検証に必要な場合だけ、隔離された追加 target/scheme を `watchos_example/` 配下に作る。
+- このスキームの中間生成物とレポートは `schemes/watch_sd_quantization/artifacts/` と `schemes/watch_sd_quantization/reports/` に置く。
 - 既存の `dist/` と `models/` は読み取り専用の入力として扱う。
 - 既存スクリプトを使う場合も、`--out` と `--manifest` は必ずこのスキーム配下を指定する。
+
+## Current Status
+
+2026-06-17 時点では、隔離 target/scheme `WatchStressTestApp` を追加し、Apple Watch 実機で Core ML load/predict/memory のストレステストを実施済みです。
+
+- 実測まとめ: `schemes/watch_sd_quantization/reports/watch_stress_test_2026-06-17.md`
+- 次スキーム引き継ぎプロンプト: `schemes/watch_sd_quantization/reports/next_minimal_pipeline_handoff_prompt_2026-06-17.md`
 
 ## Feasibility
 
