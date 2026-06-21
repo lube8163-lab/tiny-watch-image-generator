@@ -1,0 +1,224 @@
+[
+  {
+    "key": "cat",
+    "title": "Cat",
+    "prompt": "cute anime cat, clean illustration",
+    "aliases": ["cat", "kitty", "neko", "cat default"]
+  },
+  {
+    "key": "cat_face",
+    "title": "Cat Face",
+    "prompt": "single cute cat face, centered portrait, big eyes, clean anime illustration",
+    "aliases": ["cat face", "face cat"]
+  },
+  {
+    "key": "cat_head_icon",
+    "title": "Cat Head",
+    "prompt": "kawaii cat head icon, big eyes, centered, simple clean illustration",
+    "aliases": ["cat head", "cat icon"]
+  },
+  {
+    "key": "white_cat",
+    "title": "White Cat",
+    "prompt": "white kitten face, blue eyes, centered close-up, clean anime illustration",
+    "aliases": ["white cat", "kitten"]
+  },
+  {
+    "key": "cat_portrait",
+    "title": "Portrait Cat",
+    "prompt": "portrait of a cute cat looking at viewer, centered, soft background, anime style",
+    "aliases": ["cat portrait"]
+  },
+  {
+    "key": "chibi_cat",
+    "title": "Chibi Cat",
+    "prompt": "chibi cat mascot, round face, big eyes, simple pastel anime illustration",
+    "aliases": ["chibi cat"]
+  },
+  {
+    "key": "sitting_cat",
+    "title": "Sitting Cat",
+    "prompt": "cute sitting cat, full body, centered, simple clean anime illustration",
+    "aliases": ["sitting cat"]
+  },
+  {
+    "key": "cat_closeup",
+    "title": "Close Cat",
+    "prompt": "close-up cute cat face, nose and whiskers, centered, clean illustration",
+    "aliases": ["close cat"]
+  },
+  {
+    "key": "cat_logo",
+    "title": "Cat Logo",
+    "prompt": "simple cat face logo, round ears, big eyes, centered, clean vector illustration",
+    "aliases": ["cat logo"]
+  },
+  {
+    "key": "minimal_cat",
+    "title": "Minimal Cat",
+    "prompt": "minimal cute cat icon, clear silhouette, centered, simple flat colors",
+    "aliases": ["minimal cat"]
+  },
+  {
+    "key": "neko_face",
+    "title": "Neko Face",
+    "prompt": "kawaii neko face, cat ears, big eyes, centered anime icon",
+    "aliases": ["neko face"]
+  },
+  {
+    "key": "cat_looking_up",
+    "title": "Looking Up",
+    "prompt": "cute cat looking up, face visible, centered close-up, clean anime illustration",
+    "aliases": ["cat looking up"]
+  },
+  {
+    "key": "cat_blue_eyes",
+    "title": "Blue Eyes",
+    "prompt": "cute cat face with blue eyes, centered portrait, soft clean anime illustration",
+    "aliases": ["blue eyes cat"]
+  },
+  {
+    "key": "orange_cat",
+    "title": "Orange Cat",
+    "prompt": "orange tabby cat face, centered portrait, big eyes, clean anime illustration",
+    "aliases": ["orange cat", "tabby"]
+  },
+  {
+    "key": "black_cat",
+    "title": "Black Cat",
+    "prompt": "cute black cat face, yellow eyes, centered icon, clean anime illustration",
+    "aliases": ["black cat"]
+  },
+  {
+    "key": "cat_simple",
+    "title": "Simple Cat",
+    "prompt": "simple cute cat drawing, clear face, centered, clean colorful illustration",
+    "aliases": ["simple cat"]
+  },
+  {
+    "key": "cat_mascot",
+    "title": "Mascot Cat",
+    "prompt": "cute white cat mascot, tiny paws, centered full body, simple clean anime illustration",
+    "aliases": ["cat mascot"]
+  },
+  {
+    "key": "lucky_cat",
+    "title": "Lucky Cat",
+    "prompt": "cute maneki neko cat, white cat figurine, raised paws, centered, clean anime illustration",
+    "aliases": ["lucky cat", "maneki neko"]
+  },
+  {
+    "key": "cat_sticker",
+    "title": "Cat Sticker",
+    "prompt": "cute cat sticker, full body, big ears, centered, clean colorful illustration",
+    "aliases": ["cat sticker"]
+  },
+  {
+    "key": "round_cat",
+    "title": "Round Cat",
+    "prompt": "cute round cat face, big ears, big eyes, centered icon, simple clean illustration",
+    "aliases": ["round cat"]
+  },
+  {
+    "key": "tabby_icon",
+    "title": "Tabby Icon",
+    "prompt": "orange tabby cat icon, clear ears, centered face, simple clean illustration",
+    "aliases": ["tabby icon"]
+  },
+  {
+    "key": "white_mascot",
+    "title": "White Mascot",
+    "prompt": "small white cat mascot, cute full body, centered, simple pastel illustration",
+    "aliases": ["white mascot"]
+  },
+  {
+    "key": "cat_plush",
+    "title": "Cat Plush",
+    "prompt": "cute plush cat toy, full body, centered, soft clean anime illustration",
+    "aliases": ["cat plush"]
+  },
+  {
+    "key": "cat_badge",
+    "title": "Cat Badge",
+    "prompt": "cute cat badge icon, clear silhouette, centered, simple colorful illustration",
+    "aliases": ["cat badge"]
+  },
+  {
+    "key": "dog",
+    "title": "Dog",
+    "prompt": "cute anime dog, clean illustration",
+    "aliases": ["dog", "puppy", "inu"]
+  },
+  {
+    "key": "dog_logo",
+    "title": "Dog Logo",
+    "prompt": "simple dog face logo, centered, clean vector illustration",
+    "aliases": ["dog logo", "puppy logo"]
+  },
+  {
+    "key": "horse",
+    "title": "Horse",
+    "prompt": "cute anime horse, centered full body, clean illustration",
+    "aliases": ["horse", "pony", "uma"]
+  },
+  {
+    "key": "astronaut",
+    "title": "Astronaut",
+    "prompt": "single cute astronaut in a round helmet, centered full body, clean anime illustration",
+    "aliases": ["astronaut", "space person"]
+  },
+  {
+    "key": "bird",
+    "title": "Bird",
+    "prompt": "small cute bird, centered, clean anime illustration",
+    "aliases": ["bird", "small bird"]
+  },
+  {
+    "key": "blue_bird",
+    "title": "Blue Bird",
+    "prompt": "small blue bird, centered, clean anime illustration",
+    "aliases": ["blue bird"]
+  },
+  {
+    "key": "flying_blue_bird",
+    "title": "Flying Blue Bird",
+    "prompt": "small blue bird flying, wings spread, centered, clean anime illustration",
+    "aliases": ["flying blue bird", "blue bird flying", "flying bird"]
+  },
+  {
+    "key": "girl",
+    "title": "Girl",
+    "prompt": "anime girl portrait, clean illustration",
+    "aliases": ["girl", "person", "portrait", "anime"]
+  },
+  {
+    "key": "castle",
+    "title": "Castle",
+    "prompt": "fantasy castle, anime background art",
+    "aliases": ["castle", "fantasy", "shiro"]
+  },
+  {
+    "key": "flower",
+    "title": "Flower",
+    "prompt": "beautiful flower, clean anime illustration",
+    "aliases": ["flower", "rose", "hana"]
+  },
+  {
+    "key": "mountain",
+    "title": "Mountain",
+    "prompt": "mountain landscape, anime background art",
+    "aliases": ["mountain", "landscape", "yama"]
+  },
+  {
+    "key": "robot",
+    "title": "Robot",
+    "prompt": "small friendly robot, clean anime illustration",
+    "aliases": ["robot", "mecha"]
+  },
+  {
+    "key": "star",
+    "title": "Star",
+    "prompt": "starry night sky, anime background art",
+    "aliases": ["star", "sky", "night"]
+  }
+]

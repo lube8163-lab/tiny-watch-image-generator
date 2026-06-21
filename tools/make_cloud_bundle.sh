@@ -15,6 +15,9 @@ COPYFILE_DISABLE=1 tar --no-xattrs -czf "$OUT" \
   configs/sdxl_tiny_teacher_prompts_v5_watch_freeprompt.json \
   configs/sdxl_tiny_teacher_prompts_v6_watch_freeprompt.json \
   configs/sdxl_tiny_teacher_prompts_v7_focus_watch_freeprompt.json \
+  configs/lcm64_watch_presets.json \
+  configs/lcm64_cat_quality_presets.json \
+  configs/lcm128_watch_plus_presets.json \
   configs/prompt_eval_suite.json \
   datasets/sdxl_cloud_teacher_watch46_v3_problem3_curated \
   tools/prompt_normalization.py \
@@ -36,6 +39,10 @@ COPYFILE_DISABLE=1 tar --no-xattrs -czf "$OUT" \
   tools/cloud_generate_sdxl_watch_v5.sh \
   tools/cloud_generate_sdxl_watch_v6.sh \
   tools/cloud_generate_sdxl_watch_v7_focus.sh \
+  tools/cloud_lcm_resolution_probe.py \
+  tools/cloud_lcm_watch_style_probe.py \
+  tools/cloud_train_lcm_sr_probe.py \
+  tools/make_watch_preview_comparison.py \
   tools/train_watch_v4_mlp.sh \
   tools/run_cloud_watch_v5_pipeline.sh \
   tools/run_cloud_watch_v6_pipeline.sh \

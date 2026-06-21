@@ -65,14 +65,31 @@ public struct TinyImageGenerator {
         size: Int = Self.defaultSize,
         postprocess: TinyImagePostprocess = .watchDenoise
     ) -> TinyGeneratedImage {
-        let latent = makeLatent(prompt: prompt, seed: seed)
+        generate(
+            prompt: prompt,
+            seed: seed,
+            size: size,
+            variant: TinyWeights.defaultVariant,
+            postprocess: postprocess
+        )
+    }
+
+    public func generate(
+        prompt: String = "",
+        seed: UInt64,
+        size: Int = Self.defaultSize,
+        variant: TinyWeightVariant,
+        postprocess: TinyImagePostprocess = .watchDenoise
+    ) -> TinyGeneratedImage {
+        let weights = TinyWeights.storage(for: variant)
+        let latent = makeLatent(prompt: prompt, seed: seed, promptEncoder: weights.promptEncoder)
         let frequencies = TinyWeights.coordFrequencies
-        let w1 = TinyWeights.w1
-        let b1 = TinyWeights.b1
-        let w2 = TinyWeights.w2
-        let b2 = TinyWeights.b2
-        let w3 = TinyWeights.w3
-        let b3 = TinyWeights.b3
+        let w1 = weights.w1
+        let b1 = weights.b1
+        let w2 = weights.w2
+        let b2 = weights.b2
+        let w3 = weights.w3
+        let b3 = weights.b3
         let batchLimit = Self.inferenceBatchSize
         var input = [Float](repeating: 0, count: batchLimit * TinyWeights.inputCount)
         var h1 = [Float](repeating: 0, count: batchLimit * TinyWeights.hiddenCount)
@@ -585,11 +602,11 @@ public struct TinyImageGenerator {
         }
     }
 
-    private func makeLatent(prompt: String, seed: UInt64) -> [Float] {
-        if TinyWeights.promptEncoder == "compositional_v1" {
+    private func makeLatent(prompt: String, seed: UInt64, promptEncoder: String) -> [Float] {
+        if promptEncoder == "compositional_v1" {
             return makeCompositionalLatent(prompt: prompt, seed: seed, version: 1)
         }
-        if TinyWeights.promptEncoder == "compositional_v2" {
+        if promptEncoder == "compositional_v2" {
             return makeCompositionalLatent(prompt: prompt, seed: seed, version: 2)
         }
         return makeHashLatent(prompt: prompt, seed: seed)

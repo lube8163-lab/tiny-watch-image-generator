@@ -7,6 +7,33 @@ This repo now has two tracks:
 1. `TinyWatchGenerator`: toy txt2img API, pure Swift, useful for UI and watchOS integration tests.
 2. `Core ML distillation/quantization`: the future path for a real-ish model.
 
+## Current Baseline
+
+The current successful device baseline is:
+
+- `WatchPipelineSmokeApp`
+- `LCM128 6b`
+- 16 streamed UNet chunks
+- 128px 4-bit decoder
+- transient on-device CLIP text encoder for short typed prompts, with
+  precomputed prompt embeddings retained as fallback/regression assets
+- a lightweight prompt expansion step that turns very short inputs into the
+  centered clean-illustration conditioning style used by the bundled prompt
+  assets
+- random or curated latent seed on device
+- `Sharp x2` preview
+
+This now supports short free text prompts by generating the `[1, 77, 768]`
+conditioning embedding on Watch before streamed LCM generation. The typed prompt
+is still used for run IDs and seed salting, while the CLIP input receives a
+small global style prior such as `single subject, centered, full object visible,
+clean anime illustration, simple background`. Prompts that describe a relation,
+such as `cat in space` or `astronaut riding a horse`, use a centered-composition
+clause instead of forcing the whole phrase into a single-subject hint. The
+LCM128 streamed denoiser/decoder path
+remains the baseline while the text-conditioning front end is validated on
+device.
+
 ## Hard Constraints
 
 - Apple Watch has a small battery and a much tighter thermal envelope than iPhone or Mac.
@@ -46,6 +73,30 @@ The most important split is:
 - Keep the text encoder tiny or compute text embeddings outside the watch demo at first.
 - Make the denoiser the only large model.
 - Decode at 64x64 or 96x96, then display with nearest/bilinear upscale.
+
+For the current 128px LCM route, the text-conditioning path has three practical
+stages:
+
+1. Keep preset embeddings as the golden baseline and fallback path.
+2. Add an on-device text encoder that emits the same `[1, 77, 768]`
+   conditioning shape previously loaded from `prompt_embeddings_f16.bin`.
+3. Replace preset selection in the product UI with a short prompt input field
+   while preserving presets as hidden regression tests.
+
+If the full CLIP text encoder is used as an interim probe, treat it as a
+transient stage only. The Watch path should load the text encoder, produce the
+prompt embedding, release the model and Core ML cache, and only then load the
+UNet/decoder generation pipeline. Do not co-retain the full CLIP encoder with
+the generation models.
+
+The target prompt style is short and concrete, such as a few words or a compact
+phrase. Complex prompt grammar, negative prompts, long prompts, and prompt
+weight syntax are out of scope for the Watch version unless a later text encoder
+proves cheap enough. For the current CLIP probe, keep this as a broad short
+prompt path rather than tuning seeds or suffixes for one-off test prompts.
+Repeated generation of the same prompt should be treated as seed reroll: the
+Watch UI keeps the same prompt field and result surface, while console logs
+record the resolved random seed and run id for any promising output.
 
 ## Quantization Ladder
 
@@ -89,13 +140,23 @@ Add tiny text encoder or a learned prompt embedding table. For the Apple Watch d
 
 ### M5: End-to-end watch demo
 
-Use this UI flow:
+Use this developer UI flow while the pipeline is still being evaluated:
 
 1. prompt input or preset prompt picker,
 2. seed shuffle,
 3. generate button,
 4. progressive preview,
 5. final 64x64/96x96 image upscaled for display.
+
+The final app UI should be much smaller:
+
+1. short prompt input,
+2. generate button,
+3. generated image.
+
+Pipeline choice, chunk timings, resolved seed, guidance, preview mode, memory
+notes, and detailed metrics should continue to be emitted to the console logs,
+but should not remain as primary app UI once the product path is stable.
 
 ## Open Risk
 

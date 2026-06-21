@@ -8,6 +8,14 @@ struct StressLogLine: Identifiable {
     let text: String
 }
 
+private struct TextEncoderProbeManifest: Decodable {
+    let prompts: [String]
+    let inputIdsShape: [Int]
+    let inputIdsDtype: String
+    let hiddenStatesShape: [Int]
+    let hiddenStatesDtype: String
+}
+
 enum StressComputeMode: String, CaseIterable, Identifiable {
     case cpuOnly
     case all
@@ -47,6 +55,19 @@ final class StressTestViewModel: ObservableObject {
     private let logger = Logger(subsystem: "dev.local.WatchStressTestApp", category: "stress")
     private var retainedBuffers: [Data] = []
     private var retainedModels: [(label: String, model: MLModel)] = []
+    private var didPrepareForLaunch = false
+    private var textEncoderPromptIndex = 0
+    private var cachedTextEncoderProbeManifest: TextEncoderProbeManifest?
+
+    let isTextEncoderSmokeOnly = ProcessInfo.processInfo.environment["WATCH_TEXT_ENCODER_AUTORUN"] == "1"
+
+    func prepareForLaunch() async {
+        guard !didPrepareForLaunch else { return }
+        didPrepareForLaunch = true
+        scanModels()
+        guard isTextEncoderSmokeOnly else { return }
+        await runSeparatedTextEncoderCycle()
+    }
 
     func scanModels() {
         let urls = bundledModelURLs()
@@ -188,6 +209,74 @@ final class StressTestViewModel: ObservableObject {
         }
     }
 
+    func loadTextEncoderOnly() async {
+        await runGuarded("load text encoder") {
+            let urls = textEncoderModelURLs()
+            guard !urls.isEmpty else {
+                log("text encoder: no bundled text encoder .mlmodelc found")
+                return
+            }
+
+            retainedModels.removeAll(keepingCapacity: false)
+            for url in urls {
+                let model = try loadModel(url: url)
+                retainedModels.append((label: url.lastPathComponent, model: model))
+                retainedModelCount = retainedModels.count
+                log("text encoder retain: \(url.lastPathComponent) count=\(retainedModelCount)")
+            }
+        }
+    }
+
+    func predictTextEncoderOnce() async {
+        await runGuarded("predict text encoder once") {
+            let model: (label: String, model: MLModel)
+            if let retained = retainedModels.first(where: { isTextEncoderName($0.label) }) {
+                model = retained
+            } else if let url = textEncoderModelURLs().first {
+                model = (url.lastPathComponent, try loadModel(url: url))
+            } else {
+                log("text encoder predict: no bundled text encoder .mlmodelc found")
+                return
+            }
+
+            let result = try predict(model: model.model, label: model.label, iteration: 1)
+            try compareTextEncoderOutput(result.output, promptIndex: textEncoderPromptIndex, prompt: nil)
+        }
+    }
+
+    func runSeparatedTextEncoderCycle() async {
+        await runGuarded("text encoder separated cycle") {
+            guard let url = textEncoderModelURLs().first else {
+                log("text encoder separated: no bundled text encoder .mlmodelc found")
+                return
+            }
+
+            retainedModels.removeAll(keepingCapacity: false)
+            retainedModelCount = 0
+            let probeManifest = try loadTextEncoderProbeManifest()
+            log("text encoder separated: begin transient load/predict/release")
+            log("text encoder prompts: count=\(probeManifest.prompts.count)")
+
+            try autoreleasepool {
+                let model = try loadModel(url: url)
+                defer { textEncoderPromptIndex = 0 }
+                for (index, prompt) in probeManifest.prompts.enumerated() {
+                    textEncoderPromptIndex = index
+                    log("text encoder prompt: \(index + 1)/\(probeManifest.prompts.count) \"\(prompt)\"")
+                    let result = try predict(model: model, label: url.lastPathComponent, iteration: index + 1)
+                    try compareTextEncoderOutput(result.output, promptIndex: index, prompt: prompt)
+                }
+            }
+
+            log("text encoder separated: transient model scope ended")
+            retainedModels.removeAll(keepingCapacity: false)
+            retainedModelCount = 0
+            try await Task.sleep(nanoseconds: 500_000_000)
+            purgeCoreMLCache(context: "after text encoder release")
+            log("text encoder separated: ready for generation load")
+        }
+    }
+
     func predictPipeline(unetSteps: Int) async {
         await runGuarded("pipeline \(unetSteps)+decode") {
             guard let unet = retainedModels.first(where: { $0.label.lowercased().contains("unet") }) else {
@@ -201,10 +290,10 @@ final class StressTestViewModel: ObservableObject {
 
             var modelElapsed: TimeInterval = 0
             for step in 1...unetSteps {
-                modelElapsed += try predict(model: unet.model, label: unet.label, iteration: step)
+                modelElapsed += try predict(model: unet.model, label: unet.label, iteration: step).elapsed
                 await Task.yield()
             }
-            modelElapsed += try predict(model: decoder.model, label: decoder.label, iteration: 1)
+            modelElapsed += try predict(model: decoder.model, label: decoder.label, iteration: 1).elapsed
             log("pipeline: model_time=\(format(seconds: modelElapsed)) steps=\(unetSteps)+decode")
         }
     }
@@ -269,14 +358,14 @@ final class StressTestViewModel: ObservableObject {
     }
 
     @discardableResult
-    private func predict(model: MLModel, label: String, iteration: Int) throws -> TimeInterval {
+    private func predict(model: MLModel, label: String, iteration: Int) throws -> (elapsed: TimeInterval, output: MLFeatureProvider) {
         let input = try makeInputProvider(for: model)
         let start = Date()
         let output = try model.prediction(from: input)
         let elapsed = Date().timeIntervalSince(start)
         let outputs = output.featureNames.sorted().joined(separator: ",")
         log("predict: \(label) #\(iteration) \(format(seconds: elapsed)) outputs=[\(outputs)]")
-        return elapsed
+        return (elapsed, output)
     }
 
     private func makeInputProvider(for model: MLModel) throws -> MLFeatureProvider {
@@ -291,6 +380,9 @@ final class StressTestViewModel: ObservableObject {
                 }
                 let shape = constraint.shape.isEmpty ? [1] : constraint.shape
                 let array = try MLMultiArray(shape: shape, dataType: constraint.dataType)
+                if name == "input_ids", constraint.dataType == .int32 {
+                    try fillTextEncoderInputIDs(array)
+                }
                 values[name] = MLFeatureValue(multiArray: array)
                 log("input: \(name) multiArray shape=\(shape.map(\.stringValue).joined(separator: "x")) type=\(constraint.dataType.rawValue)")
             case .int64:
@@ -308,6 +400,135 @@ final class StressTestViewModel: ObservableObject {
         }
 
         return DictionaryFeatureProvider(values: values)
+    }
+
+    private func fillTextEncoderInputIDs(_ array: MLMultiArray) throws {
+        guard array.dataType == .int32 else {
+            throw StressTestError.unsupportedInput("input_ids")
+        }
+        guard let url = bundledResourceURL(named: "input_ids_i32", extension: "bin") else {
+            log("input_ids: no bundled ids asset; using zeros")
+            return
+        }
+        let data = try Data(contentsOf: url)
+        let availableCount = data.count / MemoryLayout<Int32>.size
+        let startIndex = textEncoderPromptIndex * array.count
+        guard startIndex < availableCount else {
+            log("input_ids: prompt index \(textEncoderPromptIndex) out of range; using zeros")
+            return
+        }
+        let copyCount = min(array.count, availableCount - startIndex)
+        data.withUnsafeBytes { rawBuffer in
+            guard let source = rawBuffer.baseAddress?.assumingMemoryBound(to: Int32.self) else { return }
+            let destination = array.dataPointer.assumingMemoryBound(to: Int32.self)
+            for index in 0..<copyCount {
+                destination[index] = source[startIndex + index]
+            }
+        }
+        log("input_ids: loaded \(copyCount) ids prompt=\(textEncoderPromptIndex + 1) from \(url.lastPathComponent)")
+    }
+
+    private func compareTextEncoderOutput(_ output: MLFeatureProvider, promptIndex: Int, prompt: String?) throws {
+        guard let array = output.featureValue(for: "hidden_states")?.multiArrayValue
+            ?? output.featureNames.compactMap({ output.featureValue(for: $0)?.multiArrayValue }).first
+        else {
+            log("text encoder compare: no multiArray output")
+            return
+        }
+
+        guard let url = bundledResourceURL(named: "reference_hidden_states_f16", extension: "bin") else {
+            log("text encoder compare: no bundled reference")
+            return
+        }
+
+        let data = try Data(contentsOf: url)
+        let referenceCount = data.count / MemoryLayout<UInt16>.size
+        let startIndex = promptIndex * array.count
+        guard startIndex < referenceCount else {
+            log("text encoder compare: prompt index \(promptIndex) out of reference range")
+            return
+        }
+        let compareCount = min(array.count, referenceCount - startIndex)
+        guard compareCount > 0 else {
+            log("text encoder compare: empty reference")
+            return
+        }
+
+        var sumSquared = 0.0
+        var maxAbs = 0.0
+        for index in 0..<compareCount {
+            let actual = Double(multiArrayFloatValue(array, flatIndex: index))
+            let expected = Double(referenceFloat16(data, index: startIndex + index))
+            let diff = actual - expected
+            sumSquared += diff * diff
+            maxAbs = max(maxAbs, abs(diff))
+        }
+
+        let rms = sqrt(sumSquared / Double(compareCount))
+        let promptLabel = prompt.map { " prompt=\"\($0)\"" } ?? ""
+        log(String(format: "text encoder compare:%@ count=%d rms=%.6f max=%.6f", promptLabel, compareCount, rms, maxAbs))
+    }
+
+    private func referenceFloat16(_ data: Data, index: Int) -> Float {
+        let byteIndex = index * MemoryLayout<UInt16>.size
+        let low = UInt16(data[byteIndex])
+        let high = UInt16(data[byteIndex + 1]) << 8
+        return float16ToFloat(low | high)
+    }
+
+    private func multiArrayFloatValue(_ array: MLMultiArray, flatIndex: Int) -> Float {
+        let dimensions = array.shape.map(\.intValue)
+        let strides = array.strides.map(\.intValue)
+        var remaining = flatIndex
+        var offset = 0
+
+        for dimensionIndex in stride(from: dimensions.count - 1, through: 0, by: -1) {
+            let dimension = max(dimensions[dimensionIndex], 1)
+            let coordinate = remaining % dimension
+            remaining /= dimension
+            offset += coordinate * strides[dimensionIndex]
+        }
+
+        switch array.dataType {
+        case .float16:
+            let pointer = array.dataPointer.assumingMemoryBound(to: UInt16.self)
+            return float16ToFloat(pointer[offset])
+        case .float32:
+            let pointer = array.dataPointer.assumingMemoryBound(to: Float.self)
+            return pointer[offset]
+        case .double:
+            let pointer = array.dataPointer.assumingMemoryBound(to: Double.self)
+            return Float(pointer[offset])
+        default:
+            return 0
+        }
+    }
+
+    private func float16ToFloat(_ value: UInt16) -> Float {
+        let sign = UInt32(value & 0x8000) << 16
+        let exponent = Int((value & 0x7C00) >> 10)
+        var mantissa = UInt32(value & 0x03FF)
+        let bits: UInt32
+
+        if exponent == 0 {
+            if mantissa == 0 {
+                bits = sign
+            } else {
+                var adjustedExponent = -14
+                while (mantissa & 0x0400) == 0 {
+                    mantissa <<= 1
+                    adjustedExponent -= 1
+                }
+                mantissa &= 0x03FF
+                bits = sign | (UInt32(adjustedExponent + 127) << 23) | (mantissa << 13)
+            }
+        } else if exponent == 0x1F {
+            bits = sign | 0x7F80_0000 | (mantissa << 13)
+        } else {
+            bits = sign | (UInt32(exponent - 15 + 127) << 23) | (mantissa << 13)
+        }
+
+        return Float(bitPattern: bits)
     }
 
     private func logModelDescription(_ model: MLModel) {
@@ -332,6 +553,89 @@ final class StressTestViewModel: ObservableObject {
             urls.append(url)
         }
         return urls.sorted { $0.path < $1.path }
+    }
+
+    private func textEncoderModelURLs() -> [URL] {
+        bundledModelURLs().filter { isTextEncoderName($0.lastPathComponent) }
+    }
+
+    private func isTextEncoderName(_ name: String) -> Bool {
+        name.lowercased().contains("text_encoder")
+    }
+
+    private func bundledResourceURL(named name: String, extension pathExtension: String) -> URL? {
+        guard let resourceURL = Bundle.main.resourceURL else { return nil }
+        let targetFileName = "\(name).\(pathExtension)"
+        guard let enumerator = FileManager.default.enumerator(
+            at: resourceURL,
+            includingPropertiesForKeys: [.nameKey],
+            options: [.skipsHiddenFiles]
+        ) else {
+            return nil
+        }
+
+        for case let url as URL in enumerator where url.lastPathComponent == targetFileName {
+            return url
+        }
+        return nil
+    }
+
+    private func loadTextEncoderProbeManifest() throws -> TextEncoderProbeManifest {
+        if let cachedTextEncoderProbeManifest {
+            return cachedTextEncoderProbeManifest
+        }
+        guard let url = bundledResourceURL(named: "text_encoder_probe_prompts", extension: "json") else {
+            throw StressTestError.missingResource("text_encoder_probe_prompts.json")
+        }
+        let manifest = try JSONDecoder().decode(TextEncoderProbeManifest.self, from: Data(contentsOf: url))
+        guard manifest.inputIdsShape.count == 2,
+              manifest.inputIdsShape[0] == manifest.prompts.count,
+              manifest.inputIdsShape[1] == 77,
+              manifest.hiddenStatesShape == [manifest.prompts.count, 77, 768],
+              manifest.inputIdsDtype == "int32",
+              manifest.hiddenStatesDtype == "float16"
+        else {
+            throw StressTestError.invalidProbeManifest
+        }
+        cachedTextEncoderProbeManifest = manifest
+        return manifest
+    }
+
+    private func purgeCoreMLCache(context: String) {
+        let fileManager = FileManager.default
+        guard let cachesURL = fileManager.urls(for: .cachesDirectory, in: .userDomainMask).first else {
+            log("cache: missing caches directory \(context)")
+            return
+        }
+
+        var candidates = [
+            cachesURL.appendingPathComponent("com.apple.e5rt.e5bundlecache", isDirectory: true)
+        ]
+        if let bundleIdentifier = Bundle.main.bundleIdentifier {
+            candidates.append(
+                cachesURL
+                    .appendingPathComponent(bundleIdentifier, isDirectory: true)
+                    .appendingPathComponent("com.apple.e5rt.e5bundlecache", isDirectory: true)
+            )
+        }
+
+        var removedCount = 0
+        for url in candidates where fileManager.fileExists(atPath: url.path) {
+            do {
+                try fileManager.removeItem(at: url)
+                removedCount += 1
+                log("cache: removed \(shortPath(url)) \(context)")
+            } catch {
+                log("cache: remove failed \(shortPath(url)) \(context) \(error.localizedDescription)")
+            }
+        }
+        if removedCount == 0 {
+            log("cache: no Core ML cache found \(context)")
+        }
+    }
+
+    private func shortPath(_ url: URL) -> String {
+        url.path.replacingOccurrences(of: NSHomeDirectory(), with: "~")
     }
 
     private func log(_ message: String) {
@@ -394,57 +698,76 @@ struct StressTestView: View {
                 }
 
                 Section {
-                    Button("Scan Models") {
-                        viewModel.scanModels()
-                    }
-                    Button("+4 MB") {
-                        Task { await viewModel.addMemory(megabytes: 4) }
-                    }
-                    Button("+8 MB") {
-                        Task { await viewModel.addMemory(megabytes: 8) }
-                    }
-                    Button("+16 MB") {
-                        Task { await viewModel.addMemory(megabytes: 16) }
-                    }
-                    Button("+32 MB") {
-                        Task { await viewModel.addMemory(megabytes: 32) }
-                    }
-                    Button("Fine Ladder") {
-                        Task { await viewModel.runFineMemoryLadder() }
-                    }
-                    Button("Aggressive Ladder") {
-                        Task { await viewModel.runAggressiveMemoryLadder() }
-                    }
-                    Button("Release Memory") {
-                        viewModel.releaseBuffers()
+                    Button(viewModel.isTextEncoderSmokeOnly ? "Run Text Encoder" : "Encode & Release") {
+                        Task { await viewModel.runSeparatedTextEncoderCycle() }
                     }
                 }
                 .disabled(viewModel.isRunning)
 
-                Section {
-                    Button("Load Only") {
-                        Task { await viewModel.loadModelsOnly() }
+                if !viewModel.isTextEncoderSmokeOnly {
+                    Section {
+                        Button("Scan Models") {
+                            viewModel.scanModels()
+                        }
+                        Button("+4 MB") {
+                            Task { await viewModel.addMemory(megabytes: 4) }
+                        }
+                        Button("+8 MB") {
+                            Task { await viewModel.addMemory(megabytes: 8) }
+                        }
+                        Button("+16 MB") {
+                            Task { await viewModel.addMemory(megabytes: 16) }
+                        }
+                        Button("+32 MB") {
+                            Task { await viewModel.addMemory(megabytes: 32) }
+                        }
+                        Button("Fine Ladder") {
+                            Task { await viewModel.runFineMemoryLadder() }
+                        }
+                        Button("Aggressive Ladder") {
+                            Task { await viewModel.runAggressiveMemoryLadder() }
+                        }
+                        Button("Release Memory") {
+                            viewModel.releaseBuffers()
+                        }
                     }
-                    Button("Load & Retain") {
-                        Task { await viewModel.loadAndRetainModels() }
+                    .disabled(viewModel.isRunning)
+
+                    Section {
+                        Button("Load Only") {
+                            Task { await viewModel.loadModelsOnly() }
+                        }
+                        Button("Load & Retain") {
+                            Task { await viewModel.loadAndRetainModels() }
+                        }
+                        Button("Release Models") {
+                            viewModel.releaseModels()
+                        }
+                        Button("Predict Once") {
+                            Task { await viewModel.predictOnce() }
+                        }
+                        Button("Predict x4") {
+                            Task { await viewModel.predictLoop(iterations: 4) }
+                        }
+                        Button("Retained x4") {
+                            Task { await viewModel.predictRetainedLoop(iterations: 4) }
+                        }
+                        Button("Pipeline 4+Decode") {
+                            Task { await viewModel.predictPipeline(unetSteps: 4) }
+                        }
                     }
-                    Button("Release Models") {
-                        viewModel.releaseModels()
+                    .disabled(viewModel.isRunning)
+
+                    Section {
+                        Button("Load Text Encoder") {
+                            Task { await viewModel.loadTextEncoderOnly() }
+                        }
+                        Button("Predict Text Encoder") {
+                            Task { await viewModel.predictTextEncoderOnce() }
+                        }
                     }
-                    Button("Predict Once") {
-                        Task { await viewModel.predictOnce() }
-                    }
-                    Button("Predict x4") {
-                        Task { await viewModel.predictLoop(iterations: 4) }
-                    }
-                    Button("Retained x4") {
-                        Task { await viewModel.predictRetainedLoop(iterations: 4) }
-                    }
-                    Button("Pipeline 4+Decode") {
-                        Task { await viewModel.predictPipeline(unetSteps: 4) }
-                    }
+                    .disabled(viewModel.isRunning)
                 }
-                .disabled(viewModel.isRunning)
 
                 Section {
                     ForEach(viewModel.logLines.prefix(12)) { line in
@@ -454,9 +777,9 @@ struct StressTestView: View {
                     }
                 }
             }
-            .navigationTitle("Stress")
-            .onAppear {
-                viewModel.scanModels()
+            .navigationTitle(viewModel.isTextEncoderSmokeOnly ? "Text Encoder" : "Stress")
+            .task {
+                await viewModel.prepareForLaunch()
             }
         }
     }
@@ -480,11 +803,17 @@ private final class DictionaryFeatureProvider: MLFeatureProvider {
 
 private enum StressTestError: LocalizedError {
     case unsupportedInput(String)
+    case missingResource(String)
+    case invalidProbeManifest
 
     var errorDescription: String? {
         switch self {
         case .unsupportedInput(let name):
             return "unsupported input: \(name)"
+        case .missingResource(let name):
+            return "missing resource: \(name)"
+        case .invalidProbeManifest:
+            return "invalid text encoder probe manifest"
         }
     }
 }

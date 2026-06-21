@@ -67,6 +67,14 @@ def load_presets(path: str | None) -> list[dict]:
     return json.loads(Path(path).read_text())
 
 
+def validate_dimensions(latent_height: int, latent_width: int, output_height: int, output_width: int) -> None:
+    dimensions = [latent_height, latent_width, output_height, output_width]
+    if any(value <= 0 for value in dimensions):
+        raise SystemExit("latent and output dimensions must be positive")
+    if output_height != latent_height * 8 or output_width != latent_width * 8:
+        raise SystemExit("output dimensions must be 8x the latent dimensions")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Export tiny Watch prompt assets for preset-based LCM txt2img.")
     parser.add_argument("--candidate", default="lcm_dreamshaper_v7")
@@ -74,13 +82,18 @@ def main() -> None:
     parser.add_argument("--presets", default=None)
     parser.add_argument("--steps", type=int, default=4)
     parser.add_argument("--guidance-scale", type=float, default=8.0)
+    parser.add_argument("--latent-height", type=int, default=8)
+    parser.add_argument("--latent-width", type=int, default=8)
+    parser.add_argument("--output-height", type=int, default=64)
+    parser.add_argument("--output-width", type=int, default=64)
     parser.add_argument("--out-dir", default=None)
     parser.add_argument("--local-files-only", action="store_true")
     args = parser.parse_args()
+    validate_dimensions(args.latent_height, args.latent_width, args.output_height, args.output_width)
 
     key, candidate = select_candidate(args.candidate)
     model_id = resolve_model_path(key, candidate, args.model, args.local_files_only)
-    out_dir = Path(args.out_dir) if args.out_dir else ROOT / "dist" / key / "watch_txt2img_64"
+    out_dir = Path(args.out_dir) if args.out_dir else ROOT / "dist" / key / f"watch_txt2img_{args.output_width}"
     out_dir.mkdir(parents=True, exist_ok=True)
 
     torch, diffusers = require_diffusion_stack()
@@ -166,8 +179,8 @@ def main() -> None:
                 "steps": steps,
                 "guidanceScale": args.guidance_scale,
                 "timestepCondShape": list(timestep_cond.shape),
-                "latentShape": [1, 4, 8, 8],
-                "decodedShape": [1, 3, 64, 64],
+                "latentShape": [1, 4, args.latent_height, args.latent_width],
+                "decodedShape": [1, 3, args.output_height, args.output_width],
                 "predictionType": pipe.scheduler.config.prediction_type,
             },
             indent=2,
@@ -183,6 +196,8 @@ def main() -> None:
             "prompt_count": len(presets),
             "steps": args.steps,
             "guidance_scale": args.guidance_scale,
+            "latent_shape": [1, 4, args.latent_height, args.latent_width],
+            "decoded_shape": [1, 3, args.output_height, args.output_width],
             "prompt_embeddings": str(embeddings_path),
             "prompt_embeddings_bytes": embeddings_path.stat().st_size,
             "timestep_cond": str(timestep_cond_path),

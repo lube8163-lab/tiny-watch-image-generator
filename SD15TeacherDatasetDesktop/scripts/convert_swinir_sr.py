@@ -81,7 +81,15 @@ def parse_args() -> argparse.Namespace:
 def load_model(repo_path: Path, weights_path: Path) -> torch.nn.Module:
     ensure_timm_compat()
     sys.path.insert(0, str(repo_path))
+    from models import network_swinir  # noqa: WPS433
     from models.network_swinir import SwinIR  # noqa: WPS433
+
+    def static_batch_window_reverse(windows, window_size, height, width):
+        x = windows.view(1, height // window_size, width // window_size, window_size, window_size, -1)
+        x = x.permute(0, 1, 3, 2, 4, 5).contiguous().view(1, height, width, -1)
+        return x
+
+    network_swinir.window_reverse = static_batch_window_reverse
 
     model = SwinIR(
         upscale=2,

@@ -252,7 +252,8 @@ struct ContentView: View {
     @State private var selectedView = ""
     @State private var selectedStyle = ""
     @State private var promptText = Self.presets[0].key
-    @State private var seed = Self.randomSeed()
+    @State private var selectedModel = TinyWeightVariant.defaultVariant
+    @State private var seed = Self.randomSeed(for: TinyWeightVariant.defaultVariant)
     @State private var generatedImage = Self.placeholderImage()
     @State private var isGenerating = false
     @State private var status = "Tap Generate"
@@ -350,6 +351,8 @@ struct ContentView: View {
                 }
             }
 
+            modelRow
+
             if inputMode == .slots {
                 slotInputView
             } else {
@@ -444,6 +447,38 @@ struct ContentView: View {
         .disabled(isGenerating)
     }
 
+    private var modelRow: some View {
+        HStack(spacing: 5) {
+            ForEach(TinyWeightVariant.allCases) { variant in
+                modelChip(variant)
+            }
+        }
+    }
+
+    private func modelChip(_ variant: TinyWeightVariant) -> some View {
+        let isSelected = selectedModel == variant
+        return Button {
+            selectedModel = variant
+            if seed >= UInt64(max(1, variant.trainedSeedCount)) {
+                seed = Self.randomSeed(for: variant)
+            }
+        } label: {
+            Text(variant.title)
+                .font(.caption2)
+                .lineLimit(1)
+                .minimumScaleFactor(0.65)
+                .padding(.horizontal, 6)
+                .frame(maxWidth: .infinity, minHeight: 26)
+                .foregroundColor(isSelected ? Color.white : Color.primary)
+                .background(
+                    RoundedRectangle(cornerRadius: 7)
+                        .fill(isSelected ? Color.accentColor : Color.secondary.opacity(0.15))
+                )
+        }
+        .buttonStyle(.plain)
+        .disabled(isGenerating)
+    }
+
     private func slotRow(
         systemImage: String,
         selection: Binding<String>,
@@ -523,12 +558,12 @@ struct ContentView: View {
     }
 
     private func randomizeAndGenerate() {
-        seed = Self.randomSeed()
+        seed = Self.randomSeed(for: selectedModel)
         generate()
     }
 
-    private static func randomSeed() -> UInt64 {
-        UInt64.random(in: 0..<UInt64(max(1, TinyWeights.trainedSeedCount)))
+    private static func randomSeed(for variant: TinyWeightVariant) -> UInt64 {
+        UInt64.random(in: 0..<UInt64(max(1, variant.trainedSeedCount)))
     }
 
     private func switchInputMode(to mode: WatchPromptInputMode) {
@@ -697,24 +732,25 @@ struct ContentView: View {
         isGenerating = true
         let prompt = activePrompt
         let seed = seed
+        let model = selectedModel
         let generationSize = Self.generationSize
-        status = "Generating \(prompt)"
-        print("[TinyImageWatch] generate start prompt=\"\(prompt)\" seed=\(seed) size=\(generationSize)")
+        status = "\(model.title) \(prompt)"
+        print("[TinyImageWatch] generate start model=\"\(model.title)\" prompt=\"\(prompt)\" seed=\(seed) size=\(generationSize)")
 
         Task.detached(priority: .userInitiated) {
             let start = ContinuousClock.now
-            let image = TinyImageGenerator().generate(prompt: prompt, seed: seed, size: generationSize)
+            let image = TinyImageGenerator().generate(prompt: prompt, seed: seed, size: generationSize, variant: model)
             let elapsed = start.duration(to: .now)
             let elapsedMs = Double(elapsed.components.seconds) * 1000.0
                 + Double(elapsed.components.attoseconds) / 1_000_000_000_000_000.0
             print(
-                "[TinyImageWatch] generate done prompt=\"\(prompt)\" seed=\(seed) " +
+                "[TinyImageWatch] generate done model=\"\(model.title)\" prompt=\"\(prompt)\" seed=\(seed) " +
                 "size=\(image.width)x\(image.height) elapsedMs=\(Int(elapsedMs.rounded()))"
             )
 
             await MainActor.run {
                 generatedImage = image
-                status = "\(image.width)x\(image.height) \(Int(elapsedMs.rounded()))ms"
+                status = "\(model.title) \(Int(elapsedMs.rounded()))ms"
                 isGenerating = false
             }
         }

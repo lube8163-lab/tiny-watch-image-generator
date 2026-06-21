@@ -1,0 +1,58 @@
+{
+  "steps": [
+    {
+      "timestep": 999,
+      "sqrtAlpha": 0.06826488913185079,
+      "sqrtBeta": 0.9976672315515911,
+      "sqrtAlphaPrev": 0.2285014009531885,
+      "sqrtBetaPrev": 0.973543583904917,
+      "cSkip": 2.5050075037374525e-09,
+      "cOut": 0.9999999987474963
+    },
+    {
+      "timestep": 759,
+      "sqrtAlpha": 0.2285014009531885,
+      "sqrtBeta": 0.973543583904917,
+      "sqrtAlphaPrev": 0.5269434787328264,
+      "sqrtBetaPrev": 0.8499003295804439,
+      "cSkip": 4.339667493201184e-09,
+      "cOut": 0.9999999978301662
+    },
+    {
+      "timestep": 499,
+      "sqrtAlpha": 0.5269434787328264,
+      "sqrtBeta": 0.8499003295804439,
+      "sqrtAlphaPrev": 0.8117729014745567,
+      "sqrtBetaPrev": 0.5839732497568528,
+      "cSkip": 1.004012021999791e-08,
+      "cOut": 0.99999999497994
+    },
+    {
+      "timestep": 259,
+      "sqrtAlpha": 0.8117729014745567,
+      "sqrtBeta": 0.5839732497568528,
+      "sqrtAlphaPrev": 0.8117729014745567,
+      "sqrtBetaPrev": 0.5839732497568528,
+      "cSkip": 3.726837564778493e-08,
+      "cOut": 0.999999981365812
+    }
+  ],
+  "guidanceScale": 8.0,
+  "timestepCondShape": [
+    1,
+    256
+  ],
+  "latentShape": [
+    1,
+    4,
+    16,
+    16
+  ],
+  "decodedShape": [
+    1,
+    3,
+    128,
+    128
+  ],
+  "predictionType": "epsilon"
+}

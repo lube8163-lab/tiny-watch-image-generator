@@ -1,0 +1,21 @@
+{
+  "prompts": [
+    "cat mascot",
+    "horse",
+    "astronaut",
+    "dog logo",
+    "flying blue bird",
+    "spaceship banana"
+  ],
+  "inputIdsShape": [
+    6,
+    77
+  ],
+  "inputIdsDtype": "int32",
+  "hiddenStatesShape": [
+    6,
+    77,
+    768
+  ],
+  "hiddenStatesDtype": "float16"
+}

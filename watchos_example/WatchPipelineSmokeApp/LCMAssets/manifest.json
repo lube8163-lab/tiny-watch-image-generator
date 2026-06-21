@@ -1,0 +1,27 @@
+{
+  "phase": "phase4_export_watch_prompt_assets",
+  "candidate": "lcm_dreamshaper_v7",
+  "model": "models/lcm_dreamshaper_v7",
+  "prompt_count": 37,
+  "steps": 4,
+  "guidance_scale": 8.0,
+  "latent_shape": [
+    1,
+    4,
+    16,
+    16
+  ],
+  "decoded_shape": [
+    1,
+    3,
+    128,
+    128
+  ],
+  "prompt_embeddings": "reports/watch_pipeline_reference/lcm128_watch_plus_assets/prompt_embeddings_f16.bin",
+  "prompt_embeddings_bytes": 4376064,
+  "timestep_cond": "reports/watch_pipeline_reference/lcm128_watch_plus_assets/timestep_cond_f16.bin",
+  "timestep_cond_bytes": 512,
+  "prompts": "reports/watch_pipeline_reference/lcm128_watch_plus_assets/prompt_presets.json",
+  "scheduler": "reports/watch_pipeline_reference/lcm128_watch_plus_assets/lcm_scheduler.json",
+  "created_at_unix": 1782021059
+}

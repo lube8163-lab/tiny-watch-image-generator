@@ -1,0 +1,140 @@
+[
+  {
+    "key": "cat",
+    "title": "Cat",
+    "prompt": "cute anime cat, clean illustration",
+    "aliases": ["cat", "kitty", "neko", "ねこ", "猫"]
+  },
+  {
+    "key": "cat_face",
+    "title": "Cat Face",
+    "prompt": "single cute cat face, centered portrait, big eyes, clean anime illustration",
+    "aliases": ["cat face", "face cat"]
+  },
+  {
+    "key": "cat_head_icon",
+    "title": "Cat Head",
+    "prompt": "kawaii cat head icon, big eyes, centered, simple clean illustration",
+    "aliases": ["cat head", "cat icon"]
+  },
+  {
+    "key": "white_cat",
+    "title": "White Cat",
+    "prompt": "white kitten face, blue eyes, centered close-up, clean anime illustration",
+    "aliases": ["white cat", "kitten"]
+  },
+  {
+    "key": "cat_portrait",
+    "title": "Portrait Cat",
+    "prompt": "portrait of a cute cat looking at viewer, centered, soft background, anime style",
+    "aliases": ["cat portrait"]
+  },
+  {
+    "key": "chibi_cat",
+    "title": "Chibi Cat",
+    "prompt": "chibi cat mascot, round face, big eyes, simple pastel anime illustration",
+    "aliases": ["chibi cat"]
+  },
+  {
+    "key": "sitting_cat",
+    "title": "Sitting Cat",
+    "prompt": "cute sitting cat, full body, centered, simple clean anime illustration",
+    "aliases": ["sitting cat"]
+  },
+  {
+    "key": "cat_closeup",
+    "title": "Close Cat",
+    "prompt": "close-up cute cat face, nose and whiskers, centered, clean illustration",
+    "aliases": ["close cat"]
+  },
+  {
+    "key": "cat_logo",
+    "title": "Cat Logo",
+    "prompt": "simple cat face logo, round ears, big eyes, centered, clean vector illustration",
+    "aliases": ["cat logo"]
+  },
+  {
+    "key": "minimal_cat",
+    "title": "Minimal Cat",
+    "prompt": "minimal cute cat icon, clear silhouette, centered, simple flat colors",
+    "aliases": ["minimal cat"]
+  },
+  {
+    "key": "neko_face",
+    "title": "Neko Face",
+    "prompt": "kawaii neko face, cat ears, big eyes, centered anime icon",
+    "aliases": ["neko face"]
+  },
+  {
+    "key": "cat_looking_up",
+    "title": "Looking Up",
+    "prompt": "cute cat looking up, face visible, centered close-up, clean anime illustration",
+    "aliases": ["cat looking up"]
+  },
+  {
+    "key": "cat_blue_eyes",
+    "title": "Blue Eyes",
+    "prompt": "cute cat face with blue eyes, centered portrait, soft clean anime illustration",
+    "aliases": ["blue eyes cat"]
+  },
+  {
+    "key": "orange_cat",
+    "title": "Orange Cat",
+    "prompt": "orange tabby cat face, centered portrait, big eyes, clean anime illustration",
+    "aliases": ["orange cat", "tabby"]
+  },
+  {
+    "key": "black_cat",
+    "title": "Black Cat",
+    "prompt": "cute black cat face, yellow eyes, centered icon, clean anime illustration",
+    "aliases": ["black cat"]
+  },
+  {
+    "key": "cat_simple",
+    "title": "Simple Cat",
+    "prompt": "simple cute cat drawing, clear face, centered, clean colorful illustration",
+    "aliases": ["simple cat"]
+  },
+  {
+    "key": "dog",
+    "title": "Dog",
+    "prompt": "cute anime dog, clean illustration",
+    "aliases": ["dog", "puppy", "inu", "いぬ", "犬"]
+  },
+  {
+    "key": "girl",
+    "title": "Girl",
+    "prompt": "anime girl portrait, clean illustration",
+    "aliases": ["girl", "person", "portrait", "anime", "女の子"]
+  },
+  {
+    "key": "castle",
+    "title": "Castle",
+    "prompt": "fantasy castle, anime background art",
+    "aliases": ["castle", "fantasy", "shiro", "城"]
+  },
+  {
+    "key": "flower",
+    "title": "Flower",
+    "prompt": "beautiful flower, clean anime illustration",
+    "aliases": ["flower", "rose", "hana", "花"]
+  },
+  {
+    "key": "mountain",
+    "title": "Mountain",
+    "prompt": "mountain landscape, anime background art",
+    "aliases": ["mountain", "landscape", "yama", "山"]
+  },
+  {
+    "key": "robot",
+    "title": "Robot",
+    "prompt": "small friendly robot, clean anime illustration",
+    "aliases": ["robot", "mecha", "ロボット"]
+  },
+  {
+    "key": "star",
+    "title": "Star",
+    "prompt": "starry night sky, anime background art",
+    "aliases": ["star", "sky", "night", "星", "夜空"]
+  }
+]

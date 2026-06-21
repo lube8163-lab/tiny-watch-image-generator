@@ -18,6 +18,8 @@ out/
 # Keep tiny app model drop-zone notes in Git while compiled models stay ignored.
 !watchos_example/WatchStressTestApp/Models/
 !watchos_example/WatchStressTestApp/Models/README.md
+!watchos_example/WatchPipelineSmokeApp/Models/
+!watchos_example/WatchPipelineSmokeApp/Models/README.md
 
 # Keep hand-written watch SD scheme reports in Git; generated report data stays ignored.
 !schemes/watch_sd_quantization/reports/
