@@ -6,11 +6,11 @@ This note captures the current expected WatchPipelineSmokeApp smoke-test setup a
 
 Related quality notes:
 
-`docs/watch_pipeline_quality_notes.md`
+`pipeline_quality_notes.md`
 
 Text encoder smoke notes:
 
-`docs/watch_text_encoder_smoke.md`
+`text_encoder_smoke.md`
 
 ## Default App Run
 

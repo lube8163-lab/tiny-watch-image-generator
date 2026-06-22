@@ -60,6 +60,8 @@ xcodebuild \
 
 - `watchos_example/TinyImageWatchApp.xcodeproj`: すぐ開ける watchOS サンプルアプリ
 - `watchos_example/TinyImageWatchApp/TinyWeights.bin`: Watch アプリに同梱する学習済み int8 重み
+- `WatchPipelineSmokeApp` scheme: LCM128 + transient text encoder の実機確認用 Core ML smoke target
+- `WatchStressTestApp` scheme: Watch 上の Core ML load/predict/memory ceiling を測る stress target
 - `Sources/TinyWatchGenerator`: 純 Swift の tiny generator 実装
 - `Sources/TinyPreview`: macOS CLI で PPM を出す軽量プレビュー
 - `tools/`: 学習、教師画像生成、prompt normalization、重み export 用スクリプト
@@ -135,6 +137,23 @@ python3 -m pip install pillow
 - No network access at runtime
 - No Core ML model required for the current watchOS demo
 
+## Core ML Watch Smoke Targets
+
+The Core ML watch experiments live in the same Xcode project but are separate
+schemes so the shipping tiny demo stays easy to run:
+
+- `WatchStressTestApp`: transient text encoder and component memory probes.
+- `WatchPipelineSmokeApp`: prompt input, transient CLIP text encoding, streamed
+  LCM128 6-bit UNet chunks, 128px 4-bit decoder, and `Sharp x2` preview.
+
+Compiled `.mlmodelc` bundles are intentionally ignored by Git. The repository
+tracks the Swift targets, prompt/scheduler assets, tokenizer files, docs, and
+verification scripts; large model packages should be restored locally under
+`watchos_example/WatchPipelineSmokeApp/Models/` and
+`watchos_example/WatchPipelineSmokeApp/TextEncoderAssets/`.
+
+The main smoke-test notes are in [docs/watch/README.md](docs/watch/README.md).
+
 ## Training And Research Notes
 
 追加学習や重み再生成は任意です。通常の Xcode build には不要です。
@@ -151,10 +170,9 @@ python3 tools/train_tiny_coordinate_mlp.py --help
 
 進捗メモ:
 
-- [docs/watch_eval_baseline.md](docs/watch_eval_baseline.md)
+- [docs/watch/README.md](docs/watch/README.md)
 - [docs/articles/tiny_watch_image_generator_progress_2026-06-14.md](docs/articles/tiny_watch_image_generator_progress_2026-06-14.md)
 - [docs/model_improvement_plan.md](docs/model_improvement_plan.md)
-- [docs/watch_txt2img_plan.md](docs/watch_txt2img_plan.md)
 
 ## Troubleshooting
 
