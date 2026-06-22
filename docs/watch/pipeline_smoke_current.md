@@ -1,6 +1,6 @@
 # WatchPipelineSmokeApp Current Smoke Setup
 
-Updated: 2026-06-21
+Updated: 2026-06-22
 
 This note captures the current expected WatchPipelineSmokeApp smoke-test setup and reference output.
 
@@ -30,13 +30,17 @@ button, and the generated image. Pipeline details remain in Xcode console logs.
   random seed.
 - Preset embeddings remain bundled as a fallback and regression baseline.
 - Seed default: `Random`
-- Pipeline: `LCM128 6b`
-- UNet: `LCM 128 6-bit 16p`
-- VAE: `128 4-bit`
+- Pipeline: `LCM192 6b`
+- UNet: `LCM 192 6-bit 16p`
+- VAE: `192 4-bit`
 - Guidance: `6`
 - Preview: `Sharp x2`
 
 ## Golden Reference Run
+
+The checked-in golden reference is still the 128px baseline. The 192px branch is
+for device feasibility and quality inspection first, so the verifier's
+`--family lcm192` mode checks bundle shape but skips this reference image.
 
 - Scheme: `WatchPipelineSmokeApp`
 - Pipeline: `LCM128 6b`
@@ -70,22 +74,25 @@ Reference metrics:
 
 ## Bundle Shape
 
-The app target should bundle the streamed 16-part 128px LCM UNet, the 128px VAE
-decoder, and the transient text encoder assets:
+The app target should bundle the streamed 16-part 192px LCM UNet, the 192px VAE
+decoder, the shared LCM prompt assets, the 192px scheduler asset, and the
+transient text encoder assets:
 
-- `lcm_unet_16x16_6bit_16p_part1.mlmodelc` ... `lcm_unet_16x16_6bit_16p_part16.mlmodelc`
-- `vae_decoder_128x128_noattn_4bit.mlmodelc`
+- `lcm_unet_24x24_6bit_16p_part1.mlmodelc` ... `lcm_unet_24x24_6bit_16p_part16.mlmodelc`
+- `vae_decoder_192x192_noattn_4bit.mlmodelc`
 - `TextEncoderAssets/clip_text_encoder_77.mlmodelc`
 - `TextEncoderAssets/clip_vocab.json`
 - `TextEncoderAssets/clip_merges.txt`
 - `LCMAssets/prompt_presets.json` currently has `37` preset embeddings,
   including extra probe prompts for `dog logo`, `horse`, `astronaut`, `bird`,
   `blue bird`, and `flying blue bird`.
+- `LCM192Assets/lcm_scheduler.json` has latent shape `1x4x24x24` and decoded
+  shape `1x3x192x192`.
 
 Known unwanted model families should not be in the built app bundle:
 
 - `*8x8*.mlmodelc`
-- `*16x16_4bit*.mlmodelc`
+- `*16x16*.mlmodelc`
 
 ## Useful Build Check
 
@@ -124,6 +131,7 @@ Or run the single verifier:
 
 ```sh
 ./.venv/bin/python tools/verify_watch_pipeline_smoke.py \
+  --family lcm192 \
   --app /private/tmp/watch_pipeline_check_build/Build/Products/Debug-watchos/WatchPipelineSmokeApp.app
 ```
 
@@ -131,10 +139,14 @@ Expected verifier output includes:
 
 ```text
 watch-pipeline-smoke: ok
+  family: lcm192
   unet_chunks: 16
-  decoder: vae_decoder_128x128_noattn_4bit.mlmodelc
+  decoder: vae_decoder_192x192_noattn_4bit.mlmodelc
+  latent_shape: 1x4x24x24
+  decoded_shape: 1x3x192x192
   text_encoder: TextEncoderAssets/clip_text_encoder_77.mlmodelc
-  run_id: cat_mascot-s1-g6-sharp2x
+  reference_checked: false
+  run_id: lcm192-smoke
 ```
 
 ## Device Notes
@@ -164,8 +176,8 @@ Run these on the physical Apple Watch after installing the latest build:
    completes without memory pressure. Console logs should include
    `resolvedPreset=cat_mascot`, `text encoder tokenizer:`,
    `conditioning: text_encoder`, `seed=Random ...`,
-   `lcm decoder: output ... shape=[1, 3, 128, 128]`,
-   `preview: Sharp x2 128x128->256x256`, and `done: total=...`.
+   `lcm decoder: output ... shape=[1, 3, 192, 192]`,
+   `preview: Sharp x2 192x192->384x384`, and `done: total=...`.
 3. Generate a second time without changing the prompt. Confirm the logged random
    seed changes, the image is not identical, and the button reads `Reroll Seed`
    before the second tap.

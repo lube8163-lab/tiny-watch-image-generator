@@ -5,7 +5,7 @@ This folder collects Apple Watch runtime notes and smoke-test references.
 ## Current Runtime
 
 - [txt2img_plan.md](txt2img_plan.md): overall direction, constraints, and current LCM128 baseline.
-- [pipeline_smoke_current.md](pipeline_smoke_current.md): current `WatchPipelineSmokeApp` setup, expected bundle shape, and device checklist.
+- [pipeline_smoke_current.md](pipeline_smoke_current.md): current `WatchPipelineSmokeApp` setup, including the 192px smoke branch bundle shape and device checklist.
 - [text_encoder_smoke.md](text_encoder_smoke.md): separated text encoder probe notes.
 - [pipeline_quality_notes.md](pipeline_quality_notes.md): current quality observations and postprocess/SR notes.
 

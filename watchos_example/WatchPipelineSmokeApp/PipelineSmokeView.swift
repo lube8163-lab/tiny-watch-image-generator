@@ -61,8 +61,9 @@ enum PipelineFamily: String, CaseIterable, Identifiable {
     case lcm64SixBit
     case lcm128
     case lcm128SixBit
+    case lcm192SixBit
 
-    static let selectableCases: [PipelineFamily] = [.lcm128SixBit]
+    static let selectableCases: [PipelineFamily] = [.lcm192SixBit]
 
     var id: String { rawValue }
 
@@ -78,6 +79,8 @@ enum PipelineFamily: String, CaseIterable, Identifiable {
             return "LCM128"
         case .lcm128SixBit:
             return "LCM128 6b"
+        case .lcm192SixBit:
+            return "LCM192 6b"
         }
     }
 
@@ -85,7 +88,7 @@ enum PipelineFamily: String, CaseIterable, Identifiable {
         switch self {
         case .sd128:
             return false
-        case .lcm64, .lcm64SixBit, .lcm128, .lcm128SixBit:
+        case .lcm64, .lcm64SixBit, .lcm128, .lcm128SixBit, .lcm192SixBit:
             return true
         }
     }
@@ -102,6 +105,8 @@ enum PipelineFamily: String, CaseIterable, Identifiable {
             return "LCM 128 4-bit"
         case .lcm128SixBit:
             return "LCM 128 6-bit 16p"
+        case .lcm192SixBit:
+            return "LCM 192 6-bit 16p"
         }
     }
 
@@ -157,6 +162,25 @@ enum PipelineFamily: String, CaseIterable, Identifiable {
                 "lcm_unet_16x16_6bit_16p_part15",
                 "lcm_unet_16x16_6bit_16p_part16"
             ]
+        case .lcm192SixBit:
+            return [
+                "lcm_unet_24x24_6bit_16p_part1",
+                "lcm_unet_24x24_6bit_16p_part2",
+                "lcm_unet_24x24_6bit_16p_part3",
+                "lcm_unet_24x24_6bit_16p_part4",
+                "lcm_unet_24x24_6bit_16p_part5",
+                "lcm_unet_24x24_6bit_16p_part6",
+                "lcm_unet_24x24_6bit_16p_part7",
+                "lcm_unet_24x24_6bit_16p_part8",
+                "lcm_unet_24x24_6bit_16p_part9",
+                "lcm_unet_24x24_6bit_16p_part10",
+                "lcm_unet_24x24_6bit_16p_part11",
+                "lcm_unet_24x24_6bit_16p_part12",
+                "lcm_unet_24x24_6bit_16p_part13",
+                "lcm_unet_24x24_6bit_16p_part14",
+                "lcm_unet_24x24_6bit_16p_part15",
+                "lcm_unet_24x24_6bit_16p_part16"
+            ]
         }
     }
 
@@ -168,6 +192,8 @@ enum PipelineFamily: String, CaseIterable, Identifiable {
             return "lcm_vae_decoder_64x64_noattn_4bit"
         case .lcm128, .lcm128SixBit:
             return "vae_decoder_128x128_noattn_4bit"
+        case .lcm192SixBit:
+            return "vae_decoder_192x192_noattn_4bit"
         }
     }
 
@@ -179,6 +205,8 @@ enum PipelineFamily: String, CaseIterable, Identifiable {
             return [1, 4, 8, 8]
         case .lcm128, .lcm128SixBit:
             return [1, 4, 16, 16]
+        case .lcm192SixBit:
+            return [1, 4, 24, 24]
         }
     }
 
@@ -190,6 +218,8 @@ enum PipelineFamily: String, CaseIterable, Identifiable {
             return [1, 3, 64, 64]
         case .lcm128, .lcm128SixBit:
             return [1, 3, 128, 128]
+        case .lcm192SixBit:
+            return [1, 3, 192, 192]
         }
     }
 
@@ -201,6 +231,17 @@ enum PipelineFamily: String, CaseIterable, Identifiable {
             return "64 4-bit"
         case .lcm128, .lcm128SixBit:
             return "128 4-bit"
+        case .lcm192SixBit:
+            return "192 4-bit"
+        }
+    }
+
+    var lcmSchedulerAssetSubdirectory: String {
+        switch self {
+        case .lcm192SixBit:
+            return "LCM192Assets"
+        case .sd128, .lcm64, .lcm64SixBit, .lcm128, .lcm128SixBit:
+            return "LCMAssets"
         }
     }
 }
@@ -448,7 +489,7 @@ final class PipelineSmokeViewModel: ObservableObject {
     @Published var status = "Idle"
     @Published var promptText = "cat mascot"
     @Published var presets: [PipelinePromptPreset] = []
-    @Published var selectedFamily: PipelineFamily = .lcm128SixBit
+    @Published var selectedFamily: PipelineFamily = .lcm192SixBit
     @Published var selectedPresetIndex = 0
     @Published var stepMode: PipelineStepMode = .quality30
     @Published var selectedUNetMode: PipelineUNetMode = .fourBit
@@ -634,7 +675,7 @@ final class PipelineSmokeViewModel: ObservableObject {
         switch selectedFamily {
         case .sd128:
             return !unetModels.isEmpty && decoderModel != nil
-        case .lcm64, .lcm64SixBit, .lcm128, .lcm128SixBit:
+        case .lcm64, .lcm64SixBit, .lcm128, .lcm128SixBit, .lcm192SixBit:
             return !lcmUnetChunkURLs.isEmpty && lcmDecoderURL != nil
         }
     }
@@ -703,7 +744,7 @@ final class PipelineSmokeViewModel: ObservableObject {
                 decoderModel = try loadModel(url: decoderURL, label: decoderLabel)
                 let unetLabels = unetResources.map(\.label).joined(separator: "+")
                 log("load: retained models pipeline=\(family.title) unets=\(unetLabels) decoder=\(decoderLabel) total=\(format(seconds: Date().timeIntervalSince(totalStart)))")
-            case .lcm64, .lcm64SixBit, .lcm128, .lcm128SixBit:
+            case .lcm64, .lcm64SixBit, .lcm128, .lcm128SixBit, .lcm192SixBit:
                 unetModels = []
                 decoderModel = nil
                 lcmUnetChunkURLs = try family.lcmUNetResourceNames.map {
@@ -859,7 +900,7 @@ final class PipelineSmokeViewModel: ObservableObject {
 
             if selectedFamily.isLCM {
                 guard let lcmDecoderURL else {
-                    throw PipelineSmokeError.missingResource("lcm_vae_decoder_64x64_noattn_4bit.mlmodelc")
+                    throw PipelineSmokeError.missingResource("\(selectedFamily.lcmDecoderResourceName).mlmodelc")
                 }
                 try await generateLCM(
                     unetURLs: lcmUnetChunkURLs,
@@ -1003,7 +1044,11 @@ final class PipelineSmokeViewModel: ObservableObject {
         let uncondURL = try bundledURL(named: "uncond_embedding_f16", extension: "bin", subdirectory: "PromptAssets")
         let latentSeedURL = try bundledURL(named: "latent_seed_f16", extension: "bin", subdirectory: "PipelineAssets")
         let lcmPromptURL = try bundledURL(named: "prompt_presets", extension: "json", subdirectory: "LCMAssets")
-        let lcmSchedulerURL = try bundledURL(named: "lcm_scheduler", extension: "json", subdirectory: "LCMAssets")
+        let lcmSchedulerURL = try bundledURL(
+            named: "lcm_scheduler",
+            extension: "json",
+            subdirectory: selectedFamily.lcmSchedulerAssetSubdirectory
+        )
         let lcmPromptEmbeddingURL = try bundledURL(named: "prompt_embeddings_f16", extension: "bin", subdirectory: "LCMAssets")
         let lcmTimestepCondURL = try bundledURL(named: "timestep_cond_f16", extension: "bin", subdirectory: "LCMAssets")
 
@@ -1101,7 +1146,7 @@ final class PipelineSmokeViewModel: ObservableObject {
         switch selectedFamily {
         case .sd128:
             presets = sdPresets
-        case .lcm64, .lcm64SixBit, .lcm128, .lcm128SixBit:
+        case .lcm64, .lcm64SixBit, .lcm128, .lcm128SixBit, .lcm192SixBit:
             presets = lcmPresets
         }
         if selectDefault {
@@ -1115,7 +1160,7 @@ final class PipelineSmokeViewModel: ObservableObject {
         switch family {
         case .sd128:
             return defaultSDPresetKey
-        case .lcm64, .lcm64SixBit, .lcm128, .lcm128SixBit:
+        case .lcm64, .lcm64SixBit, .lcm128, .lcm128SixBit, .lcm192SixBit:
             return defaultLCMPresetKey
         }
     }

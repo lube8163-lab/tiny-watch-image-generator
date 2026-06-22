@@ -9,20 +9,36 @@ from pathlib import Path
 from research_common import ROOT, directory_size
 
 
-EXPECTED_UNET_PREFIX = "lcm_unet_16x16_6bit_16p_part"
 EXPECTED_UNET_COUNT = 16
-EXPECTED_DECODER = "vae_decoder_128x128_noattn_4bit.mlmodelc"
 EXPECTED_DEFAULT_KEY = "cat_mascot"
 EXPECTED_MIN_PROMPT_COUNT = 31
 EXPECTED_EMBEDDING_TRAILING_SHAPE = [77, 768]
-EXPECTED_LCM_LATENT_SHAPE = [1, 4, 16, 16]
-EXPECTED_LCM_DECODED_SHAPE = [1, 3, 128, 128]
 EXPECTED_TEXT_ENCODER = "TextEncoderAssets/clip_text_encoder_77.mlmodelc"
 EXPECTED_TOKENIZER_FILES = [
     "TextEncoderAssets/clip_vocab.json",
     "TextEncoderAssets/clip_merges.txt",
 ]
 EXPECTED_REFERENCE = ROOT / "reports" / "watch_pipeline_reference" / "final_default_cat_mascot_s1_g6_coreml_16p" / "coreml.json"
+FAMILY_CONFIGS = {
+    "lcm128": {
+        "unet_prefix": "lcm_unet_16x16_6bit_16p_part",
+        "decoder": "vae_decoder_128x128_noattn_4bit.mlmodelc",
+        "latent_shape": [1, 4, 16, 16],
+        "decoded_shape": [1, 3, 128, 128],
+        "scheduler_dir": "LCMAssets",
+        "forbidden_patterns": ["*8x8*.mlmodelc", "*16x16_4bit*.mlmodelc", "*24x24*.mlmodelc"],
+        "run_id": "cat_mascot-s1-g6-sharp2x",
+    },
+    "lcm192": {
+        "unet_prefix": "lcm_unet_24x24_6bit_16p_part",
+        "decoder": "vae_decoder_192x192_noattn_4bit.mlmodelc",
+        "latent_shape": [1, 4, 24, 24],
+        "decoded_shape": [1, 3, 192, 192],
+        "scheduler_dir": "LCM192Assets",
+        "forbidden_patterns": ["*8x8*.mlmodelc", "*16x16*.mlmodelc"],
+        "run_id": "lcm192-smoke",
+    },
+}
 
 
 def fail(message: str) -> None:
@@ -37,19 +53,19 @@ def load_json(path: Path):
         raise AssertionError from exc
 
 
-def check_models(app: Path) -> list[str]:
+def check_models(app: Path, config: dict) -> list[str]:
     unets = sorted((path.name for path in app.glob("lcm_unet_*.mlmodelc")), key=unet_sort_key)
-    expected = [f"{EXPECTED_UNET_PREFIX}{index}.mlmodelc" for index in range(1, EXPECTED_UNET_COUNT + 1)]
+    expected = [f"{config['unet_prefix']}{index}.mlmodelc" for index in range(1, EXPECTED_UNET_COUNT + 1)]
     if unets != expected:
         fail(f"unexpected UNet bundle entries:\n  got={unets}\n  expected={expected}")
 
-    decoder_path = app / EXPECTED_DECODER
+    decoder_path = app / config["decoder"]
     if not decoder_path.is_dir():
         fail(f"missing decoder: {decoder_path}")
 
     forbidden = [
         path.name
-        for pattern in ["*8x8*.mlmodelc", "*16x16_4bit*.mlmodelc"]
+        for pattern in config["forbidden_patterns"]
         for path in app.glob(pattern)
     ]
     if forbidden:
@@ -62,13 +78,16 @@ def unet_sort_key(name: str) -> int:
     return int(match.group(1)) if match else 10_000
 
 
-def check_lcm_assets(app: Path) -> None:
+def check_lcm_assets(app: Path, config: dict) -> None:
     lcm_dir = app / "LCMAssets"
     if not lcm_dir.is_dir():
         fail(f"missing LCMAssets directory: {lcm_dir}")
+    scheduler_dir = app / config["scheduler_dir"]
+    if not scheduler_dir.is_dir():
+        fail(f"missing scheduler assets directory: {scheduler_dir}")
 
     preset_file = load_json(lcm_dir / "prompt_presets.json")
-    scheduler = load_json(lcm_dir / "lcm_scheduler.json")
+    scheduler = load_json(scheduler_dir / "lcm_scheduler.json")
     presets = preset_file.get("presets", [])
     embedding_shape = preset_file.get("embeddingShape")
     if len(presets) < EXPECTED_MIN_PROMPT_COUNT:
@@ -80,10 +99,10 @@ def check_lcm_assets(app: Path) -> None:
         )
     if not any(item.get("key") == EXPECTED_DEFAULT_KEY for item in presets):
         fail(f"default prompt key not found: {EXPECTED_DEFAULT_KEY}")
-    if scheduler.get("latentShape") != EXPECTED_LCM_LATENT_SHAPE:
-        fail(f"unexpected LCM latent shape: got {scheduler.get('latentShape')}, expected {EXPECTED_LCM_LATENT_SHAPE}")
-    if scheduler.get("decodedShape") != EXPECTED_LCM_DECODED_SHAPE:
-        fail(f"unexpected LCM decoded shape: got {scheduler.get('decodedShape')}, expected {EXPECTED_LCM_DECODED_SHAPE}")
+    if scheduler.get("latentShape") != config["latent_shape"]:
+        fail(f"unexpected LCM latent shape: got {scheduler.get('latentShape')}, expected {config['latent_shape']}")
+    if scheduler.get("decodedShape") != config["decoded_shape"]:
+        fail(f"unexpected LCM decoded shape: got {scheduler.get('decodedShape')}, expected {config['decoded_shape']}")
 
     embedding_bytes = (lcm_dir / "prompt_embeddings_f16.bin").stat().st_size
     expected_embedding_bytes = 2
@@ -150,24 +169,34 @@ def check_reference(path: Path) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser(description="Verify WatchPipelineSmokeApp final smoke bundle.")
     parser.add_argument("--app", required=True, help="Path to built WatchPipelineSmokeApp.app")
+    parser.add_argument("--family", choices=sorted(FAMILY_CONFIGS), default="lcm128", help="Expected bundled LCM family")
     parser.add_argument("--reference", default=str(EXPECTED_REFERENCE), help="Expected Core ML reference JSON")
+    parser.add_argument("--skip-reference", action="store_true", help="Skip the 128px golden reference check")
     args = parser.parse_args()
 
     app = Path(args.app)
     if not app.is_dir():
         fail(f"app bundle not found: {app}")
 
-    unets = check_models(app)
-    check_lcm_assets(app)
+    config = FAMILY_CONFIGS[args.family]
+    unets = check_models(app, config)
+    check_lcm_assets(app, config)
     check_text_encoder_assets(app)
-    check_reference(Path(args.reference))
+    checked_reference = False
+    if not args.skip_reference and args.family == "lcm128":
+        check_reference(Path(args.reference))
+        checked_reference = True
     print("watch-pipeline-smoke: ok")
     print(f"  app: {app}")
+    print(f"  family: {args.family}")
     print(f"  size: {directory_size(app) / 1024 / 1024:.1f}MB")
     print(f"  unet_chunks: {len(unets)}")
-    print(f"  decoder: {EXPECTED_DECODER}")
+    print(f"  decoder: {config['decoder']}")
+    print(f"  latent_shape: {'x'.join(map(str, config['latent_shape']))}")
+    print(f"  decoded_shape: {'x'.join(map(str, config['decoded_shape']))}")
     print(f"  text_encoder: {EXPECTED_TEXT_ENCODER}")
-    print("  run_id: cat_mascot-s1-g6-sharp2x")
+    print(f"  reference_checked: {str(checked_reference).lower()}")
+    print(f"  run_id: {config['run_id']}")
 
 
 if __name__ == "__main__":
