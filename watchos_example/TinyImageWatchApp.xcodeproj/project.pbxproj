@@ -29,6 +29,7 @@
 		0B000003000000000000000B /* WatchPipelineSmokeApp/LCMAssets in Resources */ = {isa = PBXBuildFile; fileRef = 0B000003000000000000001B /* WatchPipelineSmokeApp/LCMAssets */; };
 		0B0000030000000000000501 /* WatchPipelineSmokeApp/TextEncoderAssets in Resources */ = {isa = PBXBuildFile; fileRef = 0B0000030000000000000511 /* WatchPipelineSmokeApp/TextEncoderAssets */; };
 		0B0000030000000000000601 /* WatchPipelineSmokeApp/LCM192Assets in Resources */ = {isa = PBXBuildFile; fileRef = 0B0000030000000000000611 /* WatchPipelineSmokeApp/LCM192Assets */; };
+		0B0000030000000000000602 /* WatchPipelineSmokeApp/LCM256Assets in Resources */ = {isa = PBXBuildFile; fileRef = 0B0000030000000000000612 /* WatchPipelineSmokeApp/LCM256Assets */; };
 		0B000003000000000000000C /* WatchPipelineSmokeApp/Models/lcm_unet_8x8_4bit_part1.mlmodelc in Resources */ = {isa = PBXBuildFile; fileRef = 0B000003000000000000001C /* WatchPipelineSmokeApp/Models/lcm_unet_8x8_4bit_part1.mlmodelc */; };
 		0B000003000000000000000D /* WatchPipelineSmokeApp/Models/lcm_unet_8x8_4bit_part2.mlmodelc in Resources */ = {isa = PBXBuildFile; fileRef = 0B000003000000000000001D /* WatchPipelineSmokeApp/Models/lcm_unet_8x8_4bit_part2.mlmodelc */; };
 		0B000003000000000000000E /* WatchPipelineSmokeApp/Models/lcm_unet_8x8_4bit_part3.mlmodelc in Resources */ = {isa = PBXBuildFile; fileRef = 0B000003000000000000001E /* WatchPipelineSmokeApp/Models/lcm_unet_8x8_4bit_part3.mlmodelc */; };
@@ -90,6 +91,23 @@
 		0B000003000000000000070E /* WatchPipelineSmokeApp/Models/lcm_unet_24x24_6bit_16p_part14.mlmodelc in Resources */ = {isa = PBXBuildFile; fileRef = 0B000003000000000000074E /* WatchPipelineSmokeApp/Models/lcm_unet_24x24_6bit_16p_part14.mlmodelc */; };
 		0B000003000000000000070F /* WatchPipelineSmokeApp/Models/lcm_unet_24x24_6bit_16p_part15.mlmodelc in Resources */ = {isa = PBXBuildFile; fileRef = 0B000003000000000000074F /* WatchPipelineSmokeApp/Models/lcm_unet_24x24_6bit_16p_part15.mlmodelc */; };
 		0B0000030000000000000711 /* WatchPipelineSmokeApp/Models/lcm_unet_24x24_6bit_16p_part16.mlmodelc in Resources */ = {isa = PBXBuildFile; fileRef = 0B0000030000000000000750 /* WatchPipelineSmokeApp/Models/lcm_unet_24x24_6bit_16p_part16.mlmodelc */; };
+		0B0000030000000000000800 /* WatchPipelineSmokeApp/Models/vae_decoder_256x256_noattn_4bit.mlmodelc in Resources */ = {isa = PBXBuildFile; fileRef = 0B0000030000000000000810 /* WatchPipelineSmokeApp/Models/vae_decoder_256x256_noattn_4bit.mlmodelc */; };
+		0B0000030000000000000801 /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part1.mlmodelc in Resources */ = {isa = PBXBuildFile; fileRef = 0B0000030000000000000841 /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part1.mlmodelc */; };
+		0B0000030000000000000802 /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part2.mlmodelc in Resources */ = {isa = PBXBuildFile; fileRef = 0B0000030000000000000842 /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part2.mlmodelc */; };
+		0B0000030000000000000803 /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part3.mlmodelc in Resources */ = {isa = PBXBuildFile; fileRef = 0B0000030000000000000843 /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part3.mlmodelc */; };
+		0B0000030000000000000804 /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part4.mlmodelc in Resources */ = {isa = PBXBuildFile; fileRef = 0B0000030000000000000844 /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part4.mlmodelc */; };
+		0B0000030000000000000805 /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part5.mlmodelc in Resources */ = {isa = PBXBuildFile; fileRef = 0B0000030000000000000845 /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part5.mlmodelc */; };
+		0B0000030000000000000806 /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part6.mlmodelc in Resources */ = {isa = PBXBuildFile; fileRef = 0B0000030000000000000846 /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part6.mlmodelc */; };
+		0B0000030000000000000807 /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part7.mlmodelc in Resources */ = {isa = PBXBuildFile; fileRef = 0B0000030000000000000847 /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part7.mlmodelc */; };
+		0B0000030000000000000808 /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part8.mlmodelc in Resources */ = {isa = PBXBuildFile; fileRef = 0B0000030000000000000848 /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part8.mlmodelc */; };
+		0B0000030000000000000809 /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part9.mlmodelc in Resources */ = {isa = PBXBuildFile; fileRef = 0B0000030000000000000849 /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part9.mlmodelc */; };
+		0B000003000000000000080A /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part10.mlmodelc in Resources */ = {isa = PBXBuildFile; fileRef = 0B000003000000000000084A /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part10.mlmodelc */; };
+		0B000003000000000000080B /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part11.mlmodelc in Resources */ = {isa = PBXBuildFile; fileRef = 0B000003000000000000084B /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part11.mlmodelc */; };
+		0B000003000000000000080C /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part12.mlmodelc in Resources */ = {isa = PBXBuildFile; fileRef = 0B000003000000000000084C /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part12.mlmodelc */; };
+		0B000003000000000000080D /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part13.mlmodelc in Resources */ = {isa = PBXBuildFile; fileRef = 0B000003000000000000084D /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part13.mlmodelc */; };
+		0B000003000000000000080E /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part14.mlmodelc in Resources */ = {isa = PBXBuildFile; fileRef = 0B000003000000000000084E /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part14.mlmodelc */; };
+		0B000003000000000000080F /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part15.mlmodelc in Resources */ = {isa = PBXBuildFile; fileRef = 0B000003000000000000084F /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part15.mlmodelc */; };
+		0B0000030000000000000811 /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part16.mlmodelc in Resources */ = {isa = PBXBuildFile; fileRef = 0B0000030000000000000850 /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part16.mlmodelc */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -118,6 +136,7 @@
 		0B000003000000000000001B /* WatchPipelineSmokeApp/LCMAssets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = WatchPipelineSmokeApp/LCMAssets; sourceTree = SOURCE_ROOT; };
 		0B0000030000000000000511 /* WatchPipelineSmokeApp/TextEncoderAssets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = WatchPipelineSmokeApp/TextEncoderAssets; sourceTree = SOURCE_ROOT; };
 		0B0000030000000000000611 /* WatchPipelineSmokeApp/LCM192Assets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = WatchPipelineSmokeApp/LCM192Assets; sourceTree = SOURCE_ROOT; };
+		0B0000030000000000000612 /* WatchPipelineSmokeApp/LCM256Assets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = WatchPipelineSmokeApp/LCM256Assets; sourceTree = SOURCE_ROOT; };
 		0B000003000000000000001C /* WatchPipelineSmokeApp/Models/lcm_unet_8x8_4bit_part1.mlmodelc */ = {isa = PBXFileReference; lastKnownFileType = folder; path = WatchPipelineSmokeApp/Models/lcm_unet_8x8_4bit_part1.mlmodelc; sourceTree = SOURCE_ROOT; };
 		0B000003000000000000001D /* WatchPipelineSmokeApp/Models/lcm_unet_8x8_4bit_part2.mlmodelc */ = {isa = PBXFileReference; lastKnownFileType = folder; path = WatchPipelineSmokeApp/Models/lcm_unet_8x8_4bit_part2.mlmodelc; sourceTree = SOURCE_ROOT; };
 		0B000003000000000000001E /* WatchPipelineSmokeApp/Models/lcm_unet_8x8_4bit_part3.mlmodelc */ = {isa = PBXFileReference; lastKnownFileType = folder; path = WatchPipelineSmokeApp/Models/lcm_unet_8x8_4bit_part3.mlmodelc; sourceTree = SOURCE_ROOT; };
@@ -179,6 +198,23 @@
 		0B000003000000000000074E /* WatchPipelineSmokeApp/Models/lcm_unet_24x24_6bit_16p_part14.mlmodelc */ = {isa = PBXFileReference; lastKnownFileType = folder; path = WatchPipelineSmokeApp/Models/lcm_unet_24x24_6bit_16p_part14.mlmodelc; sourceTree = SOURCE_ROOT; };
 		0B000003000000000000074F /* WatchPipelineSmokeApp/Models/lcm_unet_24x24_6bit_16p_part15.mlmodelc */ = {isa = PBXFileReference; lastKnownFileType = folder; path = WatchPipelineSmokeApp/Models/lcm_unet_24x24_6bit_16p_part15.mlmodelc; sourceTree = SOURCE_ROOT; };
 		0B0000030000000000000750 /* WatchPipelineSmokeApp/Models/lcm_unet_24x24_6bit_16p_part16.mlmodelc */ = {isa = PBXFileReference; lastKnownFileType = folder; path = WatchPipelineSmokeApp/Models/lcm_unet_24x24_6bit_16p_part16.mlmodelc; sourceTree = SOURCE_ROOT; };
+		0B0000030000000000000810 /* WatchPipelineSmokeApp/Models/vae_decoder_256x256_noattn_4bit.mlmodelc */ = {isa = PBXFileReference; lastKnownFileType = folder; path = WatchPipelineSmokeApp/Models/vae_decoder_256x256_noattn_4bit.mlmodelc; sourceTree = SOURCE_ROOT; };
+		0B0000030000000000000841 /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part1.mlmodelc */ = {isa = PBXFileReference; lastKnownFileType = folder; path = WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part1.mlmodelc; sourceTree = SOURCE_ROOT; };
+		0B0000030000000000000842 /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part2.mlmodelc */ = {isa = PBXFileReference; lastKnownFileType = folder; path = WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part2.mlmodelc; sourceTree = SOURCE_ROOT; };
+		0B0000030000000000000843 /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part3.mlmodelc */ = {isa = PBXFileReference; lastKnownFileType = folder; path = WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part3.mlmodelc; sourceTree = SOURCE_ROOT; };
+		0B0000030000000000000844 /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part4.mlmodelc */ = {isa = PBXFileReference; lastKnownFileType = folder; path = WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part4.mlmodelc; sourceTree = SOURCE_ROOT; };
+		0B0000030000000000000845 /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part5.mlmodelc */ = {isa = PBXFileReference; lastKnownFileType = folder; path = WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part5.mlmodelc; sourceTree = SOURCE_ROOT; };
+		0B0000030000000000000846 /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part6.mlmodelc */ = {isa = PBXFileReference; lastKnownFileType = folder; path = WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part6.mlmodelc; sourceTree = SOURCE_ROOT; };
+		0B0000030000000000000847 /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part7.mlmodelc */ = {isa = PBXFileReference; lastKnownFileType = folder; path = WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part7.mlmodelc; sourceTree = SOURCE_ROOT; };
+		0B0000030000000000000848 /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part8.mlmodelc */ = {isa = PBXFileReference; lastKnownFileType = folder; path = WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part8.mlmodelc; sourceTree = SOURCE_ROOT; };
+		0B0000030000000000000849 /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part9.mlmodelc */ = {isa = PBXFileReference; lastKnownFileType = folder; path = WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part9.mlmodelc; sourceTree = SOURCE_ROOT; };
+		0B000003000000000000084A /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part10.mlmodelc */ = {isa = PBXFileReference; lastKnownFileType = folder; path = WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part10.mlmodelc; sourceTree = SOURCE_ROOT; };
+		0B000003000000000000084B /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part11.mlmodelc */ = {isa = PBXFileReference; lastKnownFileType = folder; path = WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part11.mlmodelc; sourceTree = SOURCE_ROOT; };
+		0B000003000000000000084C /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part12.mlmodelc */ = {isa = PBXFileReference; lastKnownFileType = folder; path = WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part12.mlmodelc; sourceTree = SOURCE_ROOT; };
+		0B000003000000000000084D /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part13.mlmodelc */ = {isa = PBXFileReference; lastKnownFileType = folder; path = WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part13.mlmodelc; sourceTree = SOURCE_ROOT; };
+		0B000003000000000000084E /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part14.mlmodelc */ = {isa = PBXFileReference; lastKnownFileType = folder; path = WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part14.mlmodelc; sourceTree = SOURCE_ROOT; };
+		0B000003000000000000084F /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part15.mlmodelc */ = {isa = PBXFileReference; lastKnownFileType = folder; path = WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part15.mlmodelc; sourceTree = SOURCE_ROOT; };
+		0B0000030000000000000850 /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part16.mlmodelc */ = {isa = PBXFileReference; lastKnownFileType = folder; path = WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part16.mlmodelc; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -328,11 +364,29 @@
 				0B000003000000000000074E /* WatchPipelineSmokeApp/Models/lcm_unet_24x24_6bit_16p_part14.mlmodelc */,
 				0B000003000000000000074F /* WatchPipelineSmokeApp/Models/lcm_unet_24x24_6bit_16p_part15.mlmodelc */,
 				0B0000030000000000000750 /* WatchPipelineSmokeApp/Models/lcm_unet_24x24_6bit_16p_part16.mlmodelc */,
+				0B0000030000000000000810 /* WatchPipelineSmokeApp/Models/vae_decoder_256x256_noattn_4bit.mlmodelc */,
+				0B0000030000000000000841 /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part1.mlmodelc */,
+				0B0000030000000000000842 /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part2.mlmodelc */,
+				0B0000030000000000000843 /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part3.mlmodelc */,
+				0B0000030000000000000844 /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part4.mlmodelc */,
+				0B0000030000000000000845 /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part5.mlmodelc */,
+				0B0000030000000000000846 /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part6.mlmodelc */,
+				0B0000030000000000000847 /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part7.mlmodelc */,
+				0B0000030000000000000848 /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part8.mlmodelc */,
+				0B0000030000000000000849 /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part9.mlmodelc */,
+				0B000003000000000000084A /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part10.mlmodelc */,
+				0B000003000000000000084B /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part11.mlmodelc */,
+				0B000003000000000000084C /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part12.mlmodelc */,
+				0B000003000000000000084D /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part13.mlmodelc */,
+				0B000003000000000000084E /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part14.mlmodelc */,
+				0B000003000000000000084F /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part15.mlmodelc */,
+				0B0000030000000000000850 /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part16.mlmodelc */,
 				0B000003000000000000001A /* WatchPipelineSmokeApp/Models/lcm_vae_decoder_64x64_noattn_4bit.mlmodelc */,
 				0B0000030000000000000015 /* ../ios_example/TinyImageIOSApp/Resources/PromptAssets */,
 				0B0000030000000000000016 /* WatchPipelineSmokeApp/PipelineAssets */,
 				0B000003000000000000001B /* WatchPipelineSmokeApp/LCMAssets */,
 				0B0000030000000000000611 /* WatchPipelineSmokeApp/LCM192Assets */,
+				0B0000030000000000000612 /* WatchPipelineSmokeApp/LCM256Assets */,
 				0B0000030000000000000511 /* WatchPipelineSmokeApp/TextEncoderAssets */,
 			);
 			path = WatchPipelineSmokeApp;
@@ -456,27 +510,27 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0B0000030000000000000700 /* WatchPipelineSmokeApp/Models/vae_decoder_192x192_noattn_4bit.mlmodelc in Resources */,
-				0B0000030000000000000701 /* WatchPipelineSmokeApp/Models/lcm_unet_24x24_6bit_16p_part1.mlmodelc in Resources */,
-				0B0000030000000000000702 /* WatchPipelineSmokeApp/Models/lcm_unet_24x24_6bit_16p_part2.mlmodelc in Resources */,
-				0B0000030000000000000703 /* WatchPipelineSmokeApp/Models/lcm_unet_24x24_6bit_16p_part3.mlmodelc in Resources */,
-				0B0000030000000000000704 /* WatchPipelineSmokeApp/Models/lcm_unet_24x24_6bit_16p_part4.mlmodelc in Resources */,
-				0B0000030000000000000705 /* WatchPipelineSmokeApp/Models/lcm_unet_24x24_6bit_16p_part5.mlmodelc in Resources */,
-				0B0000030000000000000706 /* WatchPipelineSmokeApp/Models/lcm_unet_24x24_6bit_16p_part6.mlmodelc in Resources */,
-				0B0000030000000000000707 /* WatchPipelineSmokeApp/Models/lcm_unet_24x24_6bit_16p_part7.mlmodelc in Resources */,
-				0B0000030000000000000708 /* WatchPipelineSmokeApp/Models/lcm_unet_24x24_6bit_16p_part8.mlmodelc in Resources */,
-				0B0000030000000000000709 /* WatchPipelineSmokeApp/Models/lcm_unet_24x24_6bit_16p_part9.mlmodelc in Resources */,
-				0B000003000000000000070A /* WatchPipelineSmokeApp/Models/lcm_unet_24x24_6bit_16p_part10.mlmodelc in Resources */,
-				0B000003000000000000070B /* WatchPipelineSmokeApp/Models/lcm_unet_24x24_6bit_16p_part11.mlmodelc in Resources */,
-				0B000003000000000000070C /* WatchPipelineSmokeApp/Models/lcm_unet_24x24_6bit_16p_part12.mlmodelc in Resources */,
-				0B000003000000000000070D /* WatchPipelineSmokeApp/Models/lcm_unet_24x24_6bit_16p_part13.mlmodelc in Resources */,
-				0B000003000000000000070E /* WatchPipelineSmokeApp/Models/lcm_unet_24x24_6bit_16p_part14.mlmodelc in Resources */,
-				0B000003000000000000070F /* WatchPipelineSmokeApp/Models/lcm_unet_24x24_6bit_16p_part15.mlmodelc in Resources */,
-				0B0000030000000000000711 /* WatchPipelineSmokeApp/Models/lcm_unet_24x24_6bit_16p_part16.mlmodelc in Resources */,
+				0B0000030000000000000800 /* WatchPipelineSmokeApp/Models/vae_decoder_256x256_noattn_4bit.mlmodelc in Resources */,
+				0B0000030000000000000801 /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part1.mlmodelc in Resources */,
+				0B0000030000000000000802 /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part2.mlmodelc in Resources */,
+				0B0000030000000000000803 /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part3.mlmodelc in Resources */,
+				0B0000030000000000000804 /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part4.mlmodelc in Resources */,
+				0B0000030000000000000805 /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part5.mlmodelc in Resources */,
+				0B0000030000000000000806 /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part6.mlmodelc in Resources */,
+				0B0000030000000000000807 /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part7.mlmodelc in Resources */,
+				0B0000030000000000000808 /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part8.mlmodelc in Resources */,
+				0B0000030000000000000809 /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part9.mlmodelc in Resources */,
+				0B000003000000000000080A /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part10.mlmodelc in Resources */,
+				0B000003000000000000080B /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part11.mlmodelc in Resources */,
+				0B000003000000000000080C /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part12.mlmodelc in Resources */,
+				0B000003000000000000080D /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part13.mlmodelc in Resources */,
+				0B000003000000000000080E /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part14.mlmodelc in Resources */,
+				0B000003000000000000080F /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part15.mlmodelc in Resources */,
+				0B0000030000000000000811 /* WatchPipelineSmokeApp/Models/lcm_unet_32x32_6bit_16p_part16.mlmodelc in Resources */,
 				0B0000030000000000000005 /* ../ios_example/TinyImageIOSApp/Resources/PromptAssets in Resources */,
 				0B0000030000000000000006 /* WatchPipelineSmokeApp/PipelineAssets in Resources */,
 				0B000003000000000000000B /* WatchPipelineSmokeApp/LCMAssets in Resources */,
-				0B0000030000000000000601 /* WatchPipelineSmokeApp/LCM192Assets in Resources */,
+				0B0000030000000000000602 /* WatchPipelineSmokeApp/LCM256Assets in Resources */,
 				0B0000030000000000000501 /* WatchPipelineSmokeApp/TextEncoderAssets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

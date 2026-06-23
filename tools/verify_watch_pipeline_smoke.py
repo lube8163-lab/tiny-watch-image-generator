@@ -38,6 +38,15 @@ FAMILY_CONFIGS = {
         "forbidden_patterns": ["*8x8*.mlmodelc", "*16x16*.mlmodelc"],
         "run_id": "lcm192-smoke",
     },
+    "lcm256": {
+        "unet_prefix": "lcm_unet_32x32_6bit_16p_part",
+        "decoder": "vae_decoder_256x256_noattn_4bit.mlmodelc",
+        "latent_shape": [1, 4, 32, 32],
+        "decoded_shape": [1, 3, 256, 256],
+        "scheduler_dir": "LCM256Assets",
+        "forbidden_patterns": ["*8x8*.mlmodelc", "*16x16*.mlmodelc", "*24x24*.mlmodelc"],
+        "run_id": "lcm256-smoke",
+    },
 }
 
 

@@ -62,8 +62,9 @@ enum PipelineFamily: String, CaseIterable, Identifiable {
     case lcm128
     case lcm128SixBit
     case lcm192SixBit
+    case lcm256SixBit
 
-    static let selectableCases: [PipelineFamily] = [.lcm192SixBit]
+    static let selectableCases: [PipelineFamily] = [.lcm256SixBit]
 
     var id: String { rawValue }
 
@@ -81,6 +82,8 @@ enum PipelineFamily: String, CaseIterable, Identifiable {
             return "LCM128 6b"
         case .lcm192SixBit:
             return "LCM192 6b"
+        case .lcm256SixBit:
+            return "LCM256 6b"
         }
     }
 
@@ -88,7 +91,7 @@ enum PipelineFamily: String, CaseIterable, Identifiable {
         switch self {
         case .sd128:
             return false
-        case .lcm64, .lcm64SixBit, .lcm128, .lcm128SixBit, .lcm192SixBit:
+        case .lcm64, .lcm64SixBit, .lcm128, .lcm128SixBit, .lcm192SixBit, .lcm256SixBit:
             return true
         }
     }
@@ -107,6 +110,8 @@ enum PipelineFamily: String, CaseIterable, Identifiable {
             return "LCM 128 6-bit 16p"
         case .lcm192SixBit:
             return "LCM 192 6-bit 16p"
+        case .lcm256SixBit:
+            return "LCM 256 6-bit 16p"
         }
     }
 
@@ -181,6 +186,25 @@ enum PipelineFamily: String, CaseIterable, Identifiable {
                 "lcm_unet_24x24_6bit_16p_part15",
                 "lcm_unet_24x24_6bit_16p_part16"
             ]
+        case .lcm256SixBit:
+            return [
+                "lcm_unet_32x32_6bit_16p_part1",
+                "lcm_unet_32x32_6bit_16p_part2",
+                "lcm_unet_32x32_6bit_16p_part3",
+                "lcm_unet_32x32_6bit_16p_part4",
+                "lcm_unet_32x32_6bit_16p_part5",
+                "lcm_unet_32x32_6bit_16p_part6",
+                "lcm_unet_32x32_6bit_16p_part7",
+                "lcm_unet_32x32_6bit_16p_part8",
+                "lcm_unet_32x32_6bit_16p_part9",
+                "lcm_unet_32x32_6bit_16p_part10",
+                "lcm_unet_32x32_6bit_16p_part11",
+                "lcm_unet_32x32_6bit_16p_part12",
+                "lcm_unet_32x32_6bit_16p_part13",
+                "lcm_unet_32x32_6bit_16p_part14",
+                "lcm_unet_32x32_6bit_16p_part15",
+                "lcm_unet_32x32_6bit_16p_part16"
+            ]
         }
     }
 
@@ -194,6 +218,8 @@ enum PipelineFamily: String, CaseIterable, Identifiable {
             return "vae_decoder_128x128_noattn_4bit"
         case .lcm192SixBit:
             return "vae_decoder_192x192_noattn_4bit"
+        case .lcm256SixBit:
+            return "vae_decoder_256x256_noattn_4bit"
         }
     }
 
@@ -207,6 +233,8 @@ enum PipelineFamily: String, CaseIterable, Identifiable {
             return [1, 4, 16, 16]
         case .lcm192SixBit:
             return [1, 4, 24, 24]
+        case .lcm256SixBit:
+            return [1, 4, 32, 32]
         }
     }
 
@@ -220,6 +248,8 @@ enum PipelineFamily: String, CaseIterable, Identifiable {
             return [1, 3, 128, 128]
         case .lcm192SixBit:
             return [1, 3, 192, 192]
+        case .lcm256SixBit:
+            return [1, 3, 256, 256]
         }
     }
 
@@ -233,11 +263,15 @@ enum PipelineFamily: String, CaseIterable, Identifiable {
             return "128 4-bit"
         case .lcm192SixBit:
             return "192 4-bit"
+        case .lcm256SixBit:
+            return "256 4-bit"
         }
     }
 
     var lcmSchedulerAssetSubdirectory: String {
         switch self {
+        case .lcm256SixBit:
+            return "LCM256Assets"
         case .lcm192SixBit:
             return "LCM192Assets"
         case .sd128, .lcm64, .lcm64SixBit, .lcm128, .lcm128SixBit:
@@ -489,7 +523,7 @@ final class PipelineSmokeViewModel: ObservableObject {
     @Published var status = "Idle"
     @Published var promptText = "cat mascot"
     @Published var presets: [PipelinePromptPreset] = []
-    @Published var selectedFamily: PipelineFamily = .lcm192SixBit
+    @Published var selectedFamily: PipelineFamily = .lcm256SixBit
     @Published var selectedPresetIndex = 0
     @Published var stepMode: PipelineStepMode = .quality30
     @Published var selectedUNetMode: PipelineUNetMode = .fourBit
@@ -675,7 +709,7 @@ final class PipelineSmokeViewModel: ObservableObject {
         switch selectedFamily {
         case .sd128:
             return !unetModels.isEmpty && decoderModel != nil
-        case .lcm64, .lcm64SixBit, .lcm128, .lcm128SixBit, .lcm192SixBit:
+        case .lcm64, .lcm64SixBit, .lcm128, .lcm128SixBit, .lcm192SixBit, .lcm256SixBit:
             return !lcmUnetChunkURLs.isEmpty && lcmDecoderURL != nil
         }
     }
@@ -744,7 +778,7 @@ final class PipelineSmokeViewModel: ObservableObject {
                 decoderModel = try loadModel(url: decoderURL, label: decoderLabel)
                 let unetLabels = unetResources.map(\.label).joined(separator: "+")
                 log("load: retained models pipeline=\(family.title) unets=\(unetLabels) decoder=\(decoderLabel) total=\(format(seconds: Date().timeIntervalSince(totalStart)))")
-            case .lcm64, .lcm64SixBit, .lcm128, .lcm128SixBit, .lcm192SixBit:
+            case .lcm64, .lcm64SixBit, .lcm128, .lcm128SixBit, .lcm192SixBit, .lcm256SixBit:
                 unetModels = []
                 decoderModel = nil
                 lcmUnetChunkURLs = try family.lcmUNetResourceNames.map {
@@ -1146,7 +1180,7 @@ final class PipelineSmokeViewModel: ObservableObject {
         switch selectedFamily {
         case .sd128:
             presets = sdPresets
-        case .lcm64, .lcm64SixBit, .lcm128, .lcm128SixBit, .lcm192SixBit:
+        case .lcm64, .lcm64SixBit, .lcm128, .lcm128SixBit, .lcm192SixBit, .lcm256SixBit:
             presets = lcmPresets
         }
         if selectDefault {
@@ -1160,7 +1194,7 @@ final class PipelineSmokeViewModel: ObservableObject {
         switch family {
         case .sd128:
             return defaultSDPresetKey
-        case .lcm64, .lcm64SixBit, .lcm128, .lcm128SixBit, .lcm192SixBit:
+        case .lcm64, .lcm64SixBit, .lcm128, .lcm128SixBit, .lcm192SixBit, .lcm256SixBit:
             return defaultLCMPresetKey
         }
     }
