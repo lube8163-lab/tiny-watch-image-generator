@@ -9,6 +9,8 @@ This folder collects Apple Watch runtime notes and smoke-test references.
 - [text_encoder_smoke.md](text_encoder_smoke.md): separated text encoder probe notes.
 - [pipeline_quality_notes.md](pipeline_quality_notes.md): current quality observations and postprocess/SR notes.
 - [watch_256_baseline_summary_2026-06-23.md](watch_256_baseline_summary_2026-06-23.md): adopted 256px baseline, device evidence, and Mac/watch evaluation split.
+- [mac_quality_eval.md](mac_quality_eval.md): Mac-side LCM256 quality sweep script, prompt suite, and report workflow.
+- [mac_quality_eval_seed1_summary_2026-06-24.md](mac_quality_eval_seed1_summary_2026-06-24.md): 74-prompt seed-1 Mac eval summary.
 - [future_quality_breakthroughs.md](future_quality_breakthroughs.md): larger training/distillation tracks needed for a major quality jump.
 
 ## Earlier Watch Demo

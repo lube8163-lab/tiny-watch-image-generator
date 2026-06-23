@@ -50,6 +50,7 @@ distillation, or decoder replacement rather than another resolution bump.
 See also:
 
 - `pipeline_quality_notes.md`
+- `mac_quality_eval.md`
 - `future_quality_breakthroughs.md`
 
 ## Mac Evaluation Policy

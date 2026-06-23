@@ -4,6 +4,8 @@
 
 - `watch_txt2img.json`: app-facing prompt preset config for the pure Swift demo.
 - `prompt_eval_suite.json`: fixed evaluation prompt groups.
+- `watch_lcm256_quality_prompts.json`: broad short-prompt suite for the Mac-side
+  LCM256 quality evaluator.
 - `sd_watch_presets.json`: earlier Stable Diffusion watch preset set.
 
 ## LCM Watch Pipeline

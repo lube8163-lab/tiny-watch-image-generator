@@ -10,6 +10,8 @@ map to find the right entry point.
 - `make_watch_preview_comparison.py`: non-neural preview comparison.
 - `audit_watch_prompt_coverage.py`: prompt alias and UI coverage audit.
 - `verify_watch_pipeline_smoke.py`: bundle verifier for `WatchPipelineSmokeApp`.
+- `watch_lcm256_quality_eval.py`: Mac-side LCM256 free-prompt quality sweeps,
+  contact sheets, and Markdown summaries.
 
 ## Watch Prompt And Teacher Data
 
