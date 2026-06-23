@@ -12,16 +12,16 @@ This repo now has two tracks:
 The current successful device baseline is:
 
 - `WatchPipelineSmokeApp`
-- `LCM128 6b`
+- `LCM256 6b`
 - 16 streamed UNet chunks
-- 128px 4-bit decoder
+- 256px 4-bit decoder
 - transient on-device CLIP text encoder for short typed prompts, with
   precomputed prompt embeddings retained as fallback/regression assets
 - a lightweight prompt expansion step that turns very short inputs into the
   centered clean-illustration conditioning style used by the bundled prompt
   assets
 - random or curated latent seed on device
-- `Sharp x2` preview
+- direct `Smooth` preview
 
 This now supports short free text prompts by generating the `[1, 77, 768]`
 conditioning embedding on Watch before streamed LCM generation. The typed prompt
@@ -30,9 +30,9 @@ small global style prior such as `single subject, centered, full object visible,
 clean anime illustration, simple background`. Prompts that describe a relation,
 such as `cat in space` or `astronaut riding a horse`, use a centered-composition
 clause instead of forcing the whole phrase into a single-subject hint. The
-LCM128 streamed denoiser/decoder path
-remains the baseline while the text-conditioning front end is validated on
-device.
+LCM256 streamed denoiser/decoder path is now the adopted baseline after
+192px and 256px device runs both completed within the observed watchOS memory
+budget.
 
 ## Hard Constraints
 
@@ -74,7 +74,7 @@ The most important split is:
 - Make the denoiser the only large model.
 - Decode at 64x64 or 96x96, then display with nearest/bilinear upscale.
 
-For the current 128px LCM route, the text-conditioning path has three practical
+For the current 256px LCM route, the text-conditioning path has three practical
 stages:
 
 1. Keep preset embeddings as the golden baseline and fallback path.

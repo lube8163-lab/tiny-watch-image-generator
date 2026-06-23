@@ -530,7 +530,7 @@ final class PipelineSmokeViewModel: ObservableObject {
     @Published var selectedDecoderMode: PipelineDecoderMode = .fourBit
     @Published var selectedSeedIndex = 1
     @Published var selectedGuidanceIndex = 1
-    @Published var selectedPreviewMode: PipelinePreviewMode = .sharp2x
+    @Published var selectedPreviewMode: PipelinePreviewMode = .smooth
     @Published var generatedImage: CGImage?
     @Published var metrics: [PipelineMetric] = []
     @Published var logLines: [PipelineLogLine] = []
@@ -666,7 +666,7 @@ final class PipelineSmokeViewModel: ObservableObject {
         if let guidanceIndex = guidanceOptions.firstIndex(where: { abs($0.value - run.guidanceScale) < 0.0001 }) {
             selectedGuidanceIndex = guidanceIndex
         }
-        selectedPreviewMode = .sharp2x
+        selectedPreviewMode = .smooth
         generatedImage = nil
         metrics = []
         log("candidate: \(run.title) preset=\(run.presetKey) seed=\(run.seed) guidance=\(format(float: run.guidanceScale))")
@@ -1263,7 +1263,7 @@ final class PipelineSmokeViewModel: ObservableObject {
             guard !normalized.isEmpty else { continue }
             if normalized == query {
                 bestScore = max(bestScore, 1_000 + normalized.count)
-            } else if normalized.contains(query) || query.contains(normalized) {
+            } else if normalizedPhrase(normalized, contains: query) || normalizedPhrase(query, contains: normalized) {
                 bestScore = max(bestScore, 700 + normalized.count)
             }
 
@@ -1299,6 +1299,12 @@ final class PipelineSmokeViewModel: ObservableObject {
         Set(text.split(separator: " ").map(String.init).filter { $0.count > 1 })
     }
 
+    private func normalizedPhrase(_ haystack: String, contains needle: String) -> Bool {
+        guard !haystack.isEmpty, !needle.isEmpty else { return false }
+        if haystack == needle { return true }
+        return (" " + haystack + " ").contains(" " + needle + " ")
+    }
+
     private func promptRunKey(_ prompt: String) -> String {
         let slug = normalizedSearchText(prompt)
             .split(separator: " ")
@@ -1325,16 +1331,20 @@ final class PipelineSmokeViewModel: ObservableObject {
             in: normalized,
             words: ["face", "head", "portrait", "closeup", "close"]
         )
+        let isScenePrompt = containsAnyNormalizedTerm(
+            in: normalized,
+            words: ["landscape", "scene", "mountain", "snowy", "forest", "ocean", "sky", "city", "desert"]
+        )
         var clauses = [trimmed]
 
         if !preservesPluralIntent && !containsAnyNormalizedTerm(in: normalized, words: ["single", "one", "solo"]) {
-            clauses.append(hasCompositionalRelation ? "single centered composition" : "single subject")
+            clauses.append(hasCompositionalRelation || isScenePrompt ? "centered composition" : "single subject")
         }
 
         if !containsAnyNormalizedTerm(in: normalized, words: ["center", "centered"]) {
             clauses.append("centered")
         }
-        if !isCloseupPrompt && !containsAnyNormalizedTerm(in: normalized, words: ["full", "visible", "body"]) {
+        if !isCloseupPrompt && !isScenePrompt && !containsAnyNormalizedTerm(in: normalized, words: ["full", "visible", "body"]) {
             clauses.append("full object visible")
         }
         if !containsAnyNormalizedTerm(
@@ -2310,16 +2320,16 @@ final class PipelineSmokeViewModel: ObservableObject {
         }
         log("decoded: \(decodedStats.summary) clipped=\(clippedChannels)/\(totalChannels)")
 
+        let previewStart = Date()
         let preview = makePreviewRGBA(
             from: rgba,
             width: width,
             height: height,
             mode: selectedPreviewMode
         )
-        if selectedPreviewMode.usesImagePostprocess {
-            log("preview: \(selectedPreviewMode.title) \(width)x\(height)->\(preview.width)x\(preview.height)")
-        }
+        let postprocessElapsed = Date().timeIntervalSince(previewStart)
 
+        let imageStart = Date()
         let data = Data(preview.rgba) as CFData
         guard
             let provider = CGDataProvider(data: data),
@@ -2339,6 +2349,11 @@ final class PipelineSmokeViewModel: ObservableObject {
         else {
             throw PipelineSmokeError.imageCreationFailed
         }
+        let imageElapsed = Date().timeIntervalSince(imageStart)
+        log(
+            "preview: \(selectedPreviewMode.title) \(width)x\(height)->\(preview.width)x\(preview.height) " +
+            "postprocess=\(format(seconds: postprocessElapsed)) image=\(format(seconds: imageElapsed))"
+        )
 
         return PipelineImageResult(
             image: image,

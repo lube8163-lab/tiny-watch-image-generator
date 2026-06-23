@@ -1,21 +1,23 @@
 # WatchPipelineSmokeApp Quality Notes
 
-Updated: 2026-06-20
+Updated: 2026-06-23
 
 ## Current Best Default
 
 Keep the default run as:
 
-- Prompt key: `cat_mascot`
-- Seed: `1`
+- Pipeline: `LCM256 6b`
+- Prompt: short typed prompt, default `cat mascot`
+- Seed: `Random`, with reroll as the normal exploration path
 - Guidance: `6`
-- Preview: `Sharp x2`
+- Preview: `Smooth`
 
-The 6-bit 16-part Core ML shortlist still ranks this as one of the strongest
-general default images. It reads as a small white cat mascot and survives the
-quantized/chunked path.
+The 256px 6-bit 16-part Core ML path is now the best device baseline. It keeps
+the same streamed UNet weight footprint as the 192px path, raises the decoded
+shape to `1x3x256x256`, and has completed on device with observed peak memory
+around `140MB`.
 
-Reference:
+Historical 128px reference:
 
 `reports/watch_pipeline_reference/final_default_cat_mascot_s1_g6_coreml_16p/coreml_preview_sharp2x.png`
 
@@ -83,13 +85,16 @@ shortlist:
 
 ## Resolution / Model Direction
 
-RunPod resolution probes confirm the broad trend:
+RunPod and device resolution probes confirm the broad trend:
 
 - `64px` is too compressed for reliable cat structure.
-- `128px` is the current practical sweet spot.
-- Larger outputs can look better on GPU, but a Watch deployment would require
-  `24x24` or `32x32` latents, larger intermediate tensors, larger chunk outputs,
-  and much longer streamed inference.
+- `128px` works but leaves visible structure/detail on the table.
+- `192px` improves quality and completed on device around the previous memory
+  envelope.
+- `256px` improves quality again and is the adopted baseline after successful
+  device runs.
+- Larger outputs may work technically, but are unlikely to give a similar jump
+  in quality for the added runtime, activation memory, and postprocess cost.
 
 Artifacts:
 
@@ -109,19 +114,25 @@ SDXL/Turbo-class models may produce nicer GPU images, but they are much less
 aligned with the current watchOS memory and bundle constraints. The near-term
 quality path is therefore:
 
-1. Keep LCM128 6-bit 16-part streaming.
-2. Promote strong preset/seed pairs.
-3. Use non-neural `Sharp x2` as the default display path.
-4. Consider a tiny fixed-shape SR CNN only after it clearly beats `Sharp x2`.
+1. Keep LCM256 6-bit 16-part streaming.
+2. Treat seed reroll as the main lightweight quality lever.
+3. Keep direct `Smooth` preview as the default display path on watchOS.
+4. Improve short-prompt handling and avoid one-off tuning to specific probes.
+5. Consider new model training/distillation only when a larger quality jump is
+   required.
 
 ## Upscaling / SR
 
-The current non-neural `Sharp x2` preview is a good first choice:
+For 128px and 192px outputs, non-neural `Sharp x2` was a good first choice:
 
 - Bicubic Catmull-Rom 2x
 - Unsharp amount `0.45`
 - No extra model memory
 - Runs inside the current Watch app
+
+For the adopted 256px path, `Sharp x2` would create a 512px preview and has a
+noticeable watchOS runtime cost. Direct `Smooth` preview is the current default
+because 256px already has enough display resolution for the Watch screen.
 
 SwinIR x2 was compared on top candidates:
 
@@ -165,5 +176,5 @@ The visual comparison also favors `Sharp x2`; the tiny CNN creates cyan/blurred
 averages and does not preserve details. This is enough evidence to avoid adding
 a neural SR model to WatchPipelineSmokeApp for now. A future SR attempt would
 need either a much better architecture/training setup or a very specific
-postprocess goal, and should beat the current `Sharp x2` sheet before any watchOS
+postprocess goal, and should beat the existing `Sharp x2` sheet before any watchOS
 integration work.

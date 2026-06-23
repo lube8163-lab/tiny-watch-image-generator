@@ -36,7 +36,7 @@ button, and the generated image. Pipeline details remain in Xcode console logs.
 - UNet: `LCM 256 6-bit 16p`
 - VAE: `256 4-bit`
 - Guidance: `6`
-- Preview: `Sharp x2`
+- Preview: `Smooth`
 
 ## Golden Reference Run
 
@@ -180,7 +180,7 @@ Run these on the physical Apple Watch after installing the latest build:
    `resolvedPreset=cat_mascot`, `text encoder tokenizer:`,
    `conditioning: text_encoder`, `seed=Random ...`,
    `lcm decoder: output ... shape=[1, 3, 256, 256]`,
-   `preview: Sharp x2 256x256->512x512`, and `done: total=...`.
+   `preview: Smooth 256x256->256x256`, and `done: total=...`.
 3. Generate a second time without changing the prompt. Confirm the logged random
    seed changes, the image is not identical, and the button reads `Reroll Seed`
    before the second tap.
