@@ -43,10 +43,10 @@ The default suite is 74 prompts x 4 seeds = 296 images. Output goes to:
 reports/watch_lcm256_quality/lcm256_quality_YYYYMMDD_HHMMSS/
 ```
 
-On the current Mac setup, a 74-image all-prompt seed-1 run averaged about
-`10.6s/image` with CPU-only Core ML and completed in about `13` minutes. The
-full 296-image suite should be treated as a batch job, roughly `55-90` minutes
-depending on Core ML cache state and machine load.
+On the current Mac setup, the 296-image full suite completed in about `35.7`
+minutes after Core ML cache warmup, averaging `7.24s/image`. Treat this as a
+batch job, but it is short enough to run whenever a candidate model or prompt
+change looks promising.
 
 Important files:
 
@@ -97,6 +97,11 @@ The numeric flags are only outlier detectors:
 
 These flags do not measure semantic prompt fit. The main quality decision should
 still come from visually scanning the contact sheets.
+
+Current full-run summary:
+
+- `docs/watch/mac_quality_eval_full_summary_2026-06-24.md`
+- `reports/watch_lcm256_quality/full_lcm256_g6/`
 
 ## Mac Versus Watch
 

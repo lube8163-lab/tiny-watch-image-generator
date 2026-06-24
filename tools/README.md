@@ -3,15 +3,18 @@
 The tools are kept flat so older commands and imports continue to work. Use this
 map to find the right entry point.
 
-## Watch Evaluation
+## Diffusion / LCM256 Evaluation
 
-- `make_watch_eval_contact_sheet.py`: contact sheets for fixed prompt/seed eval.
-- `make_watch_postprocess_compare.py`: raw vs watch postprocess comparison.
-- `make_watch_preview_comparison.py`: non-neural preview comparison.
 - `audit_watch_prompt_coverage.py`: prompt alias and UI coverage audit.
 - `verify_watch_pipeline_smoke.py`: bundle verifier for `WatchPipelineSmokeApp`.
 - `watch_lcm256_quality_eval.py`: Mac-side LCM256 free-prompt quality sweeps,
   contact sheets, and Markdown summaries.
+
+## Original MLP Evaluation
+
+- `make_watch_eval_contact_sheet.py`: contact sheets for fixed prompt/seed eval.
+- `make_watch_postprocess_compare.py`: raw vs watch postprocess comparison.
+- `make_watch_preview_comparison.py`: non-neural preview comparison.
 
 ## Watch Prompt And Teacher Data
 

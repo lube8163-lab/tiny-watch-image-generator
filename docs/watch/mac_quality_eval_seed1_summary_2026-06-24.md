@@ -22,8 +22,8 @@ reports/watch_lcm256_quality/all_prompts_seed1_codex_g6/
 
 - Mean generation time: `10.607s/image`
 - Total measured generation time: `784.889s` (`13.1` minutes)
-- The full 296-image four-seed suite is expected to take roughly `55-90`
-  minutes depending on cache state and machine load.
+- The later full 296-image four-seed suite completed in `35.7` minutes on the
+  same Mac setup after Core ML cache warmup.
 
 Relations and styles were the slowest groups in this run:
 
@@ -80,7 +80,11 @@ less compositionally reliable.
 
 ## Next Eval Step
 
-Run the full four-seed suite when a larger sample is needed:
+The full four-seed suite has now been run. See:
+
+- `docs/watch/mac_quality_eval_full_summary_2026-06-24.md`
+
+Run it again when a larger comparison sample is needed:
 
 ```sh
 .venv/bin/python tools/watch_lcm256_quality_eval.py \

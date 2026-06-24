@@ -51,6 +51,7 @@ See also:
 
 - `pipeline_quality_notes.md`
 - `mac_quality_eval.md`
+- `mac_quality_eval_full_summary_2026-06-24.md`
 - `future_quality_breakthroughs.md`
 
 ## Mac Evaluation Policy

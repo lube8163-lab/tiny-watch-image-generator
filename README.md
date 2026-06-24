@@ -1,30 +1,104 @@
 # Tiny Watch Image Generator
 
-Apple Watch 上で動くことを優先した、小型の画像生成デモです。
+Apple Watch 上でローカル画像生成を試すための実験リポジトリです。
 
-現在の watchOS 版は diffusion を Watch 上で動かす構成ではありません。プロンプトを小さな latent に変換し、座標条件付き MLP が 128x128 RGB 画像を直接生成します。学習済み重み `TinyWeights.bin` はリポジトリに含めているため、研究用データセットや RunPod 環境がなくても Xcode からすぐにビルドできます。
+現在の採用ベースラインは `WatchPipelineSmokeApp` の `LCM256 6b`
+パイプラインです。Watch 上で短い自由入力プロンプトを CLIP text
+encoder に通し、16分割した LCM UNet と 256px decoder を CPU-only Core
+ML で順番に実行します。
 
-## Xcode Quick Start
+一方で、最初の純 Swift MLP 方式や Core ML stress test も残しています。
+用途が違うので、後から見返しやすいように3つのトラックとして扱います。
+More detail: [docs/project_tracks.md](docs/project_tracks.md).
 
-必要なもの:
+## Track Map
 
-- macOS
-- Xcode with watchOS SDK and Swift 6 support
-- Apple Watch Simulator, or a paired Apple Watch for device testing
+| Track | Purpose | Main entry points | Status |
+| --- | --- | --- | --- |
+| Original MLP | Core ML なしで即ビルドできる軽量 Watch demo と Swift 評価基盤 | `TinyImageWatchApp`, `Sources/TinyWatchGenerator`, `TinyPreview`, `TinyWatchEval` | Legacy / UI and baseline reference |
+| Core ML Stress | Watch の Core ML load/predict/memory ceiling と text encoder 単体確認 | `WatchStressTestApp`, `WatchTextEncoderSmokeApp`, `schemes/watch_sd_quantization/` | Probe / diagnostics |
+| Diffusion LCM256 | 現在の最高品質 Watch txt2img baseline | `WatchPipelineSmokeApp`, `LCM256Assets`, `TextEncoderAssets`, `tools/watch_lcm256_quality_eval.py` | Adopted baseline |
 
-Watch Simulator で動かす場合:
+## Which Scheme To Run
+
+- `TinyImageWatchApp`: 依存モデルなしで動く最初の MLP デモ。clone 後すぐ
+  Simulator で動かしたいとき。
+- `WatchStressTestApp`: Core ML モデル単体のロード/推論/メモリ確認。
+- `WatchTextEncoderSmokeApp`: text encoder だけを分離実行する probe。
+- `WatchPipelineSmokeApp`: 現在の LCM256 画像生成 baseline。
+
+All schemes live in:
 
 ```sh
 open watchos_example/TinyImageWatchApp.xcodeproj
 ```
 
-1. Scheme に `TinyImageWatchApp` を選びます。
-2. Destination に任意の Apple Watch Simulator を選びます。
-3. Run を押します。
+## Diffusion Baseline
 
-Simulator build は署名設定なしで動きます。実機の Apple Watch に入れる場合だけ、Xcode の `Signing & Capabilities` で自分の Team を選び、必要に応じて `Bundle Identifier` を自分用に変更してください。
+`WatchPipelineSmokeApp` is the current quality path:
 
-CLI で Simulator 向けにビルド確認する場合:
+- Pipeline: `LCM256 6b`
+- Resolution: `256x256`
+- Prompt conditioning: transient CLIP text encoder on Watch
+- UNet: 16 streamed 6-bit chunks
+- Decoder: 256px 4-bit VAE decoder
+- Guidance: `6`
+- Seed: random by default, with reroll as the normal exploration path
+- Preview: direct `Smooth` 256px display
+- Compute: CPU-only Core ML
+
+The app UI is intentionally small: prompt input, generate/reroll button, and the
+generated image. Pipeline details stay in Xcode console logs with the
+`[WatchPipeline]` prefix.
+
+Compiled `.mlmodelc` bundles are intentionally ignored by Git. The repository
+tracks source, scheduler/prompt/tokenizer metadata, docs, and verification
+scripts. Large model packages are local artifacts under `dist/` and compiled
+app resources under:
+
+```text
+watchos_example/WatchPipelineSmokeApp/Models/
+watchos_example/WatchPipelineSmokeApp/TextEncoderAssets/
+```
+
+Useful docs:
+
+- [docs/watch/watch_256_baseline_summary_2026-06-23.md](docs/watch/watch_256_baseline_summary_2026-06-23.md)
+- [docs/watch/pipeline_smoke_current.md](docs/watch/pipeline_smoke_current.md)
+- [docs/watch/mac_quality_eval.md](docs/watch/mac_quality_eval.md)
+- [docs/watch/mac_quality_eval_full_summary_2026-06-24.md](docs/watch/mac_quality_eval_full_summary_2026-06-24.md)
+
+## Mac Quality Eval
+
+Mac-side quality evaluation uses the same scheduler, prompt expansion,
+tokenizer, text encoder package, UNet package, decoder package, guidance, and
+seed rule as the Watch path. It is for broad quality ranking, not for final
+Watch runtime/memory validation.
+
+Full 296-image suite:
+
+```sh
+.venv/bin/python tools/watch_lcm256_quality_eval.py \
+  --out-dir reports/watch_lcm256_quality/full_lcm256_g6
+```
+
+The current full run completed with 296/296 images and 0 failures. Generated
+images, manifests, and contact sheets stay under ignored `reports/`.
+
+## Original MLP Quick Start
+
+The original pure Swift MLP demo needs no Core ML models:
+
+```sh
+open watchos_example/TinyImageWatchApp.xcodeproj
+```
+
+Select:
+
+- Scheme: `TinyImageWatchApp`
+- Destination: an Apple Watch Simulator
+
+CLI Simulator build:
 
 ```sh
 xcodebuild \
@@ -35,56 +109,14 @@ xcodebuild \
   build
 ```
 
-実機アーキテクチャ向けに compile-only で確認する場合:
-
-```sh
-xcodebuild \
-  -project watchos_example/TinyImageWatchApp.xcodeproj \
-  -scheme TinyImageWatchApp \
-  -destination 'generic/platform=watchOS' \
-  CODE_SIGNING_ALLOWED=NO \
-  build
-```
-
-実機へインストールする CLI build は署名設定が必要です。Xcode で Team と Bundle Identifier を設定した後に実行してください。
-
-```sh
-xcodebuild \
-  -project watchos_example/TinyImageWatchApp.xcodeproj \
-  -scheme TinyImageWatchApp \
-  -destination 'generic/platform=watchOS' \
-  build
-```
-
-## What Is Included
-
-- `watchos_example/TinyImageWatchApp.xcodeproj`: すぐ開ける watchOS サンプルアプリ
-- `watchos_example/TinyImageWatchApp/TinyWeights.bin`: Watch アプリに同梱する学習済み int8 重み
-- `WatchPipelineSmokeApp` scheme: LCM128 + transient text encoder の実機確認用 Core ML smoke target
-- `WatchStressTestApp` scheme: Watch 上の Core ML load/predict/memory ceiling を測る stress target
-- `Sources/TinyWatchGenerator`: 純 Swift の tiny generator 実装
-- `Sources/TinyPreview`: macOS CLI で PPM を出す軽量プレビュー
-- `tools/`: 学習、教師画像生成、prompt normalization、重み export 用スクリプト
-- `docs/`: 研究ログと追加学習・モデル改善メモ
-
-`datasets/`, `out/`, `models/`, `dist/`, `reports/` はローカルの研究成果物置き場です。GitHub には入れず、Watch サンプルのビルドにも不要です。
-
-## SwiftPM Preview
-
-Xcode を開かずに generator だけ確認できます。
+SwiftPM preview:
 
 ```sh
 swift run TinyPreview 7 cat > /tmp/cat.ppm
 swift run TinyPreview --raw 7 cat > /tmp/cat_raw.ppm
 ```
 
-`--raw` を付けない場合は watchOS 側と同じ軽量 postprocess を通します。
-
-## Watch Eval Contact Sheets
-
-モデル変更や prompt normalization 変更の前後比較用に、固定 prompt / seed の評価画像をまとめて生成できます。これは Watch アプリと同じ Swift generator を使うため、Python 側の近似実装ではなく実機コードに近い結果を見られます。
-
-軽い smoke eval:
+MLP contact sheet:
 
 ```sh
 python3 tools/make_watch_eval_contact_sheet.py \
@@ -93,101 +125,55 @@ python3 tools/make_watch_eval_contact_sheet.py \
   --seeds 0
 ```
 
-raw と watchOS postprocess 後を横並びで比較する場合:
+## Core ML Stress Tests
 
-```sh
-python3 tools/make_watch_postprocess_compare.py \
-  --groups core_nouns,adjectives,actions,styles,japanese_aliases \
-  --prompts-per-group 2 \
-  --seeds 0
-```
+Stress/probe targets are for feasibility checks, not for the final user flow:
 
-prompt alias / slot / Watch UI preset のカバレッジを確認する場合:
+- `WatchStressTestApp`: scans bundled `.mlmodelc` models and logs load/predict
+  behavior with `[WatchStress]`.
+- `WatchTextEncoderSmokeApp`: runs the separated text encoder load/predict/release
+  cycle when the encoder needs to be checked in isolation.
 
-```sh
-python3 tools/audit_watch_prompt_coverage.py --fail-on-missing-ui --fail-on-unknown
-```
+Historical stress notes:
 
-通常 eval の出力先はデフォルトで `reports/watch_eval/YYYYMMDD_HHMMSS/`、postprocess 比較の出力先は `reports/watch_postprocess_compare/YYYYMMDD_HHMMSS/` です。`reports/` は Git 管理外なので、生成画像を誤ってコミットしにくい構成です。Swift evaluator はデフォルトで release build を使います。
+- [schemes/watch_sd_quantization/README.md](schemes/watch_sd_quantization/README.md)
+- [docs/watch/text_encoder_smoke.md](docs/watch/text_encoder_smoke.md)
 
-Swift evaluator だけを直接使う場合:
+## Local Artifact Policy
 
-```sh
-swift run -c release TinyWatchEval \
-  --config configs/prompt_eval_suite.json \
-  --out-dir reports/watch_eval/current \
-  --groups core_nouns \
-  --prompts-per-group 4 \
-  --seeds 0,7
-```
+These directories are intentionally local and ignored:
 
-PNG contact sheet 作成には Pillow が必要です。
+- `datasets/`
+- `dist/`
+- `models/`
+- `out/`
+- `reports/`
 
-```sh
-python3 -m pip install pillow
-```
+Keep prompt suites, scripts, source files, tokenizer metadata, scheduler JSON,
+and docs in Git. Keep generated images, downloaded models, converted packages,
+compiled `.mlmodelc` bundles, and large research outputs out of Git.
 
-## Current Watch App
+## Main Docs
 
-- 128x128 RGBA output
-- Prompt preset picker
-- Slot/chip input: subject, color, action, view, style
-- Advanced text input
-- Lightweight postprocess for background denoise/matting
-- No network access at runtime
-- No Core ML model required for the current watchOS demo
-
-## Core ML Watch Smoke Targets
-
-The Core ML watch experiments live in the same Xcode project but are separate
-schemes so the shipping tiny demo stays easy to run:
-
-- `WatchStressTestApp`: transient text encoder and component memory probes.
-- `WatchPipelineSmokeApp`: prompt input, transient CLIP text encoding, streamed
-  LCM128 6-bit UNet chunks, 128px 4-bit decoder, and `Sharp x2` preview.
-
-Compiled `.mlmodelc` bundles are intentionally ignored by Git. The repository
-tracks the Swift targets, prompt/scheduler assets, tokenizer files, docs, and
-verification scripts; large model packages should be restored locally under
-`watchos_example/WatchPipelineSmokeApp/Models/` and
-`watchos_example/WatchPipelineSmokeApp/TextEncoderAssets/`.
-
-The main smoke-test notes are in [docs/watch/README.md](docs/watch/README.md).
-
-## Training And Research Notes
-
-追加学習や重み再生成は任意です。通常の Xcode build には不要です。
-
-主な入口:
-
-```sh
-bash tools/run_cloud_watch_v7_pipeline.sh
-python3 tools/build_watch_v8_slot_prompt_config.py
-bash tools/cloud_generate_sdxl_watch_v8_slot.sh
-python3 tools/prompt_normalization.py --help
-python3 tools/train_tiny_coordinate_mlp.py --help
-```
-
-進捗メモ:
-
-- [docs/watch/README.md](docs/watch/README.md)
-- [docs/articles/tiny_watch_image_generator_progress_2026-06-14.md](docs/articles/tiny_watch_image_generator_progress_2026-06-14.md)
-- [docs/model_improvement_plan.md](docs/model_improvement_plan.md)
+- [docs/watch/README.md](docs/watch/README.md): Watch-specific index.
+- [docs/watch/txt2img_plan.md](docs/watch/txt2img_plan.md): project direction.
+- [docs/watch/future_quality_breakthroughs.md](docs/watch/future_quality_breakthroughs.md): larger quality-improvement paths.
+- [docs/articles/tiny_watch_image_generator_progress_2026-06-14.md](docs/articles/tiny_watch_image_generator_progress_2026-06-14.md): earlier progress log.
 
 ## Troubleshooting
 
 If Xcode asks for a development team when using Simulator:
 
-- Make sure the selected destination is an Apple Watch Simulator, not a physical device or `Any watchOS Device`.
-- Clean build folder if Xcode reused a previous device destination.
+- Make sure the selected destination is an Apple Watch Simulator.
+- Clean build folder if Xcode reused a previous physical-device destination.
 
 If a physical Watch build fails with signing errors:
 
 - Select your own Team in `Signing & Capabilities`.
-- Change `Bundle Identifier` from `dev.local.TinyImageWatchApp` to a unique identifier you own.
+- Change the bundle identifier to a unique identifier you own.
 - Ensure the Watch is paired and enabled for development.
 
-If the app crashes with `TinyWeights.bin is missing from the app bundle`:
+If `TinyImageWatchApp` crashes with `TinyWeights.bin is missing from the app bundle`:
 
-- Confirm `watchos_example/TinyImageWatchApp/TinyWeights.bin` exists after clone.
+- Confirm `watchos_example/TinyImageWatchApp/TinyWeights.bin` exists.
 - Confirm it appears in the target's Copy Bundle Resources phase.

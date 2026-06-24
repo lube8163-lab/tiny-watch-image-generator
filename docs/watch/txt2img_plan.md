@@ -2,10 +2,13 @@
 
 Goal: build a technical demo that accepts text on Apple Watch and produces a tiny image locally.
 
-This repo now has two tracks:
+This repo now has three tracks:
 
-1. `TinyWatchGenerator`: toy txt2img API, pure Swift, useful for UI and watchOS integration tests.
-2. `Core ML distillation/quantization`: the future path for a real-ish model.
+1. `TinyWatchGenerator`: original toy txt2img API, pure Swift, useful for UI
+   and watchOS integration tests.
+2. `WatchStressTestApp` / `WatchTextEncoderSmokeApp`: Core ML load/predict and
+   memory probes.
+3. `WatchPipelineSmokeApp`: current LCM256 diffusion baseline.
 
 ## Current Baseline
 

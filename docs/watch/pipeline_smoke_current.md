@@ -1,10 +1,9 @@
 # WatchPipelineSmokeApp Current Smoke Setup
 
-Updated: 2026-06-22
+Updated: 2026-06-24
 
 This note captures the current expected WatchPipelineSmokeApp smoke-test setup and reference output.
-The current branch is a 256px feasibility probe based on the successful 192px
-device run.
+The 256px path is now the adopted Watch diffusion baseline.
 
 Related quality notes:
 
@@ -40,9 +39,10 @@ button, and the generated image. Pipeline details remain in Xcode console logs.
 
 ## Golden Reference Run
 
-The checked-in golden reference is still the 128px baseline. The 256px branch is
-for device feasibility and quality inspection first, so the verifier's
-`--family lcm256` mode checks bundle shape but skips this reference image.
+The checked-in pixel golden reference is still the older 128px baseline. The
+current LCM256 path is validated with device logs, Mac quality contact sheets,
+and bundle-shape checks. The verifier's `--family lcm256` mode checks bundle
+shape but skips the 128px reference image.
 
 - Scheme: `WatchPipelineSmokeApp`
 - Pipeline: `LCM128 6b`
@@ -195,5 +195,5 @@ Run these on the physical Apple Watch after installing the latest build:
    `conditioningPrompt="spaceship banana, single subject, centered, full object visible, clean anime illustration, simple background"`.
    The logs should include `seed: mode=Random resolved=...`, and the run id
    should start with `spaceship_banana-`.
-6. Record peak memory and typical memory while generating. The current successful
-   text-encoder-integrated baseline was reported around `90MB` peak.
+6. Record peak memory and typical memory while generating. The current 256px
+   text-encoder-integrated baseline was reported around `140MB` peak.

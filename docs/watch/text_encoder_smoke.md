@@ -1,25 +1,22 @@
 # Watch Text Encoder Smoke
 
-Updated: 2026-06-21
+Updated: 2026-06-24
 
-This is the next physical-device check before wiring free prompt input into
-`WatchPipelineSmokeApp`. Use the `WatchTextEncoderSmokeApp` scheme for the
+This is the separated physical-device probe that was used before wiring free
+prompt input into `WatchPipelineSmokeApp`. The text encoder is now integrated
+into the LCM256 baseline, but this scheme remains useful when the encoder needs
+to be checked in isolation. Use the `WatchTextEncoderSmokeApp` scheme for the
 single-purpose text encoder run. It launches the existing stress-test target
 with `WATCH_TEXT_ENCODER_AUTORUN=1`, so the app opens as a text-encoder smoke
 screen and runs the separated cycle automatically.
 
 ## Why This Exists
 
-The current prompt-first generator still resolves typed text to bundled preset
-embeddings. For example, `white mascot` resolves to the `white_mascot` preset,
-whose exported embedding prompt is `small white cat mascot, cute full body,
-centered, simple pastel illustration`. That is why cat-like structure can still
-appear even when the visible prompt does not contain `cat`.
-
-An on-device text encoder should improve this class of issue because it can
-encode the user's exact short prompt instead of reusing a nearby preset
-embedding. Before integrating it into the generator, confirm that the text
-encoder can load and run alone on the physical Watch.
+Earlier prompt-first builds resolved typed text to bundled preset embeddings.
+The separated text encoder probe confirmed that the Watch could encode the
+user's exact short prompt before the generator loaded. That successful direction
+is now part of `WatchPipelineSmokeApp`; keep this note as the diagnostic recipe
+for rerunning the encoder alone.
 
 ## Current Probe
 

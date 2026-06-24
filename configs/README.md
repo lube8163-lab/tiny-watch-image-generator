@@ -12,7 +12,9 @@
 
 - `lcm64_watch_presets.json`: LCM64 prompt set.
 - `lcm64_cat_quality_presets.json`: narrow cat-quality sweep prompts.
-- `lcm128_watch_plus_presets.json`: current LCM128 WatchPipeline prompt asset source.
+- `lcm128_watch_plus_presets.json`: shared LCM prompt/preset source used by the
+  current WatchPipeline prompt assets; the adopted runtime scheduler is
+  `WatchPipelineSmokeApp/LCM256Assets/lcm_scheduler.json`.
 
 ## SDXL Teacher Data
 
