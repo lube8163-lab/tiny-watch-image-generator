@@ -61,6 +61,24 @@ watchos_example/WatchPipelineSmokeApp/Models/
 watchos_example/WatchPipelineSmokeApp/TextEncoderAssets/
 ```
 
+Download the current external model artifacts from Hugging Face before building
+`WatchPipelineSmokeApp`:
+
+```sh
+python3 tools/fetch_watch_lcm256_assets.py
+```
+
+The artifact repo is:
+
+- [lube8163/tiny-watch-image-generator-lcm256-coreml](https://huggingface.co/lube8163/tiny-watch-image-generator-lcm256-coreml)
+
+For Mac-side quality evaluation or model rebuild work, also install the
+`.mlpackage` files:
+
+```sh
+python3 tools/fetch_watch_lcm256_assets.py --packages
+```
+
 Useful docs:
 
 - [docs/watch/watch_256_baseline_summary_2026-06-23.md](docs/watch/watch_256_baseline_summary_2026-06-23.md)
@@ -152,6 +170,8 @@ These directories are intentionally local and ignored:
 Keep prompt suites, scripts, source files, tokenizer metadata, scheduler JSON,
 and docs in Git. Keep generated images, downloaded models, converted packages,
 compiled `.mlmodelc` bundles, and large research outputs out of Git.
+Current LCM256 artifacts are published separately on Hugging Face and can be
+installed with `tools/fetch_watch_lcm256_assets.py`.
 
 ## Main Docs
 

@@ -6,6 +6,8 @@ map to find the right entry point.
 ## Diffusion / LCM256 Evaluation
 
 - `audit_watch_prompt_coverage.py`: prompt alias and UI coverage audit.
+- `fetch_watch_lcm256_assets.py`: download the external LCM256 Core ML
+  artifacts from Hugging Face and install them into the Watch app tree.
 - `verify_watch_pipeline_smoke.py`: bundle verifier for `WatchPipelineSmokeApp`.
 - `watch_lcm256_quality_eval.py`: Mac-side LCM256 free-prompt quality sweeps,
   contact sheets, and Markdown summaries.

@@ -48,6 +48,32 @@ Apple Watch実機では、text encoderを生成パイプラインと同時に保
 
 この「分離実行」がかなり重要でした。
 
+## モデル成果物はHugging Faceに分けた
+
+`.mlmodelc` や `.mlpackage` はかなり大きくなります。
+
+今回のLCM256 baselineだけでも、Watch appに置くcompiled assetsが約879MB、Mac評価や再ビルド用のCore ML packagesも約878MBあります。
+
+そのため、GitHub repository本体には入れず、Hugging Faceに外部artifactとして置くことにしました。
+
+- [lube8163/tiny-watch-image-generator-lcm256-coreml](https://huggingface.co/lube8163/tiny-watch-image-generator-lcm256-coreml)
+
+GitHub側には、コード、Xcode project、scheduler、tokenizer metadata、docs、取得スクリプトだけを置きます。
+
+cloneした人は次のコマンドでWatch実行に必要なモデルを取得できます。
+
+```sh
+python3 tools/fetch_watch_lcm256_assets.py
+```
+
+Mac側で品質評価もしたい場合は、`.mlpackage` も取得します。
+
+```sh
+python3 tools/fetch_watch_lcm256_assets.py --packages
+```
+
+これで、GitHub repoを軽いまま保ちつつ、他の人が実機/ローカル評価を再現できる形にできます。
+
 ## なぜMLPからdiffusionに戻ったのか
 
 前回のMLP方式は、Apple Watchで動かすという意味ではかなり扱いやすい方式でした。

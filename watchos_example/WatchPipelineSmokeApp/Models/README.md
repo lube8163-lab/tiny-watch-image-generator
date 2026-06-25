@@ -3,6 +3,15 @@
 Drop compiled Core ML pipeline smoke models here. Compiled `.mlmodelc`
 directories are intentionally ignored by Git.
 
+For the current baseline, install the external model artifacts with:
+
+```sh
+python3 tools/fetch_watch_lcm256_assets.py
+```
+
+The artifacts are hosted at
+[lube8163/tiny-watch-image-generator-lcm256-coreml](https://huggingface.co/lube8163/tiny-watch-image-generator-lcm256-coreml).
+
 ## Current LCM256 Baseline
 
 Expected local files for the adopted 256px path:
