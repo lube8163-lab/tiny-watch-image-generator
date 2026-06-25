@@ -86,6 +86,40 @@ Useful docs:
 - [docs/watch/mac_quality_eval.md](docs/watch/mac_quality_eval.md)
 - [docs/watch/mac_quality_eval_full_summary_2026-06-24.md](docs/watch/mac_quality_eval_full_summary_2026-06-24.md)
 
+## Device Validation Notes
+
+Latest manual device checks used:
+
+- Device: Apple Watch Series 11 (GPS)
+- OS: watchOS 26.5
+- Build host: Mac mini (M2, 8GB)
+- Xcode: 26.5 (17F42)
+- Watch free storage at test time: about 44GB
+- Installed app size: 1.57GB after deleting the app and rebuilding
+- Observed generation time: 53.8s to 62.8s per 256px image, average 56.7s
+  across six prompts in the latest log
+- Observed memory peak in the 256px path: about 140MB in previous device runs
+- Battery: not instrumented; subjective short-run observation was roughly
+  around 1% per generated image
+- Thermal: not instrumented, but the Watch did not feel hot while worn during
+  short manual generation sessions
+
+Latest device screenshots:
+
+![Watch device screenshots](docs/articles/assets/watch_lcm256_qiita_2026-06-24/05_device_screenshots_contact_sheet.png)
+
+Physical-device Xcode builds are slow because the Watch app carries large
+compiled Core ML assets. Expect install/build cycles to take more than 10
+minutes, and on some environments a clean install may need a retry. If an
+install appears wedged, deleting the Watch app and rebuilding from Xcode has
+been the most reliable reset.
+
+For manual generation checks, keep the app launched from Xcode when possible.
+When launched standalone on the Watch, the display can turn off before a full
+generation completes, and watchOS may suspend or kill the app. A code-level
+mitigation may be possible, but the current baseline treats Xcode-attached runs
+as the reliable validation path.
+
 ## Mac Quality Eval
 
 Mac-side quality evaluation uses the same scheduler, prompt expansion,
