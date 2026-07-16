@@ -231,3 +231,10 @@ If `TinyImageWatchApp` crashes with `TinyWeights.bin is missing from the app bun
 
 - Confirm `watchos_example/TinyImageWatchApp/TinyWeights.bin` exists.
 - Confirm it appears in the target's Copy Bundle Resources phase.
+
+## License
+
+Repository-authored source code, scripts, and documentation are licensed under
+the MIT License unless otherwise noted. Vendored Apple source, model and
+tokenizer assets, datasets, generated media, and derived weights remain under
+their respective upstream terms. See `LICENSE` and `THIRD_PARTY_NOTICES.md`.
